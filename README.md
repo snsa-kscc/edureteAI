@@ -1,6 +1,6 @@
 # edureteAI LLM app
 
-LLM chat application for [Edurete](https://edurete.com) using OpenAI and Anthropic models.
+LLM chat application for [Edurete](https://edurete.com) platform using OpenAI and Anthropic models.
 
 ### OpenAI models:
 
