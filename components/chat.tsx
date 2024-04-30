@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "ai/react";
-
 import CopyToClipboard from "@/components/copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,13 +10,16 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SendHorizontalIcon } from "lucide-react";
 
-export default function Chat() {
+type userId = { userId: string | null };
+
+export default function Chat({ userId }: userId) {
   const [modelName, setModelName] = useState("OpenAI/gpt-3.5-turbo-0125");
   const ref = useRef<HTMLDivElement>(null);
 
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
     body: {
       model: modelName,
+      userId,
     },
   });
 

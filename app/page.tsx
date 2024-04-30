@@ -18,8 +18,8 @@ export default function Home() {
         <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="container mx-auto flex flex-col md:flex-row">
-        <Chat />
-        <Chat />
+        <Chat userId={userId} />
+        <Chat userId={userId} />
       </div>
     </main>
   );

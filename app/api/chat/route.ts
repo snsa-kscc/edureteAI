@@ -1,11 +1,15 @@
 import { NextRequest } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-
+import { Message as VercelChatMessage, StreamingTextResponse, LangChainStream } from "ai";
+import { Redis } from "@upstash/redis";
+import { BufferMemory } from "langchain/memory";
+import { UpstashRedisChatMessageHistory } from "langchain/stores/message/upstash_redis";
+import { ConversationChain } from "langchain/chains";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
-
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
+
+const client = Redis.fromEnv();
 
 export const runtime = "edge";
 
@@ -42,12 +46,14 @@ export async function POST(req: NextRequest) {
         model = new ChatOpenAI({
           temperature: 0.1,
           modelName,
+          streaming: true,
         });
         break;
       case "Anthropic":
         model = new ChatAnthropic({
           temperature: 0.1,
           modelName,
+          streaming: true,
         });
         break;
       default:
@@ -58,10 +64,23 @@ export async function POST(req: NextRequest) {
 
     const chain = prompt.pipe(model).pipe(outputParser);
 
-    const stream = await chain.stream({
+    const old_stream = await chain.stream({
       chat_history: formattedPreviousMessages.join("\n"),
       input: currentMessageContent,
     });
+
+    const memory = new BufferMemory({
+      memoryKey: "chat_history",
+      chatHistory: new UpstashRedisChatMessageHistory({
+        sessionId: body.userId,
+        client,
+      }),
+    });
+
+    const improvedChain = new ConversationChain({ llm: model, memory, prompt });
+    const { stream, handlers } = LangChainStream();
+
+    improvedChain.invoke({ input: currentMessageContent, callbacks: [handlers] });
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {
