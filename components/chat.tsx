@@ -9,19 +9,55 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SendHorizontalIcon } from "lucide-react";
+import { useParams } from "next/navigation";
 
-type userId = { userId: string | null };
-
-export default function Chat({ userId }: userId) {
-  const [modelName, setModelName] = useState("OpenAI/gpt-3.5-turbo-0125");
+export default function Chat() {
+  const [model, setModel] = useState("OpenAI/gpt-3.5-turbo-0125");
   const ref = useRef<HTMLDivElement>(null);
+  const params = useParams();
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, setMessages } = useChat({
     body: {
-      model: modelName,
-      userId,
+      model,
+      chatId: params.id,
     },
   });
+
+  async function handleLoadChat() {
+    if (params.id && typeof params.id === "string") {
+      try {
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          body: JSON.stringify({
+            chatId: params.id,
+            loadMessages: true,
+          }),
+        });
+        const data: any[] = await resp.json();
+
+        if (data.length === 0) {
+          return;
+        }
+
+        if (data.length > 0) {
+          let filteredData = data.filter((item) => item.data.content).reverse();
+          let mappedData: any[] = filteredData.map((item, i) => {
+            return {
+              content: item.data.content,
+              role: item.type === "human" ? "user" : "assistant",
+            };
+          });
+          setMessages(mappedData);
+        }
+      } catch (error) {
+        console.error("Error fetching or parsing data:", error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleLoadChat();
+  }, []);
 
   useEffect(() => {
     if (ref.current === null) return;
@@ -30,7 +66,7 @@ export default function Chat({ userId }: userId) {
 
   return (
     <div className="w-full p-4 flex flex-col h-[80vh]">
-      <Select onValueChange={setModelName}>
+      <Select onValueChange={setModel}>
         <SelectTrigger className="max-w-72 mb-2">
           <SelectValue placeholder="OpenAI/GPT-3.5" />
         </SelectTrigger>

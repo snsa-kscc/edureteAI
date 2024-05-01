@@ -13,9 +13,9 @@ const client = Redis.fromEnv();
 
 export const runtime = "edge";
 
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
-};
+// const formatMessage = (message: VercelChatMessage) => {
+//   return `${message.role}: ${message.content}`;
+// };
 
 const TEMPLATE = `You are a reasoning AI tasked with solving 
 the user's math-based questions. Logically arrive at the solution, and be 
@@ -30,27 +30,33 @@ AI:`;
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const messages = body.messages ?? [];
-    const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
+    const { messages, model, chatId, loadMessages } = await req.json();
+
+    if (loadMessages) {
+      const populateHistoricChat = await client.lrange(chatId, 0, -1);
+      return new Response(JSON.stringify(populateHistoricChat));
+    }
+
+    //const messages = messages ?? [];
+    // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-    const [family, ...rest]: string[] = body.model.split("/");
+    const [family, ...rest]: string[] = model.split("/");
     const modelName = rest.join("/");
 
-    let model;
+    let llm;
 
     switch (family) {
       case "OpenAI":
-        model = new ChatOpenAI({
+        llm = new ChatOpenAI({
           temperature: 0.1,
           modelName,
           streaming: true,
         });
         break;
       case "Anthropic":
-        model = new ChatAnthropic({
+        llm = new ChatAnthropic({
           temperature: 0.1,
           modelName,
           streaming: true,
@@ -60,27 +66,27 @@ export async function POST(req: NextRequest) {
         throw new Error("Invalid model type");
     }
 
-    const outputParser = new BytesOutputParser();
+    // const outputParser = new BytesOutputParser();
 
-    const chain = prompt.pipe(model).pipe(outputParser);
+    // const old_chain = prompt.pipe(llm).pipe(outputParser);
 
-    const old_stream = await chain.stream({
-      chat_history: formattedPreviousMessages.join("\n"),
-      input: currentMessageContent,
-    });
+    // const old_stream = await old_chain.stream({
+    //   chat_history: formattedPreviousMessages.join("\n"),
+    //   input: currentMessageContent,
+    // });
 
     const memory = new BufferMemory({
       memoryKey: "chat_history",
       chatHistory: new UpstashRedisChatMessageHistory({
-        sessionId: body.userId,
+        sessionId: chatId,
         client,
       }),
     });
 
-    const improvedChain = new ConversationChain({ llm: model, memory, prompt });
+    const chain = new ConversationChain({ llm, memory, prompt });
     const { stream, handlers } = LangChainStream();
 
-    improvedChain.invoke({ input: currentMessageContent, callbacks: [handlers] });
+    chain.invoke({ input: currentMessageContent, callbacks: [handlers] });
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {
