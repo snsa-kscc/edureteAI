@@ -20,8 +20,8 @@ export default function ChatPage() {
       </div>
       <div className="flex flex-col md:flex-row mx-4">
         <Sidebar />
-        <Chat />
-        <Chat />
+        <Chat identifier="left" />
+        <Chat identifier="right" />
       </div>
     </main>
   );

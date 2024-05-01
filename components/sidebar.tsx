@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarNav } from "@/components/ui/sidebar-nav";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 interface Item {
   href: string;
@@ -34,7 +35,7 @@ export default function Sidebar() {
         let parseDate = Number(item.replace(`${userId}-`, ""));
         return {
           href: `/chat/${item}`,
-          title: new Date(parseDate).toLocaleString(),
+          title: new Date(parseDate).toLocaleString("hr"),
         };
       });
 
@@ -44,7 +45,7 @@ export default function Sidebar() {
         setItems([
           {
             href: `/chat/${userId}-${unixTime}`,
-            title: new Date(Number(unixTime)).toLocaleString(),
+            title: new Date(Number(unixTime)).toLocaleString("hr"),
           },
           ...dbChatHistory,
         ]);
@@ -66,13 +67,13 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="w-64 h-full top-0 flex flex-col justify-top px-2">
+    <ScrollArea className="min-w-60 max-h-[720px] overflow-scroll flex flex-col justify-top px-2">
       <div className="ml-auto w-full">
         <Button className="w-full mt-2 mb-10" onClick={handleUpdateSidebar}>
           New Chat
         </Button>
       </div>
       <SidebarNav items={items} className="flex-col" />
-    </div>
+    </ScrollArea>
   );
 }

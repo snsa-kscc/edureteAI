@@ -13,24 +13,18 @@ const client = Redis.fromEnv();
 
 export const runtime = "edge";
 
+const defaultSystemPrompt = `You are a reasoning AI tasked with solving 
+the user's math-based questions. Logically arrive at the solution, and be 
+factual. In your answers, clearly detail the steps involved and give the 
+final answer. If you can't solve the question, say "I don't know".`;
+
 // const formatMessage = (message: VercelChatMessage) => {
 //   return `${message.role}: ${message.content}`;
 // };
 
-const TEMPLATE = `You are a reasoning AI tasked with solving 
-the user's math-based questions. Logically arrive at the solution, and be 
-factual. In your answers, clearly detail the steps involved and give the 
-final answer. If you can't solve the question, say "I don't know".
-
-Current conversation:
-{chat_history}
-
-User: {input}
-AI:`;
-
 export async function POST(req: NextRequest) {
   try {
-    const { messages, model, chatId, loadMessages } = await req.json();
+    const { messages, model, chatId, loadMessages, userSystemPrompt } = await req.json();
 
     if (loadMessages) {
       const populateHistoricChat = await client.lrange(chatId, 0, -1);
@@ -40,6 +34,15 @@ export async function POST(req: NextRequest) {
     //const messages = messages ?? [];
     // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
+
+    const systemPrompt = userSystemPrompt || defaultSystemPrompt;
+    const TEMPLATE = `${systemPrompt}
+
+    Current conversation:
+    {chat_history}
+
+    User: {input}
+    AI:`;
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
     const [family, ...rest]: string[] = model.split("/");
