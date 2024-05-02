@@ -1,7 +1,7 @@
 import { Redis } from "@upstash/redis";
 
 const client = Redis.fromEnv();
-//export const runtime = "edge";
+export const runtime = "edge";
 interface RequestJson {
   userId: string;
   chatHistoryAction: string;
