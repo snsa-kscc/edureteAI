@@ -1,7 +1,7 @@
 import { Redis } from "@upstash/redis";
 import { createClient } from "@vercel/kv";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 //const client = Redis.fromEnv();
 const client = createClient({
   url: process.env.KV_REST_API_URL!,
