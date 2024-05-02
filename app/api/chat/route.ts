@@ -8,9 +8,15 @@ import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
+import { createClient } from "@vercel/kv";
 
 export const runtime = "edge";
-const client = Redis.fromEnv();
+
+//const client = Redis.fromEnv();
+const client = createClient({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
 const defaultSystemPrompt = `You are a reasoning AI tasked with solving 
 the user's math-based questions. Logically arrive at the solution, and be 
@@ -81,6 +87,7 @@ export async function POST(req: NextRequest) {
       memoryKey: "chat_history",
       chatHistory: new UpstashRedisChatMessageHistory({
         sessionId: `${chatId}//${chatAreaId}//${model}`,
+        // @ts-ignore
         client,
       }),
     });

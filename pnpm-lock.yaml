@@ -47,6 +47,9 @@ importers:
       '@upstash/redis':
         specifier: ^1.30.0
         version: 1.30.0
+      '@vercel/kv':
+        specifier: ^1.0.1
+        version: 1.0.1
       ai:
         specifier: ^3.0.16
         version: 3.0.16(react@18.2.0)(solid-js@1.8.16)(svelte@4.2.12)(vue@3.4.21(typescript@5.4.3))(zod@3.22.4)
@@ -58,7 +61,7 @@ importers:
         version: 2.1.0
       langchain:
         specifier: ^0.1.30
-        version: 0.1.30(@upstash/redis@1.30.0)(fast-xml-parser@4.3.6)
+        version: 0.1.30(@upstash/redis@1.30.0)(@vercel/kv@1.0.1)(fast-xml-parser@4.3.6)
       lucide-react:
         specifier: ^0.364.0
         version: 0.364.0(react@18.2.0)
@@ -1033,8 +1036,15 @@ packages:
   '@types/uuid@9.0.8':
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
 
+  '@upstash/redis@1.25.1':
+    resolution: {integrity: sha512-ACj0GhJ4qrQyBshwFgPod6XufVEfKX2wcaihsEvSdLYnY+m+pa13kGt1RXm/yTHKf4TQi/Dy2A8z/y6WUEOmlg==}
+
   '@upstash/redis@1.30.0':
     resolution: {integrity: sha512-bkxl2n7qls27hONXNyItM6ccRT0NBJ8c6zl83wx+TlODpYXehgeiUJTkcTaXLp7hk+zy6Mqpzpeo3GX+wZSvBw==}
+
+  '@vercel/kv@1.0.1':
+    resolution: {integrity: sha512-uTKddsqVYS2GRAM/QMNNXCTuw9N742mLoGRXoNDcyECaxEXvIHG0dEY+ZnYISV4Vz534VwJO+64fd9XeSggSKw==}
+    engines: {node: '>=14.6'}
 
   '@vue/compiler-core@3.4.21':
     resolution: {integrity: sha512-MjXawxZf2SbZszLPYxaFCjxfibYrzr3eYbKxwpLR9EQN+oaziSu3qKVbwBERj1IFIB8OLUewxB5m/BFzi613og==}
@@ -2471,7 +2481,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@langchain/community@0.0.43(@upstash/redis@1.30.0)':
+  '@langchain/community@0.0.43(@upstash/redis@1.30.0)(@vercel/kv@1.0.1)':
     dependencies:
       '@langchain/core': 0.1.52
       '@langchain/openai': 0.0.25
@@ -2482,6 +2492,7 @@ snapshots:
       zod: 3.22.4
     optionalDependencies:
       '@upstash/redis': 1.30.0
+      '@vercel/kv': 1.0.1
     transitivePeerDependencies:
       - encoding
 
@@ -3075,9 +3086,17 @@ snapshots:
 
   '@types/uuid@9.0.8': {}
 
+  '@upstash/redis@1.25.1':
+    dependencies:
+      crypto-js: 4.2.0
+
   '@upstash/redis@1.30.0':
     dependencies:
       crypto-js: 4.2.0
+
+  '@vercel/kv@1.0.1':
+    dependencies:
+      '@upstash/redis': 1.25.1
 
   '@vue/compiler-core@3.4.21':
     dependencies:
@@ -3523,10 +3542,10 @@ snapshots:
 
   jsonpointer@5.0.1: {}
 
-  langchain@0.1.30(@upstash/redis@1.30.0)(fast-xml-parser@4.3.6):
+  langchain@0.1.30(@upstash/redis@1.30.0)(@vercel/kv@1.0.1)(fast-xml-parser@4.3.6):
     dependencies:
       '@anthropic-ai/sdk': 0.9.1
-      '@langchain/community': 0.0.43(@upstash/redis@1.30.0)
+      '@langchain/community': 0.0.43(@upstash/redis@1.30.0)(@vercel/kv@1.0.1)
       '@langchain/core': 0.1.52
       '@langchain/openai': 0.0.25
       binary-extensions: 2.3.0
@@ -3543,6 +3562,7 @@ snapshots:
       zod: 3.22.4
       zod-to-json-schema: 3.22.5(zod@3.22.4)
     optionalDependencies:
+      '@vercel/kv': 1.0.1
       fast-xml-parser: 4.3.6
     transitivePeerDependencies:
       - '@aws-crypto/sha256-js'
