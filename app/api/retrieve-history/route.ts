@@ -2,11 +2,11 @@ import { Redis } from "@upstash/redis";
 import { createClient } from "@vercel/kv";
 
 // export const runtime = "edge";
-//const client = Redis.fromEnv();
-const client = createClient({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
+const client = Redis.fromEnv();
+// const client = createClient({
+//   url: process.env.KV_REST_API_URL!,
+//   token: process.env.KV_REST_API_TOKEN!,
+// });
 interface RequestJson {
   userId: string;
   chatHistoryAction: string;

@@ -11,12 +11,12 @@ import { createClient } from "@vercel/kv";
 
 // export const runtime = "edge";
 
-const client = createClient({
-  url: process.env.KV_REST_API_URL!,
-  token: process.env.KV_REST_API_TOKEN!,
-});
+// const client = createClient({
+//   url: process.env.KV_REST_API_URL!,
+//   token: process.env.KV_REST_API_TOKEN!,
+// });
 
-//const client = Redis.fromEnv();
+const client = Redis.fromEnv();
 
 export default async function ChatPage({ params }: { params: { id: string } }) {
   const { userId } = auth();
