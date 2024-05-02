@@ -9,9 +9,8 @@ import { ChatAnthropic } from "@langchain/anthropic";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
 
-const client = Redis.fromEnv();
-
 export const runtime = "edge";
+const client = Redis.fromEnv();
 
 const defaultSystemPrompt = `You are a reasoning AI tasked with solving 
 the user's math-based questions. Logically arrive at the solution, and be 
