@@ -29,7 +29,14 @@ export default function Sidebar() {
     });
 
     if (response.ok) {
-      let chatHistory = await response.json();
+      let data = await response.json();
+
+      let chatHistory: string[] = data.map((item: string) => {
+        let parts = item.split("//");
+        let result = parts.shift();
+        return result;
+      });
+      chatHistory = [...new Set(chatHistory)];
       chatHistory = chatHistory.reverse();
       let dbChatHistory = chatHistory.map((item: string) => {
         let parseDate = Number(item.replace(`${userId}-`, ""));

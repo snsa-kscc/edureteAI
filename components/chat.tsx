@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { SendHorizontalIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 
-export default function Chat({ identifier }: { identifier: string }) {
+export default function Chat({ chatAreaId, chatData }: { chatAreaId: string; chatData?: any[] }) {
   const [model, setModel] = useState("OpenAI/gpt-3.5-turbo-0125");
   const [userSystemPrompt, setUserSystemPrompt] = useState<string>();
   const ref = useRef<HTMLDivElement>(null);
@@ -23,44 +23,20 @@ export default function Chat({ identifier }: { identifier: string }) {
       model,
       chatId: params.id,
       userSystemPrompt,
+      chatAreaId,
     },
   });
 
-  async function handleLoadChat() {
-    if (params.id && typeof params.id === "string") {
-      try {
-        const resp = await fetch("/api/chat", {
-          method: "POST",
-          body: JSON.stringify({
-            chatId: params.id,
-            loadMessages: true,
-          }),
-        });
-        const data: any[] = await resp.json();
-
-        if (data.length === 0) {
-          return;
-        }
-
-        if (data.length > 0) {
-          let filteredData = data.filter((item) => item.data.content).reverse();
-          let mappedData: any[] = filteredData.map((item, i) => {
-            return {
-              content: item.data.content,
-              role: item.type === "human" ? "user" : "assistant",
-            };
-          });
-          setMessages(mappedData);
-        }
-      } catch (error) {
-        console.error("Error fetching or parsing data:", error);
-      }
-    }
+  if (chatData) {
+    const filteredData = chatData.filter((item) => item.data.content).reverse();
+    const mappedData: any[] = filteredData.map((item, i) => {
+      return {
+        content: item.data.content,
+        role: item.type === "human" ? "user" : "assistant",
+      };
+    });
+    setMessages(mappedData);
   }
-
-  useEffect(() => {
-    handleLoadChat();
-  }, []);
 
   useEffect(() => {
     if (ref.current === null) return;
@@ -106,7 +82,7 @@ export default function Chat({ identifier }: { identifier: string }) {
           </PopoverContent>
         </Popover>
       </div>
-      <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref} key={identifier}>
+      <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
         {error && <p className="text-sm text-red-400">{error.message}</p>}
         {messages.map((m) => (
           <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">

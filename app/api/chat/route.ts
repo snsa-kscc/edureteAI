@@ -24,12 +24,12 @@ final answer. If you can't solve the question, say "I don't know".`;
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, model, chatId, loadMessages, userSystemPrompt } = await req.json();
+    const { messages, model, chatId, userSystemPrompt, chatAreaId } = await req.json();
 
-    if (loadMessages) {
-      const populateHistoricChat = await client.lrange(chatId, 0, -1);
-      return new Response(JSON.stringify(populateHistoricChat));
-    }
+    // if (loadMessages) {
+    //   const populateHistoricChat = await client.lrange(chatId, 0, -1);
+    //   return new Response(JSON.stringify(populateHistoricChat));
+    // }
 
     //const messages = messages ?? [];
     // const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     const memory = new BufferMemory({
       memoryKey: "chat_history",
       chatHistory: new UpstashRedisChatMessageHistory({
-        sessionId: chatId,
+        sessionId: `${chatId}//${chatAreaId}//${model}`,
         client,
       }),
     });
