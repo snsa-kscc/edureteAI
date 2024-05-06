@@ -33,6 +33,7 @@ final answer. If you can't solve the question, say "I don't know".`;
 export async function POST(req: NextRequest) {
   try {
     const { messages, model, chatId, userSystemPrompt, chatAreaId } = await req.json();
+    const { stream, handlers } = LangChainStream();
 
     // if (loadMessages) {
     //   const populateHistoricChat = await client.lrange(chatId, 0, -1);
@@ -95,10 +96,7 @@ export async function POST(req: NextRequest) {
     });
 
     const chain = new ConversationChain({ llm, memory, prompt });
-    const { stream, handlers } = LangChainStream();
-
     chain.invoke({ input: currentMessageContent, callbacks: [handlers] });
-
     return new StreamingTextResponse(stream);
   } catch (error: any) {
     console.error(error);
