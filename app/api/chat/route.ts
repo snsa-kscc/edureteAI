@@ -1,16 +1,19 @@
 import { NextRequest } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse, LangChainStream } from "ai";
 import { Redis } from "@upstash/redis";
+
 import { BufferMemory } from "langchain/memory";
-import { UpstashRedisChatMessageHistory } from "langchain/stores/message/upstash_redis";
 import { ConversationChain } from "langchain/chains";
+
+import { UpstashRedisChatMessageHistory } from "@langchain/community/stores/message/upstash_redis";
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatAnthropic } from "@langchain/anthropic";
+import { PromptTemplate } from "@langchain/core/prompts";
+
 import { BytesOutputParser } from "langchain/schema/output_parser";
-import { PromptTemplate } from "langchain/prompts";
 import { createClient } from "@vercel/kv";
 
-// export const runtime = "edge";
+export const runtime = "edge";
 
 const client = Redis.fromEnv();
 // const client = createClient({
@@ -87,7 +90,6 @@ export async function POST(req: NextRequest) {
       memoryKey: "chat_history",
       chatHistory: new UpstashRedisChatMessageHistory({
         sessionId: `${chatId}//${chatAreaId}//${model}`,
-        // @ts-ignore
         client,
       }),
     });
