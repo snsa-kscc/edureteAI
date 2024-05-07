@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    const chain = new ConversationChain({ llm, memory, prompt });
+    const chain = new ConversationChain({ llm, prompt, memory });
     chain.invoke({ input: currentMessageContent, callbacks: [handlers] });
     return new StreamingTextResponse(stream);
   } catch (error: any) {
