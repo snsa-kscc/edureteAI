@@ -13,7 +13,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { createClient } from "@vercel/kv";
 
-//export const runtime = "edge";
+export const runtime = "edge";
 
 const client = Redis.fromEnv();
 // const client = createClient({
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     });
 
     const chain = new ConversationChain({ llm, prompt, memory });
-    chain.invoke({ input: currentMessageContent, callbacks: [handlers] });
+    chain.call({ input: currentMessageContent, callbacks: [handlers] });
     return new StreamingTextResponse(stream);
   } catch (error: any) {
     console.error(error);
