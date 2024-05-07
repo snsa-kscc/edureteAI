@@ -27,16 +27,19 @@ export default function Chat({ chatAreaId, chatData }: { chatAreaId: string; cha
     },
   });
 
-  if (chatData) {
-    const filteredData = chatData.filter((item) => item.data.content).reverse();
-    const mappedData: any[] = filteredData.map((item, i) => {
-      return {
-        content: item.data.content,
-        role: item.type === "human" ? "user" : "assistant",
-      };
-    });
+  const mappedData: any[] = chatData
+    ? chatData
+        .filter((item) => item.data.content)
+        .reverse()
+        .map((item) => ({
+          content: item.data.content,
+          role: item.type === "human" ? "user" : "assistant",
+        }))
+    : [];
+
+  useEffect(() => {
     setMessages(mappedData);
-  }
+  }, []);
 
   useEffect(() => {
     if (ref.current === null) return;
@@ -84,8 +87,8 @@ export default function Chat({ chatAreaId, chatData }: { chatAreaId: string; cha
       </div>
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
         {error && <p className="text-sm text-red-400">{error.message}</p>}
-        {messages.map((m) => (
-          <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
+        {messages.map((m, i) => (
+          <div key={i} className="mr-6 whitespace-pre-wrap md:mr-12">
             {m.role === "user" && (
               <div className="mb-6 flex gap-3">
                 <Avatar>
