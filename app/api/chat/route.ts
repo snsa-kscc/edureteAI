@@ -88,14 +88,14 @@ export async function POST(req: NextRequest) {
     // });
 
     const memory = new BufferMemory({
-      memoryKey: "chat_history",
+      // memoryKey: "chat_history",
       chatHistory: new UpstashRedisChatMessageHistory({
         sessionId: `${chatId}//${chatAreaId}//${model}`,
         client,
       }),
     });
 
-    const chain = new ConversationChain({ llm, prompt, memory });
+    const chain = new ConversationChain({ llm, memory });
     chain.invoke({ input: currentMessageContent, callbacks: [handlers] });
     return new StreamingTextResponse(stream);
   } catch (error: any) {
