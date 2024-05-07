@@ -45,15 +45,15 @@ export async function POST(req: NextRequest) {
     const currentMessageContent = messages[messages.length - 1].content;
 
     const systemPrompt = userSystemPrompt || defaultSystemPrompt;
-    const TEMPLATE = `${systemPrompt}
+    const template = `${systemPrompt}
 
     Current conversation:
     {chat_history}
 
     User: {input}
     AI:`;
+    const prompt = PromptTemplate.fromTemplate(template);
 
-    const prompt = PromptTemplate.fromTemplate(TEMPLATE);
     const [family, ...rest]: string[] = model.split("/");
     const modelName = rest.join("/");
 
