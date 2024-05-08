@@ -13,7 +13,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { createClient } from "@vercel/kv";
 
-export const runtime = "edge";
+//export const runtime = "edge";
 
 const client = Redis.fromEnv();
 // const client = createClient({
