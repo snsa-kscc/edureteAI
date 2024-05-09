@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
     });
 
     const chain = new ConversationChain({ llm, prompt, memory });
-    await chain.call({ input: currentMessageContent, callbacks: [handlers] });
+    chain.call({ input: currentMessageContent, callbacks: [handlers] });
     return new StreamingTextResponse(stream);
   } catch (error: any) {
     console.error(error);
