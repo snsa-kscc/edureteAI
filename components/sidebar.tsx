@@ -14,7 +14,7 @@ interface Item {
   title: string;
 }
 
-export default function Sidebar() {
+export default function Sidebar({ updateItem }: { updateItem: any }) {
   const params = useParams();
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [othersItems, setOthersItems] = useState<Item[]>([]);
@@ -92,10 +92,10 @@ export default function Sidebar() {
         </Button>
       </div>
       <div>My history</div>
-      <SidebarNav items={userItems} className="flex-col" />
+      <SidebarNav items={userItems} updateItem={updateItem} className="flex-col" />
       <Protect permission="org:all_users:read">
         <div>Others history</div>
-        <SidebarNav items={othersItems} className="flex-col" />
+        <SidebarNav items={othersItems} updateItem={updateItem} className="flex-col" />
       </Protect>
     </ScrollArea>
   );

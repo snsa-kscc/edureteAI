@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs/server";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Changelog } from "@/components/changelog";
 
+import { redirect } from "next/navigation";
+
 import Chat from "@/components/chat";
 import Title from "@/components/title";
 import Sidebar from "@/components/sidebar";
@@ -17,6 +19,16 @@ import { createClient } from "@vercel/kv";
 // });
 
 const client = Redis.fromEnv();
+
+const updateItem = async (id: string) => {
+  "use server";
+  const part = id.split("/").at(-1);
+  const keys = await client.keys(`${part}*`);
+  for (const key of keys) {
+    await client.del(key);
+  }
+  return redirect(`/`);
+};
 
 export default async function ChatPage({ params }: { params: { id: string } }) {
   const { userId } = auth();
@@ -44,7 +56,7 @@ export default async function ChatPage({ params }: { params: { id: string } }) {
         <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="flex flex-col md:flex-row mx-4">
-        <Sidebar />
+        <Sidebar updateItem={updateItem} />
         <Chat chatAreaId="left" chatData={leftChatData} />
         <Chat chatAreaId="right" chatData={rightChatData} />
       </div>
