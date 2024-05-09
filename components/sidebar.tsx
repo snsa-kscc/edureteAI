@@ -7,6 +7,7 @@ import { SidebarNav } from "@/components/ui/sidebar-nav";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { Protect } from "@clerk/nextjs";
 
 interface Item {
   href: string;
@@ -15,12 +16,13 @@ interface Item {
 
 export default function Sidebar() {
   const params = useParams();
-  const [items, setItems] = useState<Item[]>([]);
+  const [userItems, setUserItems] = useState<Item[]>([]);
+  const [othersItems, setOthersItems] = useState<Item[]>([]);
   const router = useRouter();
-  const { userId } = useAuth();
+  const { userId, orgId } = useAuth();
 
-  async function handleRetrieveSidebar() {
-    const response = await fetch("/api/retrieve-history", {
+  async function handleRetrieveSidebar(url: string, setter: any) {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,17 +41,20 @@ export default function Sidebar() {
       chatHistory = [...new Set(chatHistory)];
       chatHistory = chatHistory.reverse();
       let dbChatHistory = chatHistory.map((item: string) => {
-        let parseDate = Number(item.replace(`${userId}-`, ""));
+        let parseDate = Number(item.split("-")[1]);
         return {
           href: `/chat/${item}`,
           title: new Date(parseDate).toLocaleString("hr"),
         };
       });
 
-      if (params.id && dbChatHistory.filter((item: { href: string }) => item.href === `/chat/${params.id}`).length === 0) {
-        const unixTime = params.id.toString().replaceAll(`${userId}-`, "");
-
-        setItems([
+      if (
+        setter === setUserItems &&
+        params.id.toString().split("-")[0] === userId &&
+        dbChatHistory.filter((item: { href: string }) => item.href === `/chat/${params.id}`).length === 0
+      ) {
+        const unixTime = params.id.toString().split("-")[1];
+        setter([
           {
             href: `/chat/${userId}-${unixTime}`,
             title: new Date(Number(unixTime)).toLocaleString("hr"),
@@ -57,7 +62,7 @@ export default function Sidebar() {
           ...dbChatHistory,
         ]);
       } else {
-        setItems(dbChatHistory);
+        setter(dbChatHistory);
       }
     } else {
       console.error("Error retrieving chat history");
@@ -70,8 +75,14 @@ export default function Sidebar() {
   }
 
   useEffect(() => {
-    handleRetrieveSidebar();
+    handleRetrieveSidebar("/api/retrieve-user-history", setUserItems);
   }, []);
+
+  if (orgId) {
+    useEffect(() => {
+      handleRetrieveSidebar("/api/retrieve-others-history", setOthersItems);
+    }, []);
+  }
 
   return (
     <ScrollArea className="min-w-60 max-h-[720px] overflow-scroll flex flex-col justify-top px-2">
@@ -80,7 +91,12 @@ export default function Sidebar() {
           New Chat
         </Button>
       </div>
-      <SidebarNav items={items} className="flex-col" />
+      <div>My history</div>
+      <SidebarNav items={userItems} className="flex-col" />
+      <Protect permission="org:all_users:read">
+        <div>Others history</div>
+        <SidebarNav items={othersItems} className="flex-col" />
+      </Protect>
     </ScrollArea>
   );
 }
