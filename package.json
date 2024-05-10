@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.19.1",
-    "@clerk/nextjs": "^4.29.9",
+    "@clerk/nextjs": "^5.0.7",
     "@langchain/anthropic": "^0.1.9",
     "@langchain/community": "^0.0.54",
     "@langchain/core": "^0.1.61",
