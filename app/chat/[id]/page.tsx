@@ -53,7 +53,7 @@ export default async function ChatPage({ params }: { params: { id: string } }) {
         <Title />
         <Changelog />
         <ModeToggle />
-        <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
+        <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="https://edurete.com" />}</div>
       </div>
       <div className="flex flex-col md:flex-row mx-4">
         <Sidebar updateItem={updateItem} />

@@ -57,6 +57,7 @@ export default function Chat({ chatAreaId, chatData }: { chatAreaId: string; cha
             <SelectGroup>
               <SelectLabel>Available Models</SelectLabel>
               <SelectItem value="OpenAI/gpt-3.5-turbo-0125">OpenAI/GPT-3.5</SelectItem>
+              <SelectItem value="OpenAI/gpt-4o">OpenAI/GPT-4o</SelectItem>
               <SelectItem value="OpenAI/gpt-4-turbo">OpenAI/GPT-4 Turbo</SelectItem>
               <SelectItem value="OpenAI/gpt-4-0125-preview">OpenAI/GPT-4</SelectItem>
               <SelectItem value="OpenAI/gpt-4-1106-preview">OpenAI/GPT-4 1106</SelectItem>
