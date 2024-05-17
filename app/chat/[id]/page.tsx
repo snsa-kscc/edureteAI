@@ -1,5 +1,5 @@
 import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Changelog } from "@/components/changelog";
 
@@ -32,6 +32,7 @@ const updateItem = async (id: string) => {
 
 export default async function ChatPage({ params }: { params: { id: string } }) {
   const { userId } = auth();
+  (await clerkClient.users.getUser(userId!)).emailAddresses[0].emailAddress;
   const chatKeys = await client.keys(`${params.id}//*`);
 
   let leftChatData;
@@ -53,7 +54,7 @@ export default async function ChatPage({ params }: { params: { id: string } }) {
         <Title />
         <Changelog />
         <ModeToggle />
-        <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="https://edurete.com" />}</div>
+        <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="flex flex-col md:flex-row mx-4">
         <Sidebar updateItem={updateItem} />

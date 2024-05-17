@@ -9,6 +9,9 @@ import { useAuth } from "@clerk/nextjs";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Protect } from "@clerk/nextjs";
 
+import { useMutation } from "@tanstack/react-query";
+import { updateDbItem } from "@/app/actions";
+
 interface Item {
   href: string;
   title: string;
@@ -84,19 +87,27 @@ export default function Sidebar({ updateItem }: { updateItem: any }) {
     }, []);
   }
 
+  const { data, mutate: server_updateDbItem } = useMutation({
+    mutationFn: updateDbItem,
+  });
+
   return (
-    <ScrollArea className="min-w-60 max-h-[720px] overflow-scroll flex flex-col justify-top px-2">
-      <div className="ml-auto w-full">
-        <Button className="w-full mt-2 mb-10" onClick={handleUpdateSidebar}>
-          New Chat
-        </Button>
-      </div>
-      <div>My history</div>
-      <SidebarNav items={userItems} updateItem={updateItem} className="flex-col" />
-      <Protect permission="org:all_users:read">
-        <div>Others history</div>
-        <SidebarNav items={othersItems} updateItem={updateItem} className="flex-col" />
-      </Protect>
-    </ScrollArea>
+    <>
+      <ScrollArea className="min-w-60 max-h-[720px] overflow-scroll flex flex-col justify-top px-2">
+        <div className="ml-auto w-full">
+          <Button className="w-full mt-2 mb-10" onClick={handleUpdateSidebar}>
+            New Chat
+          </Button>
+        </div>
+        <div>My history</div>
+        <SidebarNav items={userItems} updateItem={updateItem} className="flex-col" />
+        <Protect permission="org:all_users:read">
+          <div>Others history</div>
+          <SidebarNav items={othersItems} updateItem={updateItem} className="flex-col" />
+        </Protect>
+      </ScrollArea>
+      <Button onClick={() => server_updateDbItem("werwerw")}>click me</Button>
+      <p>{JSON.stringify(data)}</p>
+    </>
   );
 }
