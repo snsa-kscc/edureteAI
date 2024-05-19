@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.14",
+    "@ai-sdk/openai": "^0.0.13",
     "@anthropic-ai/sdk": "^0.19.1",
     "@clerk/nextjs": "^5.0.8",
     "@langchain/anthropic": "^0.1.9",
@@ -26,7 +28,7 @@
     "@tanstack/react-query": "^5.36.2",
     "@upstash/redis": "^1.30.0",
     "@vercel/kv": "^1.0.1",
-    "ai": "^3.0.16",
+    "ai": "^3.1.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "langchain": "^0.1.30",
