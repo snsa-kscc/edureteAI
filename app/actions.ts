@@ -1,16 +1,15 @@
 "use server";
 
-export async function updateDbItem(id: string) {
-  return { myid: id };
-}
-
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
 import { ReactNode } from "react";
 import { randomUUID } from "crypto";
 import { auth } from "@clerk/nextjs/server";
 
-const { userId } = auth();
+export async function updateDbItem(id: string) {
+  const { userId } = auth();
+  return { myid: userId, id };
+}
 
 export interface ServerMessage {
   role: "user" | "assistant";
