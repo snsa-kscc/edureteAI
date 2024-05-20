@@ -106,8 +106,8 @@ export default function Sidebar({ updateItem }: { updateItem: any }) {
           <SidebarNav items={othersItems} updateItem={updateItem} className="flex-col" />
         </Protect>
       </ScrollArea>
-      <Button onClick={() => server_updateDbItem("werwerw")}>click me</Button>
-      <p>{JSON.stringify(data)}</p>
+      {/* <Button onClick={() => server_updateDbItem("werwerw")}>click me</Button>
+      <p>{JSON.stringify(data)}</p> */}
     </>
   );
 }
