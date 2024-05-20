@@ -7,6 +7,10 @@ export async function updateDbItem(id: string) {
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
 import { ReactNode } from "react";
+import { randomUUID } from "crypto";
+import { auth } from "@clerk/nextjs/server";
+
+const { userId } = auth();
 
 export interface ServerMessage {
   role: "user" | "assistant";
@@ -60,13 +64,13 @@ function saveChat(history: ServerMessage[]) {
   console.log("saving chat history", history);
 }
 
-export async function continueConversation(input: string): Promise<ClientMessage> {
-  "use server";
-
+export async function submitUserMessage(input: string): Promise<ClientMessage> {
   const history = getMutableAIState();
+  console.log(history.get());
 
   const result = await streamUI({
     model: openai("gpt-3.5-turbo"),
+    system: `You are a reasoning AI tasked with solving the user's math-based questions. Logically arrive at the solution, and be factual. In your answers, clearly detail the steps involved and give the final answer. If you can't solve the question, say "I don't know". When responding with math formulas in the response, you must write the formulae using only Unicode from the Mathematical Operators block and other Unicode symbols. The AI GUI render engine does not support TeX code. You must not use LaTeX in responses.`,
     messages: [...history.get(), { role: "user", content: input }],
     text: ({ content, done }) => {
       if (done) {
@@ -78,7 +82,7 @@ export async function continueConversation(input: string): Promise<ClientMessage
   });
 
   return {
-    id: Math.random().toString(),
+    id: randomUUID(),
     role: "assistant",
     display: result.value,
   };
@@ -86,22 +90,18 @@ export async function continueConversation(input: string): Promise<ClientMessage
 
 export const AI = createAI<ServerMessage[], ClientMessage[]>({
   actions: {
-    continueConversation,
+    submitUserMessage,
   },
   onSetAIState: async ({ state, done }) => {
-    "use server";
-
     if (done) {
       saveChat(state);
     }
   },
   onGetUIState: async () => {
-    "use server";
-
     const history: ServerMessage[] = getAIState();
 
     return history.map(({ role, content }) => ({
-      id: Math.random().toString(),
+      id: randomUUID(),
       role,
       display: content,
     }));
