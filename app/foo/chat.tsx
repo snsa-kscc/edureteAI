@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { ClientMessage } from "../actions";
+import { ReactNode, useState } from "react";
 import { useActions, useUIState } from "ai/rsc";
+
+interface ClientMessage {
+  id: string;
+  role: "user" | "assistant";
+  display: ReactNode;
+}
 
 export default function FooChat() {
   const [input, setInput] = useState<string>("");
   const [conversation, setConversation] = useUIState();
-
   const { submitUserMessage } = useActions();
 
   return (
