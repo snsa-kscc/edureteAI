@@ -9,7 +9,7 @@ interface ClientMessage {
   display: ReactNode;
 }
 
-export default function FooChat() {
+export default function FooChat({ model, system }: { model: string; system: string }) {
   const [input, setInput] = useState<string>("");
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
@@ -41,6 +41,15 @@ export default function FooChat() {
         >
           Send Message
         </button>
+      </div>
+      <div>
+        {/* 2DO send mutated model and system to server */}
+        <input readOnly value={model} type="text" />
+        <button>Set model</button>
+      </div>
+      <div>
+        <input readOnly value={system} type="text" />
+        <button>Set system prompt</button>
       </div>
     </div>
   );

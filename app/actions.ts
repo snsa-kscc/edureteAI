@@ -1,13 +1,13 @@
 "use server";
 
 import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
-import { openai } from "@ai-sdk/openai";
 import { randomUUID } from "crypto";
 import { auth } from "@clerk/nextjs/server";
 import { saveChat } from "@/lib/actions";
 import { Message } from "ai";
 import { Chat } from "@/lib/types";
 import { ReactNode } from "react";
+import { handleModelProvider } from "@/lib/utils";
 
 export async function updateDbItem(id: string) {
   const { userId } = auth();
@@ -17,7 +17,7 @@ export async function updateDbItem(id: string) {
 export type AIState = {
   chatId: string;
   model: string;
-  systemPrompt: string;
+  system: string;
   chatAreaId: string;
   messages: Message[];
 };
@@ -28,18 +28,11 @@ export type UIState = {
   display: ReactNode;
 }[];
 
-const { model, systemPrompt } = {
-  model: "gpt-3.5-turbo",
-  systemPrompt: `You are a math solver. You are solving math questions and give you an answer. You must use math symbols and be precise. You must not use LaTeX in your responses.`,
-};
-
 export async function submitUserMessage(content: string) {
   const aiState = getMutableAIState<typeof AI>();
-
+  // 2DO update system and model from UI
   aiState.update({
     ...aiState.get(),
-    model,
-    systemPrompt,
     messages: [
       ...aiState.get().messages,
       {
@@ -51,8 +44,8 @@ export async function submitUserMessage(content: string) {
   });
 
   const result = await streamUI({
-    model: openai("gpt-3.5-turbo"),
-    system: `You are a reasoning AI tasked with solving the user's math-based questions. Logically arrive at the solution, and be factual. In your answers, clearly detail the steps involved and give the final answer. If you can't solve the question, say "I don't know". When responding with math formulas in the response, you must write the formulae using only Unicode from the Mathematical Operators block and other Unicode symbols. The AI GUI render engine does not support TeX code. You must not use LaTeX in responses.`,
+    model: handleModelProvider(aiState.get().model),
+    system: aiState.get().system,
 
     messages: [
       ...aiState.get().messages.map((message: any) => ({
@@ -93,7 +86,7 @@ export const AI = createAI<AIState, UIState>({
   },
   onSetAIState: async ({ state, done }) => {
     if (done) {
-      const { chatId, chatAreaId, messages, model, systemPrompt } = state;
+      const { chatId, chatAreaId, messages, model, system } = state;
 
       const { userId } = auth();
       const createdAt = new Date();
@@ -102,8 +95,8 @@ export const AI = createAI<AIState, UIState>({
 
       const chat: Chat = {
         ...(chatAreaId === "left"
-          ? { leftMessages: messages, leftModel: model, leftSystemPrompt: systemPrompt }
-          : { rightMessages: messages, rightModel: model, rightSystemPrompt: systemPrompt }),
+          ? { leftMessages: messages, leftModel: model, leftSystemPrompt: system }
+          : { rightMessages: messages, rightModel: model, rightSystemPrompt: system }),
         id: chatId,
         title,
         userId: userId!,
