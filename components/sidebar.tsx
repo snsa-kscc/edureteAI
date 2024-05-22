@@ -17,7 +17,7 @@ interface Item {
   title: string;
 }
 
-export default function Sidebar({ updateItem }: { updateItem: any }) {
+export function Sidebar({ updateItem }: { updateItem: any }) {
   const params = useParams();
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [othersItems, setOthersItems] = useState<Item[]>([]);

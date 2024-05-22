@@ -33,6 +33,8 @@ export async function submitUserMessage(content: string) {
   // 2DO update system and model from UI
   aiState.update({
     ...aiState.get(),
+    model: "gpt-3.5-turbo",
+    system: "you are okk",
     messages: [
       ...aiState.get().messages,
       {
@@ -90,7 +92,7 @@ export const AI = createAI<AIState, UIState>({
 
       const { userId } = auth();
       const createdAt = new Date();
-      const path = `/foo/${chatId}`;
+      const path = `/rsc-c/${chatId}`;
       const title = messages[0].content.substring(0, 100);
 
       const chat: Chat = {

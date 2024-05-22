@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "ai/react";
-import CopyToClipboard from "@/components/copy-to-clipboard";
+import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { SendHorizontalIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 
-export default function Chat({ chatAreaId, chatData }: { chatAreaId: string; chatData?: any[] }) {
+export function Chat({ chatAreaId, chatData }: { chatAreaId: string; chatData?: any[] }) {
   const [model, setModel] = useState("OpenAI/gpt-3.5-turbo-0125");
   const [userSystemPrompt, setUserSystemPrompt] = useState<string>();
   const ref = useRef<HTMLDivElement>(null);

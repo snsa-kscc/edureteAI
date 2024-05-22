@@ -11,7 +11,7 @@ interface ChatMessageActionsProps extends React.ComponentProps<"div"> {
   message: Message;
 }
 
-export default function CopyToClipboard({ message, className, ...props }: ChatMessageActionsProps) {
+export function CopyToClipboard({ message, className, ...props }: ChatMessageActionsProps) {
   const { isCopied, copyToClipboard } = useClipboard({ timeout: 2000 });
 
   const onCopy = () => {

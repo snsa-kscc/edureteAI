@@ -5,18 +5,12 @@ import { Changelog } from "@/components/changelog";
 
 import { redirect } from "next/navigation";
 
-import Chat from "@/components/chat";
-import Title from "@/components/title";
-import Sidebar from "@/components/sidebar";
+import { Chat } from "@/components/chat";
+import { Title } from "@/components/title";
+import { Sidebar } from "@/components/sidebar";
 import { Redis } from "@upstash/redis";
-import { createClient } from "@vercel/kv";
 
 // export const runtime = "edge";
-
-// const client = createClient({
-//   url: process.env.KV_REST_API_URL!,
-//   token: process.env.KV_REST_API_TOKEN!,
-// });
 
 const client = Redis.fromEnv();
 

@@ -9,7 +9,7 @@ interface ClientMessage {
   display: ReactNode;
 }
 
-export default function FooChat({ model, system }: { model: string; system: string }) {
+export function RscChat({ model, system }: { model: string; system: string }) {
   const [input, setInput] = useState<string>("");
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
