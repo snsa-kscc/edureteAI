@@ -16,6 +16,8 @@ export async function updateDbItem(id: string) {
 
 export type AIState = {
   chatId: string;
+  model: string;
+  systemPrompt: string;
   chatAreaId: string;
   messages: Message[];
 };
@@ -26,11 +28,18 @@ export type UIState = {
   display: ReactNode;
 }[];
 
+const { model, systemPrompt } = {
+  model: "gpt-3.5-turbo",
+  systemPrompt: `You are a math solver. You are solving math questions and give you an answer. You must use math symbols and be precise. You must not use LaTeX in your responses.`,
+};
+
 export async function submitUserMessage(content: string) {
   const aiState = getMutableAIState<typeof AI>();
 
   aiState.update({
     ...aiState.get(),
+    model,
+    systemPrompt,
     messages: [
       ...aiState.get().messages,
       {
@@ -84,14 +93,17 @@ export const AI = createAI<AIState, UIState>({
   },
   onSetAIState: async ({ state, done }) => {
     if (done) {
-      const { chatId, chatAreaId, messages } = state;
+      const { chatId, chatAreaId, messages, model, systemPrompt } = state;
+
       const { userId } = auth();
       const createdAt = new Date();
       const path = `/foo/${chatId}`;
       const title = messages[0].content.substring(0, 100);
 
       const chat: Chat = {
-        ...(chatAreaId === "left" ? { leftMessages: messages } : { rightMessages: messages }),
+        ...(chatAreaId === "left"
+          ? { leftMessages: messages, leftModel: model, leftSystemPrompt: systemPrompt }
+          : { rightMessages: messages, rightModel: model, rightSystemPrompt: systemPrompt }),
         id: chatId,
         title,
         userId: userId!,

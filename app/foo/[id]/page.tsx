@@ -21,10 +21,28 @@ export default async function FooPage({ params }: { params: { id: string } }) {
         <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="flex gap-16 justify-evenly">
-        <AI initialAIState={{ chatId: params.id, chatAreaId: "left", messages: chat?.leftMessages ?? [] }} initialUIState={[]}>
+        <AI
+          initialAIState={{
+            chatId: params.id,
+            chatAreaId: "left",
+            messages: chat?.leftMessages ?? [],
+            model: chat?.leftModel ?? "",
+            systemPrompt: chat?.leftSystemPrompt ?? "",
+          }}
+          initialUIState={[]}
+        >
           <FooChat />
         </AI>
-        <AI initialAIState={{ chatId: params.id, chatAreaId: "right", messages: chat?.rightMessages ?? [] }} initialUIState={[]}>
+        <AI
+          initialAIState={{
+            chatId: params.id,
+            chatAreaId: "right",
+            messages: chat?.rightMessages ?? [],
+            model: chat?.rightModel ?? "",
+            systemPrompt: chat?.rightSystemPrompt ?? "",
+          }}
+          initialUIState={[]}
+        >
           <FooChat />
         </AI>
       </div>
