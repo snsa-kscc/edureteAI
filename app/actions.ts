@@ -28,13 +28,13 @@ export type UIState = {
   display: ReactNode;
 }[];
 
-export async function submitUserMessage(content: string) {
+export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
-  // 2DO update system and model from UI
+
   aiState.update({
     ...aiState.get(),
-    model: "gpt-3.5-turbo",
-    system: "you are okk",
+    model,
+    system,
     messages: [
       ...aiState.get().messages,
       {
