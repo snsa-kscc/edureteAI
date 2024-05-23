@@ -33,7 +33,7 @@ export default async function RscPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <RscChat defaultModel={chat?.leftModel ?? DEFAULT_MODEL} defaultSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <RscChat initialModel={chat?.leftModel ?? DEFAULT_MODEL} initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
         </AI>
         <AI
           initialAIState={{
@@ -45,7 +45,7 @@ export default async function RscPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <RscChat defaultModel={chat?.rightModel ?? DEFAULT_MODEL} defaultSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <RscChat initialModel={chat?.rightModel ?? DEFAULT_MODEL} initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
         </AI>
       </div>
     </main>
