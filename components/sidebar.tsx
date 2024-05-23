@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { SidebarNav } from "@/components/ui/sidebar-nav";
+import { SidebarNav } from "@/components/ui/ai-sidebar-nav";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
