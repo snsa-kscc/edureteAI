@@ -1,9 +1,12 @@
+"use server";
+
 import { Redis } from "@upstash/redis";
 import { Chat } from "./types";
 import { revalidatePath } from "next/cache";
 
+const client = Redis.fromEnv();
+
 export async function getChats(userId?: string | null) {
-  const client = Redis.fromEnv();
   if (!userId) {
     return [];
   }
@@ -27,7 +30,6 @@ export async function getChats(userId?: string | null) {
 }
 
 export async function getChat(id: string, userId: string) {
-  const client = Redis.fromEnv();
   const chat = await client.hgetall<Chat>(`chat:${id}`);
 
   if (!chat || (userId && chat.userId !== userId)) {
@@ -38,7 +40,6 @@ export async function getChat(id: string, userId: string) {
 }
 
 export async function saveChat(chat: Chat) {
-  const client = Redis.fromEnv();
   const pipeline = client.pipeline();
 
   pipeline.hmset(`chat:${chat.id}`, chat);
@@ -51,8 +52,6 @@ export async function saveChat(chat: Chat) {
 }
 
 export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {
-  const client = Redis.fromEnv();
-
   await client.del(`chat:${id}`);
   await client.zrem(`user:chat:${userId!}`, `chat:${id}`);
 

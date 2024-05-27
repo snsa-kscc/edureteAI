@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SyncActiveOrganization } from "@/components/sync-active-orgs";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
+          <Toaster position="top-center" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Providers>{children}</Providers>
           </ThemeProvider>
