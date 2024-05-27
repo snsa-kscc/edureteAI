@@ -13,3 +13,10 @@ export interface Chat extends Record<string, any> {
   leftSystemPrompt?: string;
   rightSystemPrompt?: string;
 }
+
+export type ServerActionResult<Result> = Promise<
+  | Result
+  | {
+      error: string;
+    }
+>;
