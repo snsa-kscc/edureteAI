@@ -18,7 +18,7 @@ import {
 } from "./ui/alert-dialog";
 import { toast } from "sonner";
 
-export function RscSidebarActions({
+export function SidebarActions({
   chat,
   userId,
   removeChat,
@@ -38,7 +38,7 @@ export function RscSidebarActions({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" className="size-7 p-0 hover:bg-background" disabled={isRemovePending} onClick={() => setDeleteDialogOpen(true)}>
-                <IconTrash />
+                <IconTrash className="text-emerald-500 mt-1" />
                 <span className="sr-only">Delete</span>
               </Button>
             </TooltipTrigger>
@@ -72,7 +72,7 @@ export function RscSidebarActions({
 
                   setDeleteDialogOpen(false);
                   router.refresh();
-                  router.push("/");
+                  router.push("/c");
                   toast.success("Chat deleted");
                 });
               }}

@@ -1,12 +1,12 @@
 import { getChats } from "@/lib/actions";
-import { RscSidebarItems } from "./rsc-sidebar-items";
+import { SidebarItems } from "./sidebar-items";
 import { cache } from "react";
 
 const loadChats = cache(async (userId: string) => {
   return await getChats(userId);
 });
 
-export async function RscSidebarList({ userId }: { userId: string | null }) {
+export async function SidebarList({ userId }: { userId: string | null }) {
   const chats = await loadChats(userId!);
 
   return (
@@ -14,7 +14,7 @@ export async function RscSidebarList({ userId }: { userId: string | null }) {
       <div className="flex-1 overflow-auto">
         {chats?.length ? (
           <div className="space-y-2 px-2">
-            <RscSidebarItems userId={userId} chats={chats} />
+            <SidebarItems userId={userId} chats={chats} />
           </div>
         ) : (
           <div className="p-8 text-center">

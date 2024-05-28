@@ -92,7 +92,7 @@ export const AI = createAI<AIState, UIState>({
 
       const { userId } = auth();
       const createdAt = new Date();
-      const path = `/rsc-c/${chatId}`;
+      const path = `/c/${chatId}`;
       const title = messages[0].content.substring(0, 100);
 
       const chat: Chat = {

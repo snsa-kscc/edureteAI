@@ -5,9 +5,9 @@ import { Changelog } from "@/components/changelog";
 
 import { redirect } from "next/navigation";
 
-import { Chat } from "@/components/chat";
+import { Chat } from "@/components/ai-chat";
 import { Title } from "@/components/title";
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar } from "@/components/ai-sidebar";
 import { Redis } from "@upstash/redis";
 
 // export const runtime = "edge";

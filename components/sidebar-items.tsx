@@ -2,11 +2,11 @@
 
 import { Chat } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { RscSidebarItem } from "./rsc-sidebar-item";
-import { RscSidebarActions } from "./rsc-sidebar-actions";
+import { SidebarItem } from "./sidebar-item";
+import { SidebarActions } from "./sidebar-actions";
 import { removeChat } from "@/lib/actions";
 
-export function RscSidebarItems({ chats, userId }: { chats?: Chat[]; userId: string | null }) {
+export function SidebarItems({ chats, userId }: { chats?: Chat[]; userId: string | null }) {
   if (!chats?.length) return null;
 
   return (
@@ -21,9 +21,9 @@ export function RscSidebarItems({ chats, userId }: { chats?: Chat[]; userId: str
                 height: 0,
               }}
             >
-              <RscSidebarItem index={index} chat={chat}>
-                <RscSidebarActions chat={chat} userId={userId} removeChat={removeChat} />
-              </RscSidebarItem>
+              <SidebarItem index={index} chat={chat}>
+                <SidebarActions chat={chat} userId={userId} removeChat={removeChat} />
+              </SidebarItem>
             </motion.div>
           )
       )}

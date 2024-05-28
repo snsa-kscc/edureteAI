@@ -24,7 +24,7 @@ export function Changelog() {
           <AlertDialogTitle>What is new in the app</AlertDialogTitle>
           <AlertDialogDescription>
             23.05.2023 - Added another chat option -{" "}
-            <Link className="underline hover:text-primary" href="/rsc-c">
+            <Link className="underline hover:text-primary" href="/c">
               available here
             </Link>
           </AlertDialogDescription>
