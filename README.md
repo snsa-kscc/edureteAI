@@ -6,11 +6,11 @@ LLM chat application for [Edurete](https://edurete.com) platform using OpenAI an
 
 - Gpt-3.5-turbo
 - Gpt-4
+- Gpt-4-Turbo
+- Gpt-4o
 
 ### Anthropic models:
 
-- Claude-v1
-- Claude-v2
 - Haiku
 - Sonnet
 - Opus
