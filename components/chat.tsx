@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useActions, useUIState } from "ai/rsc";
+import { useAIState, useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { useEnterSubmit } from "@/hooks/use-enter-submit";
 interface ClientMessage {
   id: string;
   role: "user" | "assistant";
-  display: ReactNode;
+  content: ReactNode;
 }
 
 export function Chat({ initialModel, initialSystem }: { initialModel: string; initialSystem: string }) {
@@ -75,7 +75,7 @@ export function Chat({ initialModel, initialSystem }: { initialModel: string; in
                 </Avatar>
                 <div className="mt-1.5">
                   <p className="font-semibold">You</p>
-                  <div className="mt-1.5 text-sm text-zinc-500">{m.display}</div>
+                  <div className="mt-1.5 text-sm text-zinc-500">{m.content}</div>
                 </div>
               </div>
             )}
@@ -91,7 +91,7 @@ export function Chat({ initialModel, initialSystem }: { initialModel: string; in
                     <p className="font-semibold">Bot</p>
                     <CopyToClipboard message={m} className="-mt-1" />
                   </div>
-                  <div className="mt-2 text-sm text-zinc-500">{m.display}</div>
+                  <div className="mt-2 text-sm text-zinc-500">{m.content}</div>
                 </div>
               </div>
             )}
@@ -103,7 +103,7 @@ export function Chat({ initialModel, initialSystem }: { initialModel: string; in
         onSubmit={async (e: any) => {
           e.preventDefault();
           setContent("");
-          setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", display: content }]);
+          setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
           const message = await submitUserMessage({ content, model, system });
           setConversation((currentConversation: ClientMessage[]) => [...currentConversation, message]);
         }}

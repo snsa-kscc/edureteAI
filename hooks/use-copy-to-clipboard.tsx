@@ -21,7 +21,7 @@ export function CopyToClipboard({ message, className, ...props }: ChatMessageAct
 
   return (
     <div className={cn("", className)} {...props}>
-      <Button variant="secondary" size="icon" className="h-8 w-8" onClick={onCopy}>
+      <Button variant="secondary" size="icon" className="h-8 w-8 p-2" onClick={onCopy}>
         {isCopied ? <CheckIcon className="h-4 w-4 text-emerald-500" /> : <CopyIcon className="h-4 w-4 text-zinc-500" />}
         <span className="sr-only">Copy message</span>
       </Button>

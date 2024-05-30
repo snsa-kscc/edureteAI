@@ -25,7 +25,7 @@ export type AIState = {
 export type UIState = {
   id: string;
   role: "user" | "assistant";
-  display: ReactNode;
+  content: ReactNode;
 }[];
 
 export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
@@ -78,7 +78,7 @@ export async function submitUserMessage({ content, model, system }: { content: s
   return {
     id: randomUUID(),
     role: "assistant",
-    display: result.value,
+    content: result.value,
   };
 }
 
@@ -117,7 +117,7 @@ export const AI = createAI<AIState, UIState>({
     return aiState.messages.map((message: any) => ({
       id: message.id,
       role: message.role,
-      display: message.content,
+      content: message.content,
     }));
   },
 });
