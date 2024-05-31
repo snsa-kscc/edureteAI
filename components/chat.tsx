@@ -80,7 +80,7 @@ export function Chat({ id, initialModel, initialSystem }: { id: string; initialM
         </Popover>
       </div>
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
-        {/* 2DO scroll doesn't work */}
+        {/* 2DO - scroll & copy don't work */}
         {conversation.map((m: any) => (
           <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
             {m.role === "user" && (
