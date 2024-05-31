@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useAIState, useActions, useUIState } from "ai/rsc";
+import { useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";

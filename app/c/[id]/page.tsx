@@ -4,7 +4,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
-import { AI } from "../../actions";
+import { AI } from "@/app/actions";
 import { getChat } from "@/lib/actions";
 import { Sidebar } from "@/components/sidebar";
 
