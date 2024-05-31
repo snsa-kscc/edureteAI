@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useActions, useUIState } from "ai/rsc";
+import { useAIState, useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SendHorizontalIcon } from "lucide-react";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
+import { useRouter } from "next/navigation";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 interface ClientMessage {
   id: string;
@@ -18,7 +20,8 @@ interface ClientMessage {
   content: ReactNode;
 }
 
-export function Chat({ initialModel, initialSystem }: { initialModel: string; initialSystem: string }) {
+export function Chat({ id, initialModel, initialSystem }: { id: string; initialModel: string; initialSystem: string }) {
+  const router = useRouter();
   const [content, setContent] = useState<string>("");
   const [model, setModel] = useState<string>(initialModel);
   const [system, setSystem] = useState<string>(initialSystem);
@@ -26,6 +29,19 @@ export function Chat({ initialModel, initialSystem }: { initialModel: string; in
   const { submitUserMessage } = useActions();
   const ref = useRef<HTMLDivElement>(null);
   const { formRef, onKeyDown } = useEnterSubmit();
+  const [aiState] = useAIState();
+  const [_, setNewChatId] = useLocalStorage("newChatId", id);
+
+  useEffect(() => {
+    const messagesLength = aiState.messages?.length;
+    if (messagesLength === 2) {
+      router.refresh();
+    }
+  }, [aiState.messages, router]);
+
+  useEffect(() => {
+    setNewChatId(id);
+  });
 
   useEffect(() => {
     if (ref.current === null) return;

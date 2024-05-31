@@ -35,7 +35,7 @@ export default async function cPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <Chat initialModel={chat?.leftModel ?? DEFAULT_MODEL} initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <Chat id={params.id} initialModel={chat?.leftModel ?? DEFAULT_MODEL} initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
         </AI>
         <AI
           initialAIState={{
@@ -47,7 +47,7 @@ export default async function cPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <Chat initialModel={chat?.rightModel ?? DEFAULT_MODEL} initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <Chat id={params.id} initialModel={chat?.rightModel ?? DEFAULT_MODEL} initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
         </AI>
       </div>
     </main>
