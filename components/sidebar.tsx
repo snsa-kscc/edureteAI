@@ -6,7 +6,7 @@ import { SidebarList } from "./sidebar-list";
 
 export function Sidebar({ userId }: { userId: string | null }) {
   return (
-    <div className="min-w-60 max-h-[720px] overflow-scroll flex flex-col justify-top px-2">
+    <div className="min-w-60 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">
         <Link
           href="/c"
