@@ -3,8 +3,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
+import { getUserData } from "@/lib/actions";
 
-export function Sidebar({ userId }: { userId: string | null }) {
+export async function Sidebar({ userId }: { userId: string | null }) {
+  const data = await getUserData();
+
   return (
     <div className="min-w-60 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">

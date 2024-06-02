@@ -3,8 +3,24 @@
 import { Redis } from "@upstash/redis";
 import { Chat } from "./types";
 import { revalidatePath } from "next/cache";
+import { clerkClient } from "@clerk/nextjs/server";
 
 const client = Redis.fromEnv();
+
+export async function getUserData() {
+  try {
+    const userIds: string[] = await client.smembers("userIds");
+    const userData: Record<string, string> = {};
+    for (const userId of userIds) {
+      const user = await clerkClient.users.getUser(userId);
+      const emailAddress = user.emailAddresses[0].emailAddress;
+      userData[userId] = emailAddress;
+    }
+    return userData;
+  } catch (error) {
+    return {};
+  }
+}
 
 export async function getChats(userId?: string | null) {
   if (!userId) {
@@ -47,6 +63,7 @@ export async function saveChat(chat: Chat) {
     score: Date.now(),
     member: `chat:${chat.id}`,
   });
+  pipeline.sadd(`userIds`, chat.userId);
 
   await pipeline.exec();
 }

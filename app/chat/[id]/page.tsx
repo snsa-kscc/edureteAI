@@ -26,7 +26,7 @@ const updateItem = async (id: string) => {
 
 export default async function ChatPage({ params }: { params: { id: string } }) {
   const { userId } = auth();
-  (await clerkClient.users.getUser(userId!)).emailAddresses[0].emailAddress;
+  (await clerkClient.users.getUser(userId!)).emailAddresses[0].emailAddress; //to je bitno
   const chatKeys = await client.keys(`${params.id}//*`);
 
   let leftChatData;
