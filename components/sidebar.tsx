@@ -9,7 +9,7 @@ export function Sidebar({ userId }: { userId: string | null }) {
     <div className="min-w-60 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">
         <Link
-          href="/c"
+          href="/"
           className={cn(
             buttonVariants({ variant: "outline" }),
             "h-10 w-full justify-start bg-zinc-50 px-4 shadow-none transition-colors hover:bg-zinc-200/40 dark:bg-zinc-900 dark:hover:bg-zinc-300/10"
