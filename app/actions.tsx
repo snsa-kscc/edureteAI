@@ -1,6 +1,6 @@
 "use server";
 
-import { createAI, getAIState, getMutableAIState, streamUI } from "ai/rsc";
+import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { randomUUID } from "crypto";
 import { auth } from "@clerk/nextjs/server";
 import { saveChat } from "@/lib/actions";
@@ -8,6 +8,7 @@ import { Message } from "ai";
 import { Chat } from "@/lib/types";
 import { ReactNode } from "react";
 import { handleModelProvider } from "@/lib/utils";
+import { BotMessage } from "@/components/bot-message";
 
 export async function updateDbItem(id: string) {
   const { userId } = auth();
@@ -45,19 +46,30 @@ export async function submitUserMessage({ content, model, system }: { content: s
     ],
   });
 
+  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
+  let textNode: undefined | ReactNode;
+  if (!textStream) {
+    textStream = createStreamableValue("");
+    textNode = <BotMessage content={textStream.value} />;
+  }
+
   const result = await streamUI({
     model: handleModelProvider(aiState.get().model),
     system: aiState.get().system,
-
     messages: [
       ...aiState.get().messages.map((message: any) => ({
         role: message.role,
         content: message.content,
       })),
     ],
+    text: ({ content, done, delta }) => {
+      // if (!textStream) {
+      //   textStream = createStreamableValue("");
+      //   textNode = <BotMessage content={textStream.value} />;
+      // }
 
-    text: ({ content, done }) => {
       if (done) {
+        textStream.done();
         aiState.done({
           ...aiState.get(),
           messages: [
@@ -69,9 +81,11 @@ export async function submitUserMessage({ content, model, system }: { content: s
             },
           ],
         });
+      } else {
+        textStream.update(delta);
       }
 
-      return content;
+      return textNode;
     },
   });
 
@@ -79,6 +93,7 @@ export async function submitUserMessage({ content, model, system }: { content: s
     id: randomUUID(),
     role: "assistant",
     content: result.value,
+    stream: textStream.value,
   };
 }
 

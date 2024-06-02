@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useAIState, useActions, useUIState } from "ai/rsc";
+import { readStreamableValue, useAIState, useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,6 @@ export function Chat({ id, initialModel, initialSystem }: { id: string; initialM
         </Popover>
       </div>
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
-        {/* 2DO - scroll & copy don't work */}
         {conversation.map((m: any) => (
           <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
             {m.role === "user" && (
@@ -121,7 +120,15 @@ export function Chat({ id, initialModel, initialSystem }: { id: string; initialM
           setContent("");
           setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
           const message = await submitUserMessage({ content, model, system });
-          setConversation((currentConversation: ClientMessage[]) => [...currentConversation, message]);
+          let textContent = "";
+          for await (const delta of readStreamableValue(message.stream)) {
+            textContent = `${textContent}${delta}`;
+            setConversation([
+              ...aiState.messages,
+              { id: Math.random().toString(), role: "user", content },
+              { id: Math.random().toString(), role: "assistant", content: textContent },
+            ]);
+          }
         }}
         className="relative"
       >
