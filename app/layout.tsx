@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { auth } from "@clerk/nextjs/server";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SyncActiveOrganization } from "@/components/sync-active-orgs";
+import { SyncActiveOrganization } from "@/components/sync-active-org";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -24,7 +24,7 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-      {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
+      <SyncActiveOrganization membership={sessionClaims?.membership} />
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
           <Toaster position="top-center" />
