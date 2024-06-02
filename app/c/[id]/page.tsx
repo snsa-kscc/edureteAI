@@ -23,7 +23,7 @@ export default async function cPage({ params }: { params: { id: string } }) {
         <ModeToggle />
         <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
-      <div className="flex flex-col lg:flex-row gap-4 xl:gap-16 justify-evenly">
+      <div className="flex flex-col lg:flex-row justify-evenly">
         <Sidebar userId={userId} />
         <AI
           initialAIState={{

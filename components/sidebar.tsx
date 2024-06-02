@@ -4,12 +4,14 @@ import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
 import { getUserData } from "@/lib/actions";
+import { auth } from "@clerk/nextjs/server";
 
 export async function Sidebar({ userId }: { userId: string | null }) {
   const data = await getUserData();
+  const { orgRole } = auth();
 
   return (
-    <div className="min-w-60 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
+    <div className="min-w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">
         <Link
           href="/"
@@ -20,6 +22,7 @@ export async function Sidebar({ userId }: { userId: string | null }) {
         >
           New Chat
         </Link>
+        {orgRole && <pre>{orgRole}</pre>}
       </div>
       <Suspense
         fallback={
