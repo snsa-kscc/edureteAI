@@ -13,7 +13,7 @@ const DEFAULT_MODEL = "gpt-3.5-turbo";
 
 export default async function cPage({ params }: { params: { id: string } }) {
   const { userId } = auth();
-  const chat = await getChat(params.id, userId!);
+  const chat = await getChat(params.id);
 
   return (
     <main className="min-h-screen">
