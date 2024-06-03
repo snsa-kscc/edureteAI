@@ -3,11 +3,21 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
-import { getUserData } from "@/lib/actions";
+import { getUserData, getChats } from "@/lib/actions";
 import { auth } from "@clerk/nextjs/server";
+import { cache } from "react";
+
+const loadUserData = cache(async () => {
+  return await getUserData();
+});
+
+const loadChats = cache(async (userId: string) => {
+  return await getChats(userId);
+});
 
 export async function Sidebar({ userId }: { userId: string | null }) {
-  const data = await getUserData();
+  const chats = await loadChats(userId!);
+  const userData = await loadUserData();
   const { orgRole } = auth();
 
   return (
@@ -22,7 +32,6 @@ export async function Sidebar({ userId }: { userId: string | null }) {
         >
           New Chat
         </Link>
-        {orgRole && <pre>{orgRole}</pre>}
       </div>
       <Suspense
         fallback={
@@ -33,7 +42,7 @@ export async function Sidebar({ userId }: { userId: string | null }) {
           </div>
         }
       >
-        <SidebarList userId={userId} />
+        <SidebarList userId={userId} userData={userData} orgRole={orgRole} chats={chats} />
       </Suspense>
     </div>
   );
