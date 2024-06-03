@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { useEffect, useState } from "react";
 import { getChats } from "@/lib/actions";
 import { useMutation } from "@tanstack/react-query";
+import { IconSpinner } from "./ui/icons";
 
 interface SidebarListProps {
   userId: string | null;
@@ -52,7 +53,8 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
         </div>
       )}
       {isPending ? (
-        <div className="p-8 text-center">
+        <div className="flex items-center justify-center p-8 text-center">
+          <IconSpinner className="animate-spin mr-2" />
           <p className="text-sm text-muted-foreground">Loading...</p>
         </div>
       ) : chats?.length ? (
