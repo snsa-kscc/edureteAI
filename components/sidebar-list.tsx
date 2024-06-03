@@ -3,7 +3,7 @@
 import { Chat } from "@/lib/types";
 import { SidebarItems } from "./sidebar-items";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getChats } from "@/lib/actions";
 import { useMutation } from "@tanstack/react-query";
 
@@ -18,6 +18,10 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
   const [user, setUser] = useState<string | null>(userId);
   const [chats, setChats] = useState<Chat[]>(initialChats || []);
   const { mutate: server_getChats, isPending } = useMutation({ mutationFn: getChats, onSuccess: setChats });
+
+  useEffect(() => {
+    setChats(initialChats || []);
+  }, [initialChats]);
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
