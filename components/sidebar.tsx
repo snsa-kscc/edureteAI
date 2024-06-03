@@ -21,7 +21,7 @@ export async function Sidebar({ userId }: { userId: string | null }) {
   const { orgRole } = auth();
 
   return (
-    <div className="min-w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
+    <div className="min-w-72 lg:w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">
         <Link
           href="/"

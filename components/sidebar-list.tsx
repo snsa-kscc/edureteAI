@@ -17,7 +17,7 @@ interface SidebarListProps {
 export function SidebarList({ userId, userData, orgRole, chats: initialChats }: SidebarListProps) {
   const [user, setUser] = useState<string | null>(userId);
   const [chats, setChats] = useState<Chat[]>(initialChats || []);
-  const { data, mutate: server_getChats, isPending } = useMutation({ mutationFn: getChats, onSuccess: setChats });
+  const { mutate: server_getChats, isPending } = useMutation({ mutationFn: getChats, onSuccess: setChats });
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
@@ -26,6 +26,7 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
           <Select
             value={user!}
             onValueChange={(value) => {
+              setChats([]);
               setUser(value);
               server_getChats(value);
             }}
@@ -46,7 +47,11 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
           </Select>
         </div>
       )}
-      {chats?.length ? (
+      {isPending ? (
+        <div className="p-8 text-center">
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      ) : chats?.length ? (
         <div className="space-y-2 p-2">
           <SidebarItems userId={user} chats={chats} />
         </div>
