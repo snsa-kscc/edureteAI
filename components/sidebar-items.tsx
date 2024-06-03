@@ -15,6 +15,7 @@ export function SidebarItems({ chats, userId }: { chats?: Chat[]; userId: string
         (chat, index) =>
           chat && (
             <motion.div
+              className="py-0.5"
               key={chat?.id}
               exit={{
                 opacity: 0,
