@@ -52,49 +52,52 @@ export async function submitUserMessage({ content, model, system }: { content: s
     textStream = createStreamableValue("");
     textNode = <BotMessage content={textStream.value} />;
   }
+  try {
+    const result = await streamUI({
+      model: handleModelProvider(aiState.get().model),
+      system: aiState.get().system,
+      messages: [
+        ...aiState.get().messages.map((message: any) => ({
+          role: message.role,
+          content: message.content,
+        })),
+      ],
+      text: ({ content, done, delta }) => {
+        // if (!textStream) {
+        //   textStream = createStreamableValue("");
+        //   textNode = <BotMessage content={textStream.value} />;
+        // }
 
-  const result = await streamUI({
-    model: handleModelProvider(aiState.get().model),
-    system: aiState.get().system,
-    messages: [
-      ...aiState.get().messages.map((message: any) => ({
-        role: message.role,
-        content: message.content,
-      })),
-    ],
-    text: ({ content, done, delta }) => {
-      // if (!textStream) {
-      //   textStream = createStreamableValue("");
-      //   textNode = <BotMessage content={textStream.value} />;
-      // }
+        if (done) {
+          textStream.done();
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: randomUUID(),
+                role: "assistant",
+                content,
+              },
+            ],
+          });
+        } else {
+          textStream.update(delta);
+        }
 
-      if (done) {
-        textStream.done();
-        aiState.done({
-          ...aiState.get(),
-          messages: [
-            ...aiState.get().messages,
-            {
-              id: randomUUID(),
-              role: "assistant",
-              content,
-            },
-          ],
-        });
-      } else {
-        textStream.update(delta);
-      }
+        return textNode;
+      },
+    });
 
-      return textNode;
-    },
-  });
-
-  return {
-    id: randomUUID(),
-    role: "assistant",
-    content: result.value,
-    stream: textStream.value,
-  };
+    return {
+      //id: randomUUID(),
+      //role: "assistant",
+      content: result.value,
+      stream: textStream.value,
+    };
+  } catch (error: any) {
+    return { error: error.message };
+  }
 }
 
 export const AI = createAI<AIState, UIState>({

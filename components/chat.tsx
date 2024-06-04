@@ -13,6 +13,7 @@ import { SendHorizontalIcon } from "lucide-react";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { useRouter } from "next/navigation";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { toast } from "sonner";
 
 interface ClientMessage {
   id: string;
@@ -121,13 +122,17 @@ export function Chat({ id, initialModel, initialSystem }: { id: string; initialM
           setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
           const message = await submitUserMessage({ content, model, system });
           let textContent = "";
-          for await (const delta of readStreamableValue(message.stream)) {
-            textContent = `${textContent}${delta}`;
-            setConversation([
-              ...aiState.messages,
-              { id: Math.random().toString(), role: "user", content },
-              { id: Math.random().toString(), role: "assistant", content: textContent },
-            ]);
+          if (message.error) {
+            toast.error(message.error);
+          } else {
+            for await (const delta of readStreamableValue(message.stream)) {
+              textContent = `${textContent}${delta}`;
+              setConversation([
+                ...aiState.messages,
+                { id: Math.random().toString(), role: "user", content },
+                { id: Math.random().toString(), role: "assistant", content: textContent },
+              ]);
+            }
           }
         }}
         className="relative"
