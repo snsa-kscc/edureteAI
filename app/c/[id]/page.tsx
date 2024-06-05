@@ -25,9 +25,10 @@ export default async function cPage({ params }: { params: { id: string } }) {
         <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="flex flex-col lg:flex-row justify-evenly">
-        <Sidebar userId={userId} />
+        <Sidebar userId={chat?.userId ?? userId} />
         <AI
           initialAIState={{
+            userId: chat?.userId ?? userId,
             chatId: params.id,
             chatAreaId: "left",
             messages: chat?.leftMessages ?? [],
@@ -36,10 +37,16 @@ export default async function cPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <Chat id={params.id} initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL} initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <Chat
+            userId={userId}
+            id={params.id}
+            initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
+            initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT}
+          />
         </AI>
         <AI
           initialAIState={{
+            userId: chat?.userId ?? userId,
             chatId: params.id,
             chatAreaId: "right",
             messages: chat?.rightMessages ?? [],
@@ -48,7 +55,12 @@ export default async function cPage({ params }: { params: { id: string } }) {
           }}
           initialUIState={[]}
         >
-          <Chat id={params.id} initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL} initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT} />
+          <Chat
+            userId={userId}
+            id={params.id}
+            initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
+            initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT}
+          />
         </AI>
       </div>
     </main>

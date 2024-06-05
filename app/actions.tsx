@@ -2,7 +2,6 @@
 
 import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { randomUUID } from "crypto";
-import { auth } from "@clerk/nextjs/server";
 import { saveChat } from "@/lib/actions";
 import { Message } from "ai";
 import { Chat } from "@/lib/types";
@@ -10,12 +9,8 @@ import { ReactNode } from "react";
 import { handleModelProvider } from "@/lib/utils";
 import { BotMessage } from "@/components/bot-message";
 
-export async function updateDbItem(id: string) {
-  const { userId } = auth();
-  return { myid: userId, id };
-}
-
 export type AIState = {
+  userId: string | null;
   chatId: string;
   model: string;
   system: string;
@@ -106,9 +101,8 @@ export const AI = createAI<AIState, UIState>({
   },
   onSetAIState: async ({ state, done }) => {
     if (done) {
-      const { chatId, chatAreaId, messages, model, system } = state;
+      const { userId, chatId, chatAreaId, messages, model, system } = state;
 
-      const { userId } = auth();
       const createdAt = new Date();
       const path = `/c/${chatId}`;
       const title = messages[0].content.substring(0, 100);

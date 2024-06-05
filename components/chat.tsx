@@ -21,7 +21,7 @@ interface ClientMessage {
   content: ReactNode;
 }
 
-export function Chat({ id, initialModel, initialSystem }: { id: string; initialModel: string; initialSystem: string }) {
+export function Chat({ userId, id, initialModel, initialSystem }: { userId: string | null; id: string; initialModel: string; initialSystem: string }) {
   const router = useRouter();
   const [content, setContent] = useState<string>("");
   const [model, setModel] = useState<string>(initialModel);
@@ -114,41 +114,43 @@ export function Chat({ id, initialModel, initialSystem }: { id: string; initialM
           </div>
         ))}
       </ScrollArea>
-      <form
-        ref={formRef}
-        onSubmit={async (e: any) => {
-          e.preventDefault();
-          setContent("");
-          setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
-          const message = await submitUserMessage({ content, model, system });
-          let textContent = "";
-          if (message.error) {
-            toast.error(message.error);
-          } else {
-            for await (const delta of readStreamableValue(message.stream)) {
-              textContent = `${textContent}${delta}`;
-              setConversation([
-                ...aiState.messages,
-                { id: Math.random().toString(), role: "user", content },
-                { id: Math.random().toString(), role: "assistant", content: textContent },
-              ]);
+      {aiState.userId === userId && (
+        <form
+          ref={formRef}
+          onSubmit={async (e: any) => {
+            e.preventDefault();
+            setContent("");
+            setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
+            const message = await submitUserMessage({ content, model, system });
+            let textContent = "";
+            if (message.error) {
+              toast.error(message.error);
+            } else {
+              for await (const delta of readStreamableValue(message.stream)) {
+                textContent = `${textContent}${delta}`;
+                setConversation([
+                  ...aiState.messages,
+                  { id: Math.random().toString(), role: "user", content },
+                  { id: Math.random().toString(), role: "assistant", content: textContent },
+                ]);
+              }
             }
-          }
-        }}
-        className="relative"
-      >
-        <Textarea
-          name="message"
-          value={content}
-          onKeyDown={onKeyDown}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Ask me anything..."
-          className="pr-12 placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500"
-        />
-        <Button size="icon" type="submit" variant="secondary" disabled={content === ""} className="absolute right-2 bottom-2 h-8 w-10">
-          <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />
-        </Button>
-      </form>
+          }}
+          className="relative"
+        >
+          <Textarea
+            name="message"
+            value={content}
+            onKeyDown={onKeyDown}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Ask me anything..."
+            className="pr-12 placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500"
+          />
+          <Button size="icon" type="submit" variant="secondary" disabled={content === ""} className="absolute right-2 bottom-2 h-8 w-10">
+            <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />
+          </Button>
+        </form>
+      )}
     </div>
   );
 }
