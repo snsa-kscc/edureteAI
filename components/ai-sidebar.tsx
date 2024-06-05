@@ -10,7 +10,7 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Protect } from "@clerk/nextjs";
 
 import { useMutation } from "@tanstack/react-query";
-import { updateDbItem } from "@/app/actions";
+//import { updateDbItem } from "@/app/actions";
 
 interface Item {
   href: string;
@@ -87,9 +87,9 @@ export function Sidebar({ updateItem }: { updateItem: any }) {
     }, []);
   }
 
-  const { data, mutate: server_updateDbItem } = useMutation({
-    mutationFn: updateDbItem,
-  });
+  // const { data, mutate: server_updateDbItem } = useMutation({
+  //   mutationFn: updateDbItem,
+  // });
 
   return (
     <>
