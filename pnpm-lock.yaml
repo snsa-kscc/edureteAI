@@ -110,6 +110,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.3)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
     devDependencies:
       '@types/node':
         specifier: ^20
@@ -120,6 +123,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.2.23
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       autoprefixer:
         specifier: ^10.0.1
         version: 10.4.19(postcss@8.4.38)

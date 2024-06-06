@@ -132,6 +132,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                   ...aiState.messages,
                   { id: Math.random().toString(), role: "user", content },
                   { id: Math.random().toString(), role: "assistant", content: textContent },
+                  //{ id: Math.random().toString(), role: "assistant", content: message.content },
                 ]);
               }
             }

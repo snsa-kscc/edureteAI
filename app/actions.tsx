@@ -1,7 +1,7 @@
 "use server";
 
 import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 import { saveChat } from "@/lib/actions";
 import { Message } from "ai";
 import { Chat } from "@/lib/types";
@@ -34,7 +34,7 @@ export async function submitUserMessage({ content, model, system }: { content: s
     messages: [
       ...aiState.get().messages,
       {
-        id: randomUUID(),
+        id: uuidv4(),
         role: "user",
         content,
       },
@@ -70,7 +70,7 @@ export async function submitUserMessage({ content, model, system }: { content: s
             messages: [
               ...aiState.get().messages,
               {
-                id: randomUUID(),
+                id: uuidv4(),
                 role: "assistant",
                 content,
               },
@@ -85,7 +85,7 @@ export async function submitUserMessage({ content, model, system }: { content: s
     });
 
     return {
-      //id: randomUUID(),
+      //id: uuidv4(),
       //role: "assistant",
       content: result.value,
       stream: textStream.value,

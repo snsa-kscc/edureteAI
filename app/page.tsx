@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
-  redirect(`/c/${randomUUID()}`);
+  redirect(`/c/${uuidv4()}`);
 }
