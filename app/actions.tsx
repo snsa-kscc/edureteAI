@@ -85,10 +85,10 @@ export async function submitUserMessage({ content, model, system }: { content: s
     });
 
     return {
-      //id: uuidv4(),
-      //role: "assistant",
+      id: uuidv4(),
+      role: "assistant",
       content: result.value,
-      stream: textStream.value,
+      //stream: textStream.value,
     };
   } catch (error: any) {
     return { error: error.message };

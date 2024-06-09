@@ -32,6 +32,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
   const { formRef, onKeyDown } = useEnterSubmit();
   const [aiState] = useAIState();
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
+  let previousRole: string;
 
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
@@ -81,38 +82,46 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
         </Popover>
       </div>
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
-        {conversation.map((m: any) => (
-          <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
-            {m.role === "user" && (
-              <div className="mb-6 flex gap-3">
-                <Avatar>
-                  <AvatarImage src="" />
-                  <AvatarFallback className="text-sm">U</AvatarFallback>
-                </Avatar>
-                <div className="mt-1.5">
-                  <p className="font-semibold">You</p>
-                  <div className="mt-1.5 text-sm text-zinc-500">{m.content}</div>
-                </div>
-              </div>
-            )}
+        {conversation.map((m: any) => {
+          const shouldRender = m.role === "user" || (m.role === "assistant" && previousRole !== "assistant");
+          previousRole = m.role;
 
-            {m.role === "assistant" && (
-              <div className="mb-6 flex gap-3">
-                <Avatar>
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-emerald-500 text-white">AI</AvatarFallback>
-                </Avatar>
-                <div className="mt-1.5 w-full">
-                  <div className="flex justify-between">
-                    <p className="font-semibold">Bot</p>
-                    <CopyToClipboard message={m} className="-mt-1" />
+          if (!shouldRender) {
+            return null;
+          }
+          return (
+            <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
+              {m.role === "user" && (
+                <div className="mb-6 flex gap-3">
+                  <Avatar>
+                    <AvatarImage src="" />
+                    <AvatarFallback className="text-sm">U</AvatarFallback>
+                  </Avatar>
+                  <div className="mt-1.5">
+                    <p className="font-semibold">You</p>
+                    <div className="mt-1.5 text-sm text-zinc-500">{m.content}</div>
                   </div>
-                  <div className="mt-2 text-sm text-zinc-500">{m.content}</div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+
+              {m.role === "assistant" && (
+                <div className="mb-6 flex gap-3">
+                  <Avatar>
+                    <AvatarImage src="" />
+                    <AvatarFallback className="bg-emerald-500 text-white">AI</AvatarFallback>
+                  </Avatar>
+                  <div className="mt-1.5 w-full">
+                    <div className="flex justify-between">
+                      <p className="font-semibold">Bot</p>
+                      <CopyToClipboard message={m} className="-mt-1" />
+                    </div>
+                    <div className="mt-2 text-sm text-zinc-500">{m.content}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </ScrollArea>
       {aiState.userId === userId && (
         <form
@@ -122,19 +131,19 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
             setContent("");
             setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
             const message = await submitUserMessage({ content, model, system });
-            let textContent = "";
+            //let textContent = "";
             if (message.error) {
               toast.error(message.error);
             } else {
-              for await (const delta of readStreamableValue(message.stream)) {
-                textContent = `${textContent}${delta}`;
-                setConversation([
-                  ...aiState.messages,
-                  { id: Math.random().toString(), role: "user", content },
-                  { id: Math.random().toString(), role: "assistant", content: textContent },
-                  //{ id: Math.random().toString(), role: "assistant", content: message.content },
-                ]);
-              }
+              // for await (const delta of readStreamableValue(message.stream)) {
+              //   textContent = `${textContent}${delta}`;
+              //   setConversation([
+              //     ...aiState.messages,
+              //     { id: Math.random().toString(), role: "user", content },
+              //     { id: Math.random().toString(), role: "assistant", content: textContent },
+              //   ]);
+              // }
+              setConversation((currentConversation: ClientMessage[]) => [...currentConversation, message]);
             }
           }}
           className="relative"
