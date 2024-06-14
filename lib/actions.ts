@@ -66,7 +66,6 @@ export async function saveChat(chat: Chat) {
   pipeline.sadd(`userIds`, chat.userId);
 
   await pipeline.exec();
-  console.log(`hello from ${process.env.VERCEL_REGION}`);
 }
 
 export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {
