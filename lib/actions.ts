@@ -66,6 +66,7 @@ export async function saveChat(chat: Chat) {
   pipeline.sadd(`userIds`, chat.userId);
 
   await pipeline.exec();
+  console.log("Chat saved");
 }
 
 export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {

@@ -76,7 +76,6 @@ export async function submitUserMessage({ content, model, system }: { content: s
               },
             ],
           });
-          console.log("done");
         } else {
           textStream.update(delta);
         }
