@@ -13,13 +13,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { BytesOutputParser } from "langchain/schema/output_parser";
 import { createClient } from "@vercel/kv";
 
-export const runtime = "edge";
-
 const client = Redis.fromEnv();
-// const client = createClient({
-//   url: process.env.KV_REST_API_URL!,
-//   token: process.env.KV_REST_API_TOKEN!,
-// });
 
 const defaultSystemPrompt = `You are a reasoning AI tasked with solving the user's math-based questions. Logically arrive at the solution, and be factual. In your answers, clearly detail the steps involved and give the final answer. If you can't solve the question, say "I don't know". When responding with math formulas in the response, you must write the formulae using only Unicode from the Mathematical Operators block and other Unicode symbols. The AI GUI render engine does not support TeX code. You must not use LaTeX in responses.`;
 
