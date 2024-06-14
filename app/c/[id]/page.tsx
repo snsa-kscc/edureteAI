@@ -8,7 +8,7 @@ import { AI } from "@/app/actions";
 import { getChat } from "@/lib/actions";
 import { Sidebar } from "@/components/sidebar";
 
-export const runtime = "edge";
+export const maxDuration = 60;
 
 const DEFAULT_SYSTEM_PROMPT = `You are a reasoning AI tasked with solving the user's math-based questions. Logically arrive at the solution, and be factual. In your answers, clearly detail the steps involved and give the final answer. If you can't solve the question, say "I don't know". When responding with math formulas in the response, you must write the formulae using only Unicode from the Mathematical Operators block and other Unicode symbols. The AI GUI render engine does not support TeX code. You must not use LaTeX in responses.`;
 const DEFAULT_LEFT_MODEL = "gpt-4o";
