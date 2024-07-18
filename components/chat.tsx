@@ -62,7 +62,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
               <SelectItem value="gpt-4o">OpenAI/GPT-4o</SelectItem>
               <SelectItem value="gpt-4-turbo">OpenAI/GPT-4 Turbo</SelectItem>
               <SelectItem value="gpt-4">OpenAI/GPT-4</SelectItem>
-              <SelectItem value="gpt-3.5-turbo">OpenAI/GPT-3.5</SelectItem>
+              <SelectItem value="gpt-4o-mini">OpenAI/GPT-4o-mini</SelectItem>
               <SelectItem value="claude-3-5-sonnet-20240620">Anthropic/Claude 3.5 Sonnet</SelectItem>
               <SelectItem value="claude-3-opus-20240229">Anthropic/Claude 3 Opus</SelectItem>
               <SelectItem value="claude-3-sonnet-20240229">Anthropic/Claude 3 Sonnet</SelectItem>
