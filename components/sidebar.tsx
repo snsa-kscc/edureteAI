@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
 import { getUserData, getChats } from "@/lib/actions";
-import { auth } from "@clerk/nextjs/server";
 import { cache } from "react";
 
 const loadUserData = cache(async () => {
@@ -15,10 +14,9 @@ const loadChats = cache(async (userId: string) => {
   return await getChats(userId);
 });
 
-export async function Sidebar({ userId }: { userId: string | null }) {
+export async function Sidebar({ userId, orgRole }: { userId: string | null; orgRole: string | null | undefined }) {
   const chats = await loadChats(userId!);
   const userData = await loadUserData();
-  const { orgRole } = auth();
 
   return (
     <div className="min-w-72 lg:w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">

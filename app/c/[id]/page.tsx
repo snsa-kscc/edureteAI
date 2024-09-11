@@ -7,6 +7,8 @@ import { auth } from "@clerk/nextjs/server";
 import { AI } from "@/app/actions";
 import { getChat } from "@/lib/actions";
 import { Sidebar } from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const maxDuration = 60;
 
@@ -15,19 +17,24 @@ const DEFAULT_LEFT_MODEL = "gpt-4o";
 const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20240620";
 
 export default async function cPage({ params }: { params: { id: string } }) {
-  const { userId } = auth();
+  const { userId, orgRole } = auth();
   const chat = await getChat(params.id);
 
   return (
     <main className="min-h-screen">
-      <div className="flex gap-2 p-8">
+      <div className="flex flex-col sm:flex-row gap-2 p-8">
         <Title />
+        {orgRole && (
+          <Button variant="outline">
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+        )}
         <Changelog />
         <ModeToggle />
-        <div className="flex items-center px-4">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
+        <div className="flex items-center">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div>
       </div>
       <div className="flex flex-col lg:flex-row justify-evenly">
-        <Sidebar userId={chat?.userId ?? userId} />
+        <Sidebar userId={chat?.userId ?? userId} orgRole={orgRole} />
         <AI
           initialAIState={{
             userId: chat?.userId ?? userId,

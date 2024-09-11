@@ -5,8 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
 import { Navigation } from "@/components/components-navigation";
+import { toast } from "sonner";
 
 // Mock data for demonstration
 const initialUsers = [
@@ -16,24 +16,34 @@ const initialUsers = [
   { id: 4, email: "test2@example.com", tokens: 124, amount: 0.0001, limit: 5 },
 ];
 
+interface User {
+  id: number;
+  email: string;
+  tokens: number;
+  amount: number;
+  limit: number;
+}
+
+interface NewLimits {
+  [key: number]: string;
+}
+
 export default function AppDashboardAnthropicPage() {
-  const [users, setUsers] = useState(initialUsers);
-  const [newLimits, setNewLimits] = useState({});
+  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [newLimits, setNewLimits] = useState<NewLimits>({});
 
   const totalTokens = users.reduce((sum, user) => sum + user.tokens, 0);
   const totalAmount = users.reduce((sum, user) => sum + user.amount, 0);
 
-  const handleLimitChange = (userId, value) => {
+  const handleLimitChange = (userId: number, value: string) => {
     setNewLimits((prev) => ({ ...prev, [userId]: value }));
   };
 
-  const handleLimitSubmit = (userId) => {
+  const handleLimitSubmit = (userId: number) => {
     const newLimit = Number(newLimits[userId]);
     if (isNaN(newLimit) || newLimit < 0) {
-      toast({
-        title: "Invalid input",
-        description: "Please enter a valid dollar amount for the monthly limit.",
-        variant: "destructive",
+      toast.error("Invalid input", {
+        description: "Please enter a valid positive number.",
       });
       return;
     }
@@ -41,10 +51,7 @@ export default function AppDashboardAnthropicPage() {
     setUsers(users.map((user) => (user.id === userId ? { ...user, limit: newLimit } : user)));
     setNewLimits((prev) => ({ ...prev, [userId]: "" }));
 
-    toast({
-      title: "Monthly Limit Updated",
-      description: `Anthropic API monthly usage limit for ${users.find((u) => u.id === userId)?.email ?? "user"} has been set to $${newLimit}.`,
-    });
+    toast.success(`Monthly limit for ${users.find((u) => u.id === userId)?.email ?? "user"} has been set to $${newLimit}.`);
   };
 
   return (
@@ -99,13 +106,7 @@ export default function AppDashboardAnthropicPage() {
                   <TableCell>${user.limit.toFixed(2)}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <Input
-                        type="number"
-                        placeholder="New monthly limit ($)"
-                        value={newLimits[user.id] || ""}
-                        onChange={(e) => handleLimitChange(user.id, e.target.value)}
-                        className="w-36"
-                      />
+                      <Input type="number" value={newLimits[user.id] || ""} onChange={(e) => handleLimitChange(user.id, e.target.value)} className="w-36" />
                       <Button onClick={() => handleLimitSubmit(user.id)}>Set</Button>
                     </div>
                   </TableCell>
