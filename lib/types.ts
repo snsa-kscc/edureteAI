@@ -20,3 +20,12 @@ export type ServerActionResult<Result> = Promise<
       error: string;
     }
 >;
+
+export type Usage = {
+  userId: string;
+  model: string;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  timestamp: Date;
+};

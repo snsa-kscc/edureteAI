@@ -4,7 +4,7 @@ import { createAI, createStreamableValue, getAIState, getMutableAIState, streamU
 import { v4 as uuidv4 } from "uuid";
 import { saveChat } from "@/lib/actions";
 import { Message } from "ai";
-import { Chat } from "@/lib/types";
+import { Chat, Usage } from "@/lib/types";
 import { ReactNode } from "react";
 import { handleModelProvider } from "@/lib/utils";
 import { BotMessage } from "@/components/bot-message";
@@ -26,6 +26,14 @@ export type UIState = {
 
 export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
+
+  const hasQuotaAvailable = true;
+
+  if (!hasQuotaAvailable) {
+    return {
+      error: "You have exceeded your quota. Please contact support.",
+    };
+  }
 
   aiState.update({
     ...aiState.get(),
@@ -81,6 +89,16 @@ export async function submitUserMessage({ content, model, system }: { content: s
         }
 
         return textNode;
+      },
+      onFinish: async (result) => {
+        const usageData: Usage = {
+          userId: aiState.get().userId!,
+          model: aiState.get().model,
+          promptTokens: result.usage.promptTokens,
+          completionTokens: result.usage.completionTokens,
+          totalTokens: result.usage.totalTokens,
+          timestamp: new Date(),
+        };
       },
     });
 
