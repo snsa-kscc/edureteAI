@@ -4,6 +4,7 @@ import { Redis } from "@upstash/redis";
 import { Chat, Usage, UserQuota } from "./types";
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
+import { dollarsToTokens } from "./utils";
 
 const client = Redis.fromEnv();
 
@@ -170,14 +171,15 @@ export async function checkQuota(userId: string, model: string) {
   return quota.totalTokensUsed < quota.quotaLimit;
 }
 
-export async function updateUserLimit(userId: string, model: string, limit: number) {
+export async function updateUserLimit(userId: string, model: string, amount: number) {
+  const limitInTokens = dollarsToTokens(amount);
   if (model.startsWith("gpt")) {
     const key = `quota:${userId}:gpt`;
     const quota = await getUserQuota(userId, model);
 
     const updatedQuota = {
       ...quota,
-      quotaLimit: limit,
+      quotaLimit: limitInTokens,
     };
 
     await client.hset(key, updatedQuota);
@@ -188,7 +190,7 @@ export async function updateUserLimit(userId: string, model: string, limit: numb
 
     const updatedQuota = {
       ...quota,
-      quotaLimit: limit,
+      quotaLimit: limitInTokens,
     };
 
     await client.hset(key, updatedQuota);

@@ -15,10 +15,10 @@ export function handleModelProvider(model: string) {
   }
 }
 
-export function tokensToDollars(tokens: number) {
-  return tokens / 66_666;
+export function tokensToDollars(tokens: number): number {
+  return Number((tokens / 66_666).toFixed(4));
 }
 
-export function dollarsToTokens(dollars: number) {
-  return dollars * 66_666;
+export function dollarsToTokens(dollars: number): number {
+  return Math.round(dollars * 66_666);
 }
