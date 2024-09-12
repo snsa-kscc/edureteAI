@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Navigation } from "@/components/components-navigation";
+import { Navigation } from "@/components/navigation";
 import { toast } from "sonner";
 
 // Mock data for demonstration
@@ -49,7 +49,11 @@ export default function AppDashboardAnthropicPage() {
     }
 
     setUsers(users.map((user) => (user.id === userId ? { ...user, limit: newLimit } : user)));
-    setNewLimits((prev) => ({ ...prev, [userId]: "" }));
+    setNewLimits((prev) => {
+      const updated = { ...prev };
+      delete updated[userId];
+      return updated;
+    });
 
     toast.success(`Monthly limit for ${users.find((u) => u.id === userId)?.email ?? "user"} has been set to $${newLimit}.`);
   };

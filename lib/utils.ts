@@ -14,3 +14,11 @@ export function handleModelProvider(model: string) {
     return anthropic(model);
   }
 }
+
+export function tokensToDollars(tokens: number) {
+  return tokens / 66_666;
+}
+
+export function dollarsToTokens(dollars: number) {
+  return dollars * 66_666;
+}

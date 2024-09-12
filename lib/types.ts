@@ -29,3 +29,9 @@ export type Usage = {
   totalTokens: number;
   timestamp: Date;
 };
+
+export type UserQuota = {
+  userId: string;
+  totalTokensUsed: number;
+  quotaLimit: number;
+};

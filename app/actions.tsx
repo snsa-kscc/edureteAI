@@ -2,7 +2,7 @@
 
 import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
-import { saveChat } from "@/lib/actions";
+import { checkQuota, saveChat, saveUsage } from "@/lib/actions";
 import { Message } from "ai";
 import { Chat, Usage } from "@/lib/types";
 import { ReactNode } from "react";
@@ -27,7 +27,7 @@ export type UIState = {
 export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
 
-  const hasQuotaAvailable = true;
+  const hasQuotaAvailable = await checkQuota(aiState.get().userId!, aiState.get().model);
 
   if (!hasQuotaAvailable) {
     return {
@@ -99,6 +99,8 @@ export async function submitUserMessage({ content, model, system }: { content: s
           totalTokens: result.usage.totalTokens,
           timestamp: new Date(),
         };
+
+        await saveUsage(usageData);
       },
     });
 

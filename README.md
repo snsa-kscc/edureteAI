@@ -32,5 +32,7 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 ### 2DO
 
+- Populate dashboard with real data
+- Server actions for updating limits
 - Secure dashboard route
-- after i add correct limit, if i add wrong limit, it will be set to 0
+- Monthly token reset
