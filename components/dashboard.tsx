@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { UserQuota } from "@/lib/types";
 
 interface User {
-  id: number;
+  userId: string;
   email: string;
   tokens: number;
   amount: number;
@@ -16,7 +17,7 @@ interface User {
 }
 
 interface NewLimits {
-  [key: number]: string;
+  [key: string]: string;
 }
 
 export function Dashboard({
@@ -26,19 +27,19 @@ export function Dashboard({
 }: {
   initialUsers: User[];
   model: string;
-  updateUserLimit: (userId: string, model: string, newLimit: number) => void;
+  updateUserLimit: (userId: string, model: string, newLimit: number) => Promise<UserQuota>;
 }) {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [newLimits, setNewLimits] = useState<NewLimits>({});
-
+  const [isPending, startTransition] = useTransition();
   const totalTokens = users.reduce((sum, user) => sum + user.tokens, 0);
   const totalAmount = users.reduce((sum, user) => sum + user.amount, 0);
 
-  const handleLimitChange = (userId: number, value: string) => {
+  const handleLimitChange = (userId: string, value: string) => {
     setNewLimits((prev) => ({ ...prev, [userId]: value }));
   };
 
-  const handleLimitSubmit = (userId: number) => {
+  const handleLimitSubmit = (userId: string) => {
     const newLimit = Number(newLimits[userId]);
     if (isNaN(newLimit) || newLimit < 0) {
       toast.error("Invalid input", {
@@ -47,14 +48,22 @@ export function Dashboard({
       return;
     }
 
-    setUsers(users.map((user) => (user.id === userId ? { ...user, limit: newLimit } : user)));
-    setNewLimits((prev) => {
-      const updated = { ...prev };
-      delete updated[userId];
-      return updated;
+    startTransition(async () => {
+      try {
+        await updateUserLimit(userId, model, newLimit);
+        setUsers(users.map((user) => (user.userId === userId ? { ...user, limit: newLimit } : user)));
+        setNewLimits((prev) => {
+          const updated = { ...prev };
+          delete updated[userId];
+          return updated;
+        });
+        toast.success(`Monthly limit for ${users.find((u) => u.userId === userId)?.email ?? "user"} has been set to $${newLimit}.`);
+      } catch (error) {
+        toast.error("Failed to update limit", {
+          description: "An error occurred while updating the limit. Please try again.",
+        });
+      }
     });
-
-    toast.success(`Monthly limit for ${users.find((u) => u.id === userId)?.email ?? "user"} has been set to $${newLimit}.`);
   };
 
   return (
@@ -99,15 +108,22 @@ export function Dashboard({
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id}>
+                <TableRow key={user.userId}>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.tokens.toLocaleString()}</TableCell>
                   <TableCell>${user.amount.toFixed(4)}</TableCell>
                   <TableCell>${user.limit.toFixed(2)}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <Input type="number" value={newLimits[user.id] || ""} onChange={(e) => handleLimitChange(user.id, e.target.value)} className="w-36" />
-                      <Button onClick={() => handleLimitSubmit(user.id)}>Set</Button>
+                      <Input
+                        type="number"
+                        value={newLimits[user.userId] || ""}
+                        onChange={(e) => handleLimitChange(user.userId, e.target.value)}
+                        className="w-36"
+                      />
+                      <Button onClick={() => handleLimitSubmit(user.userId)} disabled={isPending}>
+                        Set
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

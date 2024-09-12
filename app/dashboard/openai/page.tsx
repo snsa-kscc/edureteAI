@@ -14,10 +14,10 @@ export default async function AppDashboardOpenaiPage() {
   const usersData = await getUserData();
 
   const users = await Promise.all(
-    Object.entries(usersData).map(async ([userId, email], index) => {
+    Object.entries(usersData).map(async ([userId, email]) => {
       const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, MODEL);
       return {
-        id: index,
+        userId,
         email,
         tokens: totalTokensUsed,
         amount: tokensToDollars(totalTokensUsed),

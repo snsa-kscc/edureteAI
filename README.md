@@ -32,7 +32,5 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 ### 2DO
 
-- Populate dashboard with real data
-- Server actions for updating limits
 - Secure dashboard route
 - Monthly token reset
