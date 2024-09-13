@@ -32,5 +32,5 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 ### 2DO
 
-- Secure dashboard route
 - Monthly token reset
+- Better token calculation
