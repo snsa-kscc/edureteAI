@@ -6,10 +6,10 @@ LLM chat application for [Edurete](https://edurete.com) platform using OpenAI an
 
 ### OpenAI models:
 
-- Gpt-3.5-turbo
 - Gpt-4
 - Gpt-4-Turbo
 - Gpt-4o
+- Gpt-4o mini
 
 ### Anthropic models:
 
