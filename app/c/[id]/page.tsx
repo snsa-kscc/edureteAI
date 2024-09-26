@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export const maxDuration = 60;
 
-const DEFAULT_SYSTEM_PROMPT = `You are a reasoning AI tasked with solving the user's math-based questions. Logically arrive at the solution, and be factual. In your answers, clearly detail the steps involved and give the final answer. If you can't solve the question, say "I don't know". When responding with math formulas in the response, you must write the formulae using only Unicode from the Mathematical Operators block and other Unicode symbols. The AI GUI render engine does not support TeX code. You must not use LaTeX in responses.`;
+const DEFAULT_SYSTEM_PROMPT = `As an assistant, when providing mathematical content, ensure that all formulas and equations are written in plain text or Unicode. Do not use LaTeX or any other coding format. Present the information in a straightforward and accessible manner.`;
 const DEFAULT_LEFT_MODEL = "gpt-4o";
 const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20240620";
 
