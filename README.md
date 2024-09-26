@@ -14,7 +14,7 @@ LLM chat application for [Edurete](https://edurete.com) platform using OpenAI an
 ### Anthropic models:
 
 - Haiku
-- Sonnet
+- Sonnet 3.5
 - Opus
 
 ### Technologies used:
