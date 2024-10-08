@@ -9,6 +9,11 @@ import { dollarsToTokens } from "./utils";
 const client = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  enableAutoPipelining: true,
+  retry: {
+    retries: 5,
+    backoff: (retryCount) => Math.exp(retryCount) * 50,
+  },
 });
 
 export async function getUserData() {

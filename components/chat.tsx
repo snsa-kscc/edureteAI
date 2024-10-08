@@ -36,7 +36,6 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
     if (messagesLength % 2 === 0 && messagesLength > 0) {
-      toast("done");
       router.refresh();
     }
   }, [aiState.messages, router]);
