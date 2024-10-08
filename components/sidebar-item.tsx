@@ -15,8 +15,8 @@ export function SidebarItem({ index, chat, children }: { index: number; chat: Ch
   const pathname = usePathname();
 
   const isActive = pathname === chat.path;
-  // const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
-  const shouldAnimate = index === 0 && isActive;
+  const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
+  const shouldAnimate = index === 0 && isActive && newChatId;
 
   if (!chat?.id) return null;
 
@@ -77,7 +77,7 @@ export function SidebarItem({ index, chat, children }: { index: number; chat: Ch
                   }}
                   onAnimationComplete={() => {
                     if (index === chat.title.length - 1) {
-                      // setNewChatId(null);
+                      setNewChatId(null);
                     }
                   }}
                 >
