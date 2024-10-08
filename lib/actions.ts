@@ -60,21 +60,28 @@ export async function getChat(id: string) {
 }
 
 export async function saveChat(chat: Chat) {
+  console.log("Starting saveChat function with chat:", chat);
   try {
+    console.log("Initializing Redis pipeline");
     const pipeline = client.pipeline();
 
+    console.log("Adding chat to hash set");
     pipeline.hmset(`chat:${chat.id}`, chat);
+    console.log("Adding chat to sorted set");
     pipeline.zadd(`user:chat:${chat.userId}`, {
       score: Date.now(),
       member: `chat:${chat.id}`,
     });
+    console.log("Adding userId to set");
     pipeline.sadd(`userIds`, chat.userId);
 
+    console.log("Executing pipeline");
     await pipeline.exec();
-    console.log("chat saved");
+    console.log("Pipeline executed successfully");
   } catch (error) {
-    console.error(error);
+    console.error("Error in saveChat function:", error);
   }
+  console.log("saveChat function completed");
 }
 
 export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {
