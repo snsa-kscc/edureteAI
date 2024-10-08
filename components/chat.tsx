@@ -31,18 +31,19 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
   const ref = useRef<HTMLDivElement>(null);
   const { formRef, onKeyDown } = useEnterSubmit();
   const [aiState] = useAIState();
-  const [_, setNewChatId] = useLocalStorage("newChatId", id);
+  // const [_, setNewChatId] = useLocalStorage("newChatId", id);
 
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
-    if (messagesLength === 2) {
+    if (messagesLength % 2 === 0) {
+      console.log("refreshing");
       router.refresh();
     }
   }, [aiState.messages, router]);
 
-  useEffect(() => {
-    setNewChatId(id);
-  });
+  // useEffect(() => {
+  //   setNewChatId(id);
+  // });
 
   useEffect(() => {
     if (ref.current === null) return;
