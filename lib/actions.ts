@@ -57,17 +57,21 @@ export async function getChat(id: string) {
 }
 
 export async function saveChat(chat: Chat) {
-  const pipeline = client.pipeline();
+  try {
+    const pipeline = client.pipeline();
 
-  pipeline.hmset(`chat:${chat.id}`, chat);
-  pipeline.zadd(`user:chat:${chat.userId}`, {
-    score: Date.now(),
-    member: `chat:${chat.id}`,
-  });
-  pipeline.sadd(`userIds`, chat.userId);
+    pipeline.hmset(`chat:${chat.id}`, chat);
+    pipeline.zadd(`user:chat:${chat.userId}`, {
+      score: Date.now(),
+      member: `chat:${chat.id}`,
+    });
+    pipeline.sadd(`userIds`, chat.userId);
 
-  await pipeline.exec();
-  console.log("chat saved");
+    await pipeline.exec();
+    console.log("chat saved");
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {
