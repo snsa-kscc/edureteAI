@@ -6,7 +6,10 @@ import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { dollarsToTokens } from "./utils";
 
-const client = Redis.fromEnv();
+const client = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function getUserData() {
   try {
@@ -69,8 +72,8 @@ export async function saveChat(chat: Chat) {
 
     await pipeline.exec();
     console.log("chat saved");
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 }
 
