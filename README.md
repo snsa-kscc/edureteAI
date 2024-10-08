@@ -34,5 +34,3 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 - Monthly token reset
 - Better token calculation
-- getChat cache
-- alert when done streaming
