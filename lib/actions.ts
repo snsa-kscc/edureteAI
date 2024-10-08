@@ -13,7 +13,7 @@ export async function getUserData() {
     const userIds: string[] = await client.smembers("userIds");
     const userData: Record<string, string> = {};
     for (const userId of userIds) {
-      const user = await clerkClient.users.getUser(userId);
+      const user = await clerkClient().users.getUser(userId);
       const emailAddress = user.emailAddresses[0].emailAddress;
       userData[userId] = emailAddress;
     }

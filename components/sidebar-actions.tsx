@@ -42,7 +42,7 @@ export function SidebarActions({
                 <span className="sr-only">Delete</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Delete chat</TooltipContent>
+            <TooltipContent className="text-xs">Del</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>

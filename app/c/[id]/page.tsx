@@ -12,6 +12,7 @@ import Link from "next/link";
 
 // export const maxDuration = 60;
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 const DEFAULT_SYSTEM_PROMPT = `As an assistant, when providing mathematical content, ensure that all formulas and equations are written in plain text or Unicode. Do not use LaTeX or any other coding format. Present the information in a straightforward and accessible manner.`;
 const DEFAULT_LEFT_MODEL = "gpt-4o";
