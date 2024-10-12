@@ -10,7 +10,7 @@ import { IconSpinner } from "./ui/icons";
 
 interface SidebarListProps {
   userId: string | null;
-  userData: Record<string, string>;
+  userData: { userId: string; firstName: string; lastName: string; emailAddress: string }[];
   orgRole: string | null | undefined;
   chats?: Chat[];
 }
@@ -42,9 +42,9 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Active Users</SelectLabel>
-                {Object.entries(userData).map(([key, value]) => (
-                  <SelectItem key={key} value={key}>
-                    {value}
+                {userData.map(({ userId, firstName, lastName, emailAddress }) => (
+                  <SelectItem key={userId} value={userId} title={`${firstName} ${lastName}`}>
+                    {emailAddress}
                   </SelectItem>
                 ))}
               </SelectGroup>

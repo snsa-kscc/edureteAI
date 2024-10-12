@@ -5,20 +5,17 @@ import { tokensToDollars } from "@/lib/utils";
 
 const MODEL = "gpt";
 
-// { id: 1, email: "sinisa@dvasadva.com", tokens: 1034, amount: 0.0002, limit: 5 },
-// { id: 2, email: "sinisa@dvasadva.hr", tokens: 2359, amount: 0.0002, limit: 5 },
-// { id: 3, email: "test@example.com", tokens: 3455, amount: 0.0003, limit: 5 },
-// { id: 4, email: "test2@example.com", tokens: 94, amount: 0.0001, limit: 5 },
-
 export default async function AppDashboardOpenaiPage() {
   const usersData = await getUserData();
 
   const users = await Promise.all(
-    Object.entries(usersData).map(async ([userId, email]) => {
+    usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
       const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, MODEL);
       return {
         userId,
-        email,
+        firstName,
+        lastName,
+        emailAddress,
         tokens: totalTokensUsed,
         amount: tokensToDollars(totalTokensUsed),
         limit: tokensToDollars(quotaLimit),

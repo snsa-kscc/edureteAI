@@ -10,7 +10,9 @@ import { UserQuota } from "@/lib/types";
 
 interface User {
   userId: string;
-  email: string;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
   tokens: number;
   amount: number;
   limit: number;
@@ -57,7 +59,7 @@ export function Dashboard({
           delete updated[userId];
           return updated;
         });
-        toast.success(`Monthly limit for ${users.find((u) => u.userId === userId)?.email ?? "user"} has been set to $${newLimit}.`);
+        toast.success(`Monthly limit for ${users.find((u) => u.userId === userId)?.emailAddress ?? "user"} has been set to $${newLimit}.`);
       } catch (error) {
         toast.error("Failed to update limit", {
           description: "An error occurred while updating the limit. Please try again.",
@@ -99,20 +101,26 @@ export function Dashboard({
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>First Name</TableHead>
+                <TableHead>Last Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Tokens (This Month)</TableHead>
                 <TableHead>Amount ($ This Month)</TableHead>
                 <TableHead>Current Monthly Limit ($)</TableHead>
+                <TableHead>Percentage of Limit Left</TableHead>
                 <TableHead>Set New Monthly Limit ($)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.userId}>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.firstName}</TableCell>
+                  <TableCell>{user.lastName}</TableCell>
+                  <TableCell>{user.emailAddress}</TableCell>
                   <TableCell>{user.tokens.toLocaleString()}</TableCell>
                   <TableCell>${user.amount.toFixed(4)}</TableCell>
                   <TableCell>${user.limit.toFixed(2)}</TableCell>
+                  <TableCell>{user.limit === 0 ? "0" : (((user.limit - user.amount) / user.limit) * 100).toFixed(2)}%</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <Input

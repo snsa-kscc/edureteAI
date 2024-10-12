@@ -51,7 +51,7 @@ export function SidebarItem({ index, chat, children }: { index: number; chat: Ch
           isActive && "bg-zinc-200 pr-16 font-semibold dark:bg-zinc-800"
         )}
       >
-        <div className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all" title={chat.title}>
+        <div className="relative max-h-5 flex-1 select-none overflow-hidden text-ellipsis break-all" title={new Date(chat.createdAt).toLocaleString("hr-HR")}>
           <span className="whitespace-nowrap">
             {shouldAnimate ? (
               chat.title.split("").map((character, index) => (
