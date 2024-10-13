@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       from: process.env.SMTP_USER,
       to: process.env.SMTP_TO,
       subject: "edureteAI App Daily Report",
-      text: "Please find the report attached.",
+      text: "Please find attached the daily report.",
       html: `
       <h1>Daily Report</h1>
       <p>Please find attached the daily report.</p>
