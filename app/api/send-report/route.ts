@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       `,
       attachments: [
         {
-          filename: `edureteAI-report-${formattedDate}_${formattedTime}.xlsx`,
+          filename: `edureteAI-report-${formattedDate}_${formattedTime}_UTC.xlsx`,
           content: buffer,
           contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         },
