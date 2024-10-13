@@ -112,31 +112,34 @@ export function Dashboard({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.userId}>
-                  <TableCell>{user.firstName}</TableCell>
-                  <TableCell>{user.lastName}</TableCell>
-                  <TableCell>{user.emailAddress}</TableCell>
-                  <TableCell>{user.tokens.toLocaleString()}</TableCell>
-                  <TableCell>${user.amount.toFixed(4)}</TableCell>
-                  <TableCell>${user.limit.toFixed(2)}</TableCell>
-                  <TableCell>{user.limit === 0 ? "0" : (((user.limit - user.amount) / user.limit) * 100).toFixed(2)}%</TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="number"
-                        placeholder="New limit"
-                        value={newLimits[user.userId] || ""}
-                        onChange={(e) => handleLimitChange(user.userId, e.target.value)}
-                        className="w-36"
-                      />
-                      <Button onClick={() => handleLimitSubmit(user.userId)} disabled={isPending}>
-                        Set
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {users.map((user) => {
+                const amount = user.limit === 0 ? "0" : (((user.limit - user.amount) / user.limit) * 100).toFixed(2);
+                return (
+                  <TableRow key={user.userId}>
+                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.firstName}</TableCell>
+                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.lastName}</TableCell>
+                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.emailAddress}</TableCell>
+                    <TableCell>{user.tokens.toLocaleString()}</TableCell>
+                    <TableCell>${user.amount.toFixed(4)}</TableCell>
+                    <TableCell>${user.limit.toFixed(2)}</TableCell>
+                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{amount}%</TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="number"
+                          placeholder="New limit"
+                          value={newLimits[user.userId] || ""}
+                          onChange={(e) => handleLimitChange(user.userId, e.target.value)}
+                          className="w-36"
+                        />
+                        <Button onClick={() => handleLimitSubmit(user.userId)} disabled={isPending}>
+                          Set
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>
