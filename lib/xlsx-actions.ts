@@ -84,11 +84,11 @@ export async function getUsersDataXlsx() {
 
   XLSX.utils.book_append_sheet(wb, totalsWs, "Totals");
 
-  const buf = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
+  const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
 
-  const blob = new Blob([buf], {
+  const blob = new Blob([buffer], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
 
-  return blob;
+  return { blob, buffer };
 }

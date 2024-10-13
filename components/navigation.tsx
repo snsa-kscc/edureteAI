@@ -10,7 +10,7 @@ export function Navigation() {
 
   const handleDownload = async () => {
     try {
-      const blob = await getUsersDataXlsx();
+      const { blob } = await getUsersDataXlsx();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
