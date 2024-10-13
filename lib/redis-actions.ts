@@ -30,6 +30,7 @@ export async function getUsersData() {
     }
     return usersData;
   } catch (error) {
+    console.error(error);
     return [];
   }
 }
