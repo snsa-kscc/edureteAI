@@ -5,9 +5,9 @@ import { headers } from "next/headers";
 
 export async function GET(req: Request) {
   const headersList = headers();
-  const isCron = headersList.get("x-vercel-cron");
+  const cronToken = headersList.get("authorization");
 
-  if (isCron !== "true") {
+  if (cronToken !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
