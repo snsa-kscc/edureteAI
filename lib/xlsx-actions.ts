@@ -19,7 +19,6 @@ type ProviderData =
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   const MODELS = ["gpt", "claude"];
   const usersData = await getUsersData();
-  usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
 
   const gptUsers = await getUsersUsage(usersData, MODELS[0]);
   const claudeUsers = await getUsersUsage(usersData, MODELS[1]);

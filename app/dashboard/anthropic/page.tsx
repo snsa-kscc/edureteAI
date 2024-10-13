@@ -8,8 +8,6 @@ const MODEL = "claude";
 export default async function AppDashboardAnthropicPage() {
   const usersData = await getUsersData();
 
-  usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
-
   const users = await getUsersUsage(usersData, MODEL);
 
   return (

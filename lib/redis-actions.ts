@@ -26,7 +26,7 @@ export async function getUsersData() {
       const firstName = user.firstName ?? "";
       const lastName = user.lastName ?? "";
       usersData.push({ userId, firstName, lastName, emailAddress });
-      // 2DO: sort by last name when we have users' names
+      usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
     }
     return usersData;
   } catch (error) {

@@ -43,8 +43,8 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
               <SelectGroup>
                 <SelectLabel>Active Users</SelectLabel>
                 {userData.map(({ userId, firstName, lastName, emailAddress }) => (
-                  <SelectItem key={userId} value={userId} title={`${firstName} ${lastName}`}>
-                    {emailAddress}
+                  <SelectItem key={userId} value={userId} title={emailAddress}>
+                    {`${firstName} ${lastName}`}
                   </SelectItem>
                 ))}
               </SelectGroup>
