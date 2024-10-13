@@ -53,13 +53,13 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   });
 
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(combinedData);
+  const instructorWs = XLSX.utils.json_to_sheet(combinedData);
 
-  const range = XLSX.utils.decode_range(ws["!ref"]!);
-  for (let C = range.s.c; C <= range.e.c; ++C) {
-    const address = XLSX.utils.encode_cell({ r: range.s.r, c: C });
-    if (!ws[address]) continue;
-    ws[address].s = { font: { bold: true } };
+  const instructorRange = XLSX.utils.decode_range(instructorWs["!ref"]!);
+  for (let C = instructorRange.s.c; C <= instructorRange.e.c; ++C) {
+    const address = XLSX.utils.encode_cell({ r: instructorRange.s.r, c: C });
+    if (!instructorWs[address]) continue;
+    instructorWs[address].s = { font: { bold: true } };
   }
 
   const columnWidths = [
@@ -76,9 +76,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
     { wch: 12 },
     { wch: 12 },
   ];
-  ws["!cols"] = columnWidths;
-
-  XLSX.utils.book_append_sheet(wb, ws, "Per Instructor");
+  instructorWs["!cols"] = columnWidths;
 
   const totalGptTokens = gptUsers.reduce((sum, user) => sum + user.tokens, 0);
   const totalGptAmount = gptUsers.reduce((sum, user) => sum + user.amount, 0);
@@ -126,6 +124,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   totalsWs["!cols"] = [{ wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 20 }];
 
   XLSX.utils.book_append_sheet(wb, totalsWs, "Totals");
+  XLSX.utils.book_append_sheet(wb, instructorWs, "Per Instructor");
 
   const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
 
