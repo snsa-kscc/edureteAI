@@ -16,18 +16,19 @@ const client = new Redis({
   },
 });
 
-export async function getUserData() {
+export async function getUsersData() {
   try {
     const userIds: string[] = await client.smembers("userIds");
-    const userData: { userId: string; firstName: string; lastName: string; emailAddress: string }[] = [];
+    const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string }[] = [];
     for (const userId of userIds) {
       const user = await clerkClient().users.getUser(userId);
       const emailAddress = user.emailAddresses[0].emailAddress;
       const firstName = user.firstName ?? "";
       const lastName = user.lastName ?? "";
-      userData.push({ userId, firstName, lastName, emailAddress });
+      usersData.push({ userId, firstName, lastName, emailAddress });
+      // 2DO: sort by last name when we have users' names
     }
-    return userData;
+    return usersData;
   } catch (error) {
     return [];
   }

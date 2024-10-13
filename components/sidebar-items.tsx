@@ -4,7 +4,7 @@ import { Chat } from "@/lib/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarActions } from "./sidebar-actions";
-import { removeChat } from "@/lib/actions";
+import { removeChat } from "@/lib/redis-actions";
 
 export function SidebarItems({ chats, userId }: { chats?: Chat[]; userId: string | null }) {
   if (!chats?.length) return null;

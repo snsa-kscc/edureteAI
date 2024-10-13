@@ -125,6 +125,7 @@ export function Dashboard({
                     <div className="flex items-center space-x-2">
                       <Input
                         type="number"
+                        placeholder="New limit"
                         value={newLimits[user.userId] || ""}
                         onChange={(e) => handleLimitChange(user.userId, e.target.value)}
                         className="w-36"

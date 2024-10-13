@@ -1,27 +1,16 @@
 import { Dashboard } from "@/components/dashboard";
 import { Navigation } from "@/components/navigation";
-import { getUserData, getUserQuota, updateUserLimit } from "@/lib/actions";
-import { tokensToDollars } from "@/lib/utils";
+import { getUsersData, updateUserLimit } from "@/lib/redis-actions";
+import { getUsersUsage } from "@/lib/utils";
 
 const MODEL = "gpt";
 
 export default async function AppDashboardOpenaiPage() {
-  const usersData = await getUserData();
+  const usersData = await getUsersData();
 
-  const users = await Promise.all(
-    usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
-      const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, MODEL);
-      return {
-        userId,
-        firstName,
-        lastName,
-        emailAddress,
-        tokens: totalTokensUsed,
-        amount: tokensToDollars(totalTokensUsed),
-        limit: tokensToDollars(quotaLimit),
-      };
-    })
-  );
+  usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
+
+  const users = await getUsersUsage(usersData, MODEL);
 
   return (
     <div className="container mx-auto p-4">

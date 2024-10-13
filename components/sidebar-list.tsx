@@ -4,7 +4,7 @@ import { Chat } from "@/lib/types";
 import { SidebarItems } from "./sidebar-items";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { getChats } from "@/lib/actions";
+import { getChats } from "@/lib/redis-actions";
 import { useMutation } from "@tanstack/react-query";
 import { IconSpinner } from "./ui/icons";
 

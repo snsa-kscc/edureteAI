@@ -5,7 +5,7 @@ import { Title } from "@/components/title";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { AI } from "@/app/actions";
-import { getChat } from "@/lib/actions";
+import { getChat } from "@/lib/redis-actions";
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

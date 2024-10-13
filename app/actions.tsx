@@ -2,7 +2,7 @@
 
 import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
-import { checkQuota, saveChat, saveUsage } from "@/lib/actions";
+import { checkQuota, saveChat, saveUsage } from "@/lib/redis-actions";
 import { Message } from "ai";
 import { Chat, Usage } from "@/lib/types";
 import { ReactNode } from "react";

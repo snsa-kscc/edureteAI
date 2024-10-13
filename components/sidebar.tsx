@@ -3,11 +3,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
-import { getUserData, getChats } from "@/lib/actions";
+import { getUsersData, getChats } from "@/lib/redis-actions";
 import { cache } from "react";
 
 const loadUserData = cache(async () => {
-  return await getUserData();
+  return await getUsersData();
 });
 
 const loadChats = cache(async (userId: string) => {

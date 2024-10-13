@@ -1,25 +1,16 @@
 import { Navigation } from "@/components/navigation";
 import { Dashboard } from "@/components/dashboard";
-import { getUserData, getUserQuota, updateUserLimit } from "@/lib/actions";
-import { tokensToDollars } from "@/lib/utils";
+import { getUsersData, updateUserLimit } from "@/lib/redis-actions";
+import { getUsersUsage } from "@/lib/utils";
 
 const MODEL = "claude";
 
 export default async function AppDashboardAnthropicPage() {
-  const usersData = await getUserData();
+  const usersData = await getUsersData();
 
-  const users = await Promise.all(
-    Object.entries(usersData).map(async ([userId, email]) => {
-      const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, MODEL);
-      return {
-        userId,
-        email,
-        tokens: totalTokensUsed,
-        amount: tokensToDollars(totalTokensUsed),
-        limit: tokensToDollars(quotaLimit),
-      };
-    })
-  );
+  usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
+
+  const users = await getUsersUsage(usersData, MODEL);
 
   return (
     <div className="container mx-auto p-4">
