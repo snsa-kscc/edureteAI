@@ -28,6 +28,8 @@ export async function GET(request: Request) {
       html: `
       <h1>Daily Report</h1>
       <p>Please find attached the daily report.</p>
+      <p>Best Regards,</p>
+      <p>edureteAI App</p>
       `,
       attachments: [
         {
