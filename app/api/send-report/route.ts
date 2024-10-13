@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { buffer } = await getUsersDataXlsx();
+    const { buffer } = await getUsersDataXlsx(true);
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -37,7 +37,7 @@ export async function GET(req: Request) {
       <h1>Daily Report</h1>
       <p>Please find attached the daily report.</p>
       <p>Best Regards,</p>
-      <p>edureteAI App</p>
+      <p>edureteAI app</p>
       `,
       attachments: [
         {

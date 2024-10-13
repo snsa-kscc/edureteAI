@@ -37,7 +37,7 @@
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
-    "xlsx": "^0.18.5"
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.5",
