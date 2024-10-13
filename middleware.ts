@@ -5,6 +5,10 @@ const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 
 export default clerkMiddleware((auth, request) => {
+  if (request.nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   if (!isPublicRoute(request)) {
     auth().protect();
 
@@ -18,5 +22,5 @@ export default clerkMiddleware((auth, request) => {
 });
 
 export const config = {
-  matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(trpc)(.*)"],
 };

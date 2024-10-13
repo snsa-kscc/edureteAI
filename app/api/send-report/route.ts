@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getUsersDataXlsx } from "@/lib/xlsx-actions";
+import { headers } from "next/headers";
 
-export async function GET(request: Request) {
+export async function GET(req: Request) {
+  const headersList = headers();
+  const isCron = headersList.get("x-vercel-cron");
+
+  if (isCron !== "true") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const { buffer } = await getUsersDataXlsx();
 
