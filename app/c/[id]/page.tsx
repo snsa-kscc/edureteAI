@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 const DEFAULT_SYSTEM_PROMPT = `As an assistant, when providing mathematical content, ensure that all formulas and equations are written in plain text or Unicode. Do not use LaTeX or any other coding format. Present the information in a straightforward and accessible manner.`;
 const DEFAULT_LEFT_MODEL = "gpt-4o";
-const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20240620";
+const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20241022";
 
 export default async function cPage({ params }: { params: { id: string } }) {
   const { userId, orgRole } = auth();
