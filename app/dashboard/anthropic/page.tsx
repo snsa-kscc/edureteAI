@@ -4,6 +4,7 @@ import { getUsersData, updateUserLimit } from "@/lib/redis-actions";
 import { getUsersUsage } from "@/lib/utils";
 
 const MODEL = "claude";
+export const dynamic = "force-dynamic";
 
 export default async function AppDashboardAnthropicPage() {
   const usersData = await getUsersData();

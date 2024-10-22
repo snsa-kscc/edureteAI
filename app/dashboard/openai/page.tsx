@@ -4,6 +4,7 @@ import { getUsersData, updateUserLimit } from "@/lib/redis-actions";
 import { getUsersUsage } from "@/lib/utils";
 
 const MODEL = "gpt";
+export const dynamic = "force-dynamic";
 
 export default async function AppDashboardOpenaiPage() {
   const usersData = await getUsersData();

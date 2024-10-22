@@ -4,7 +4,7 @@ import { getUsersDataXlsx } from "@/lib/xlsx-actions";
 import { headers } from "next/headers";
 
 export async function GET(req: Request) {
-  const headersList = headers();
+  const headersList = await headers();
   const cronToken = headersList.get("authorization");
 
   if (cronToken !== `Bearer ${process.env.CRON_SECRET}`) {
