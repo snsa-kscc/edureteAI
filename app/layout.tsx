@@ -15,15 +15,15 @@ export const metadata: Metadata = {
   description: "edureteAI - Math assistant",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { sessionClaims } = auth();
+  const { sessionClaims } = await auth();
 
   return (
-    <ClerkProvider>
+    <ClerkProvider dynamic>
       <SyncActiveOrganization membership={sessionClaims?.membership} />
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>

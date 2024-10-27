@@ -4,16 +4,16 @@ import { NextResponse } from "next/server";
 const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 
-export default clerkMiddleware((auth, request) => {
+export default clerkMiddleware(async (auth, request) => {
   if (request.nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
   if (!isPublicRoute(request)) {
-    auth().protect();
+    await auth.protect();
 
     if (isDashboardRoute(request)) {
-      const { orgRole } = auth();
+      const { orgRole } = await auth();
       if (!orgRole) {
         return NextResponse.rewrite(new URL("/404", request.url));
       }

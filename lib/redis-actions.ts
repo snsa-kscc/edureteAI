@@ -19,9 +19,10 @@ const client = new Redis({
 export async function getUsersData() {
   try {
     const userIds: string[] = await client.smembers("userIds");
+    const clerk = await clerkClient();
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string }[] = [];
     for (const userId of userIds) {
-      const user = await clerkClient().users.getUser(userId);
+      const user = await clerk.users.getUser(userId);
       const emailAddress = user.emailAddresses[0].emailAddress;
       const firstName = user.firstName ?? "";
       const lastName = user.lastName ?? "";
