@@ -1,14 +1,14 @@
+import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Chat } from "@/components/chat";
 import { Changelog } from "@/components/changelog";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
-import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { AI } from "@/app/actions";
 import { getChat } from "@/lib/redis-actions";
 import { Sidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { AI } from "@/app/ai";
 
 export const maxDuration = 60;
 // export const runtime = "edge";

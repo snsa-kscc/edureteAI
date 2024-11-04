@@ -1,28 +1,13 @@
 "use server";
 
-import { createAI, createStreamableValue, getAIState, getMutableAIState, streamUI } from "ai/rsc";
-import { v4 as uuidv4 } from "uuid";
-import { checkQuota, saveChat, saveUsage } from "@/lib/redis-actions";
-import { Message } from "ai";
-import { Chat, Usage } from "@/lib/types";
 import { ReactNode } from "react";
+import { createStreamableValue, getMutableAIState, streamUI } from "ai/rsc";
+import { v4 as uuidv4 } from "uuid";
+import { checkQuota, saveUsage } from "@/lib/redis-actions";
+import { Usage } from "@/lib/types";
 import { handleModelProvider } from "@/lib/utils";
 import { BotMessage } from "@/components/bot-message";
-
-export type AIState = {
-  userId: string | null;
-  chatId: string;
-  model: string;
-  system: string;
-  chatAreaId: string;
-  messages: Message[];
-};
-
-export type UIState = {
-  id: string;
-  role: "user" | "assistant";
-  content: ReactNode;
-}[];
+import { AI } from "@/app/ai";
 
 export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
@@ -114,42 +99,3 @@ export async function submitUserMessage({ content, model, system }: { content: s
     return { error: error.message };
   }
 }
-
-export const AI = createAI<AIState, UIState>({
-  actions: {
-    submitUserMessage,
-  },
-  onSetAIState: async ({ state, done }) => {
-    if (done) {
-      const { userId, chatId, chatAreaId, messages, model, system } = state;
-
-      const createdAt = new Date();
-      const path = `/c/${chatId}`;
-      const title = messages[0].content.substring(0, 100);
-
-      const chat: Chat = {
-        ...(chatAreaId === "left"
-          ? { leftMessages: messages, leftModel: model, leftSystemPrompt: system }
-          : { rightMessages: messages, rightModel: model, rightSystemPrompt: system }),
-        id: chatId,
-        title,
-        userId: userId!,
-        createdAt,
-        path,
-      };
-
-      await saveChat(chat);
-    } else {
-      return;
-    }
-  },
-  onGetUIState: async () => {
-    const aiState: AIState = getAIState<typeof AI>();
-
-    return aiState.messages.map((message: any) => ({
-      id: message.id,
-      role: message.role,
-      content: message.content,
-    }));
-  },
-});

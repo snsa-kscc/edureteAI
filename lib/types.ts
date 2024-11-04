@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Message } from "ai";
 
 export interface Chat extends Record<string, any> {
@@ -13,6 +14,21 @@ export interface Chat extends Record<string, any> {
   leftSystemPrompt?: string;
   rightSystemPrompt?: string;
 }
+
+export type AIState = {
+  userId: string | null;
+  chatId: string;
+  model: string;
+  system: string;
+  chatAreaId: string;
+  messages: Message[];
+};
+
+export type UIState = {
+  id: string;
+  role: "user" | "assistant";
+  content: ReactNode;
+}[];
 
 export type ServerActionResult<Result> = Promise<
   | Result
