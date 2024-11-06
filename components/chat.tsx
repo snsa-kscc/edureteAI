@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 
-import { uploadFileToR2 } from "@/lib/upload-actions";
+import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 
 interface ClientMessage {
   id: string;
@@ -165,6 +165,21 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
       >
         <input type="file" name="file" />
         <Button type="submit">Upload</Button>
+      </form>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const url = formData.get("url") as string;
+          const { success, message } = await deleteFileFromR2(url);
+          if (success) {
+            toast.success("File deleted successfully");
+            console.log(message);
+          }
+        }}
+      >
+        <input type="text" name="url" />
+        <Button type="submit">Delete</Button>
       </form>
     </div>
   );

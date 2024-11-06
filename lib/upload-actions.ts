@@ -1,6 +1,6 @@
 "use server";
 
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
 
@@ -62,6 +62,34 @@ export async function uploadFileToR2(formData: FormData) {
     return {
       success: false,
       error: "Failed to upload file",
+    };
+  }
+}
+
+export async function deleteFileFromR2(fileUrl: string) {
+  try {
+    const filename = fileUrl.split("/").pop();
+
+    if (!filename) {
+      throw new Error("Invalid file URL");
+    }
+
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
+      Key: filename,
+    });
+
+    await S3.send(command);
+
+    return {
+      success: true,
+      message: "File deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    return {
+      success: false,
+      error: "Failed to delete file",
     };
   }
 }
