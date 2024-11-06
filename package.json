@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.53",
     "@ai-sdk/openai": "^0.0.70",
+    "@aws-sdk/client-s3": "^3.685.0",
     "@clerk/nextjs": "^6.0.2",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -33,6 +34,7 @@
     "nodemailer": "^6.9.15",
     "react": "19.0.0-rc-1460d67c-20241003",
     "react-dom": "19.0.0-rc-1460d67c-20241003",
+    "sharp": "^0.33.5",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",

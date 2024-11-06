@@ -21,7 +21,7 @@ export function Changelog() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>What is new in the app</AlertDialogTitle>
-          <AlertDialogDescription>22.10.2024 - New Claude 3.5 Sonnet model added</AlertDialogDescription>
+          <AlertDialogDescription>22.10.2024 - New Claude 3.5 Sonnet and Haiku models added</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction>Close</AlertDialogAction>

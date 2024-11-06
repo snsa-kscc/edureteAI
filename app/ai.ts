@@ -14,14 +14,15 @@ export const AI = createAI<AIState, UIState>({
 
       const createdAt = new Date();
       const path = `/c/${chatId}`;
-      const title = messages[0].content.substring(0, 100);
+      // 2DO - title refactor
+      //const title = messages[0].content.substring(0, 100);
 
       const chat: Chat = {
         ...(chatAreaId === "left"
           ? { leftMessages: messages, leftModel: model, leftSystemPrompt: system }
           : { rightMessages: messages, rightModel: model, rightSystemPrompt: system }),
         id: chatId,
-        title,
+        title: "untitled", // 2DO - title refactor
         userId: userId!,
         createdAt,
         path,

@@ -20,16 +20,26 @@ export async function submitUserMessage({ content, model, system }: { content: s
     };
   }
 
+  const messageContent = [
+    { type: "text", text: content },
+    {
+      type: "image",
+      image: "https://www.w3schools.com/html/img_girl.jpg", // 2DO - hardcode removal
+    },
+  ];
+
   aiState.update({
     ...aiState.get(),
     model,
     system,
     messages: [
+      //@ts-ignore
       ...aiState.get().messages,
       {
         id: uuidv4(),
         role: "user",
-        content,
+        //@ts-ignore
+        content: messageContent,
       },
     ],
   });

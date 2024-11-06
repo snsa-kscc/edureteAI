@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 
+import { uploadFileToR2 } from "@/lib/upload-actions";
+
 interface ClientMessage {
   id: string;
   role: "user" | "assistant";
@@ -153,6 +155,17 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
           </Button>
         </form>
       )}
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const { url } = await uploadFileToR2(formData);
+          console.log(url);
+        }}
+      >
+        <input type="file" name="file" />
+        <Button type="submit">Upload</Button>
+      </form>
     </div>
   );
 }
