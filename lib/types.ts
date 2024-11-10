@@ -1,5 +1,15 @@
 import { ReactNode } from "react";
-import { Message } from "ai";
+import { Message as AiMessage } from "ai";
+
+export type MessageContent = {
+  type: "text" | "image";
+  text?: string;
+  image?: string;
+};
+
+type Message = Omit<AiMessage, "content"> & {
+  content: string | MessageContent[];
+};
 
 export interface Chat extends Record<string, any> {
   id: string;

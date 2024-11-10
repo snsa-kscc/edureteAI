@@ -1,7 +1,7 @@
 import { createAI, getAIState } from "ai/rsc";
 import { submitUserMessage } from "@/app/actions";
 import { saveChat } from "@/lib/redis-actions";
-import { Chat, AIState, UIState } from "@/lib/types";
+import { Chat, AIState, UIState, MessageContent } from "@/lib/types";
 
 export const AI = createAI<AIState, UIState>({
   actions: {
@@ -14,15 +14,28 @@ export const AI = createAI<AIState, UIState>({
 
       const createdAt = new Date();
       const path = `/c/${chatId}`;
-      // 2DO - title refactor
-      //const title = messages[0].content.substring(0, 100);
+
+      const firstMessage = messages[0];
+      let title = "untitled";
+
+      if (firstMessage) {
+        if (Array.isArray(firstMessage.content)) {
+          const textContent = firstMessage.content
+            .map((item: MessageContent) => (item.type === "text" ? item.text : ""))
+            .join("\n")
+            .trim();
+          title = textContent.substring(0, 100);
+        } else {
+          title = firstMessage.content.substring(0, 100);
+        }
+      }
 
       const chat: Chat = {
         ...(chatAreaId === "left"
           ? { leftMessages: messages, leftModel: model, leftSystemPrompt: system }
           : { rightMessages: messages, rightModel: model, rightSystemPrompt: system }),
         id: chatId,
-        title: "untitled", // 2DO - title refactor
+        title,
         userId: userId!,
         createdAt,
         path,

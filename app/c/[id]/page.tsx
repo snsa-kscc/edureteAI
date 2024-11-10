@@ -35,10 +35,12 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           </Button>
         )}
         <Changelog />
-        <ModeToggle />
-        {/* <div className="flex items-center">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div> */}
-        {/* 2DO - afterSignOutUrl is deprecated, let's monitor if removal is okay */}
-        <div className="flex items-center">{userId && <UserButton />}</div>
+        <div className="flex gap-2">
+          <ModeToggle />
+          {/* <div className="flex items-center">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div> */}
+          {/* 2DO - afterSignOutUrl is deprecated, let's monitor if removal is okay */}
+          <div className="flex items-center">{userId && <UserButton />}</div>
+        </div>
       </div>
       <div className="flex flex-col lg:flex-row justify-evenly">
         <Sidebar userId={chat?.userId ?? userId} orgRole={orgRole} />

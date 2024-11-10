@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState, useTransition } from "react";
 import { readStreamableValue, useAIState, useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,13 +9,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { SendHorizontalIcon } from "lucide-react";
+import { SendHorizontalIcon, ImageIcon, Loader2, X } from "lucide-react";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { useRouter } from "next/navigation";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
+import { MessageContent } from "@/lib/types";
 
 interface ClientMessage {
   id: string;
@@ -31,9 +32,12 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
   const ref = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { formRef, onKeyDown } = useEnterSubmit();
   const [aiState] = useAIState();
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
@@ -50,6 +54,80 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
     if (ref.current === null) return;
     ref.current.scrollTo(0, ref.current.scrollHeight);
   }, [conversation]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      startTransition(async () => {
+        const { success, url } = await uploadFileToR2(formData);
+        if (success && url) {
+          setUploadedImage(url);
+        } else {
+          throw new Error("Failed to upload image");
+        }
+      });
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("Failed to upload image");
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    if (!uploadedImage) return;
+
+    startTransition(async () => {
+      try {
+        const { success } = await deleteFileFromR2(uploadedImage);
+        if (success) {
+          setUploadedImage(null);
+          toast.success("Image deleted successfully");
+        } else {
+          throw new Error("Failed to delete image");
+        }
+      } catch (error) {
+        console.error("Error deleting file:", error);
+        toast.error("Failed to delete image");
+      }
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const messageContent = uploadedImage
+      ? [
+          { type: "text", text: content },
+          { type: "image", image: uploadedImage },
+        ]
+      : content;
+
+    setUploadedImage(null);
+    setContent("");
+    setConversation((currentConversation: ClientMessage[]) => [
+      ...currentConversation,
+      { id: Math.random().toString(), role: "user", content: messageContent },
+    ]);
+    startTransition(async () => {
+      const message = await submitUserMessage({ content: messageContent, model, system });
+      let textContent = "";
+      if (message.error) {
+        toast.error(message.error);
+      } else {
+        for await (const delta of readStreamableValue(message.stream)) {
+          textContent = `${textContent}${delta}`;
+          setConversation([
+            ...aiState.messages,
+            { id: Math.random().toString(), role: "user", content: messageContent },
+            { id: Math.random().toString(), role: "assistant", content: textContent },
+          ]);
+        }
+      }
+    });
+  };
 
   return (
     <div className="w-full p-4 flex flex-col h-[80vh]">
@@ -94,7 +172,16 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                 </Avatar>
                 <div className="mt-1.5">
                   <p className="font-semibold">You</p>
-                  <div className="mt-1.5 text-sm text-zinc-500">{m.content}</div>
+                  <div className="mt-1.5 text-sm text-zinc-500">
+                    {Array.isArray(m.content)
+                      ? m.content.map((item: MessageContent, index: number) => (
+                          <div key={index}>
+                            {item.type === "text" && item.text}
+                            {item.type === "image" && <img src={item.image} alt="uploaded image" className="mt-2 max-w-xs rounded" />}
+                          </div>
+                        ))
+                      : m.content}
+                  </div>
                 </div>
               </div>
             )}
@@ -118,69 +205,42 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
         ))}
       </ScrollArea>
       {aiState.userId === userId && (
-        <form
-          ref={formRef}
-          onSubmit={async (e: any) => {
-            e.preventDefault();
-            setContent("");
-            setConversation((currentConversation: ClientMessage[]) => [...currentConversation, { id: Math.random().toString(), role: "user", content }]);
-            const message = await submitUserMessage({ content, model, system });
-            let textContent = "";
-            if (message.error) {
-              toast.error(message.error);
-            } else {
-              for await (const delta of readStreamableValue(message.stream)) {
-                textContent = `${textContent}${delta}`;
-                setConversation([
-                  ...aiState.messages,
-                  { id: Math.random().toString(), role: "user", content },
-                  { id: Math.random().toString(), role: "assistant", content: textContent },
-                  //{ id: Math.random().toString(), role: "assistant", content: message.content },
-                ]);
-              }
-            }
-          }}
-          className="relative"
-        >
+        <form ref={formRef} onSubmit={handleSubmit} className="relative">
           <Textarea
             name="message"
             value={content}
             onKeyDown={onKeyDown}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Ask me anything..."
-            className="pr-12 placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500"
+            className={`placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500 ${uploadedImage ? "pr-40" : "pr-28"}`}
+            disabled={isPending}
           />
-          <Button size="icon" type="submit" variant="secondary" disabled={content === ""} className="absolute right-2 bottom-2 h-8 w-10">
-            <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />
-          </Button>
+          <div className="flex items-center gap-3 mb-2 absolute bottom-2 right-2">
+            <Button
+              type="button"
+              size="icon"
+              variant="secondary"
+              className="text-emerald-500 h-8 w-10"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isPending || !!uploadedImage}
+            >
+              <ImageIcon className="h-5 w-5" />
+            </Button>
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+            {uploadedImage && (
+              <div className="relative h-9 w-9">
+                <img src={uploadedImage} alt="uploaded image" className="h-full w-full object-cover rounded-sm" />
+                <div onClick={handleDeleteImage} className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer bg-slate-700 rounded-full">
+                  <X className="h-4 w-4 text-emerald-500 m-1" />
+                </div>
+              </div>
+            )}
+            <Button size="icon" type="submit" variant="secondary" disabled={isPending || content === ""} className="h-8 w-10">
+              {isPending ? <Loader2 className="h-5 w-5 animate-spin text-emerald-500" /> : <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />}
+            </Button>
+          </div>
         </form>
       )}
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          const { url } = await uploadFileToR2(formData);
-          console.log(url);
-        }}
-      >
-        <input type="file" name="file" />
-        <Button type="submit">Upload</Button>
-      </form>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          const url = formData.get("url") as string;
-          const { success, message } = await deleteFileFromR2(url);
-          if (success) {
-            toast.success("File deleted successfully");
-            console.log(message);
-          }
-        }}
-      >
-        <input type="text" name="url" />
-        <Button type="submit">Delete</Button>
-      </form>
     </div>
   );
 }

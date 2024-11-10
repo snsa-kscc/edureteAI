@@ -4,12 +4,12 @@ import { ReactNode } from "react";
 import { createStreamableValue, getMutableAIState, streamUI } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/redis-actions";
-import { Usage } from "@/lib/types";
+import { Usage, MessageContent } from "@/lib/types";
 import { handleModelProvider } from "@/lib/utils";
 import { BotMessage } from "@/components/bot-message";
 import { AI } from "@/app/ai";
 
-export async function submitUserMessage({ content, model, system }: { content: string; model: string; system: string }) {
+export async function submitUserMessage({ content, model, system }: { content: MessageContent[]; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
 
   const hasQuotaAvailable = await checkQuota(aiState.get().userId!, aiState.get().model);
@@ -20,25 +20,23 @@ export async function submitUserMessage({ content, model, system }: { content: s
     };
   }
 
-  const messageContent = [
-    { type: "text", text: content },
-    {
-      type: "image",
-      image: "https://www.w3schools.com/html/img_girl.jpg", // 2DO - hardcode removal
-    },
-  ];
+  let messageContent: MessageContent[];
+
+  if (typeof content === "string") {
+    messageContent = [{ type: "text", text: content }];
+  } else {
+    messageContent = content;
+  }
 
   aiState.update({
     ...aiState.get(),
     model,
     system,
     messages: [
-      //@ts-ignore
       ...aiState.get().messages,
       {
         id: uuidv4(),
         role: "user",
-        //@ts-ignore
         content: messageContent,
       },
     ],
