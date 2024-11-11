@@ -1,24 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import { buttonVariants } from "@/components/ui/button";
-import { IconMessage } from "@/components/ui/icons";
+import { IconMessage, IconSpinner } from "@/components/ui/icons";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { type Chat } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export function SidebarItem({ index, chat, children }: { index: number; chat: Chat; children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isActive = pathname === chat.path;
   const [newChatId, setNewChatId] = useLocalStorage("newChatId", null);
   const shouldAnimate = index === 0 && isActive && newChatId;
 
   if (!chat?.id) return null;
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    router.push(chat.path);
+  };
 
   return (
     <motion.div
@@ -41,10 +49,11 @@ export function SidebarItem({ index, chat, children }: { index: number; chat: Ch
       }}
     >
       <div className="absolute left-2 top-1 flex size-6 items-center justify-center">
-        <IconMessage className="mr-2 mt-1 text-emerald-400" />
+        {isLoading ? <IconSpinner className="mr-2 mt-1 h-4 w-4 animate-spin text-emerald-400" /> : <IconMessage className="mr-2 mt-1 text-emerald-400" />}
       </div>
       <Link
         href={chat.path}
+        onClick={handleClick}
         className={cn(
           buttonVariants({ variant: "ghost" }),
           "group w-full px-8 transition-colors hover:bg-zinc-200/40 dark:hover:bg-zinc-300/10",

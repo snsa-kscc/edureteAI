@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { SidebarList } from "./sidebar-list";
 import { getUsersData, getChats } from "@/lib/redis-actions";
 import { cache } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const loadUserData = cache(async () => {
   return await getUsersData();
@@ -22,7 +23,7 @@ export async function Sidebar({ userId, orgRole }: { userId: string | null; orgR
     <div className="min-w-72 lg:w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
       <div className="mb-2 px-2">
         <Link
-          href="/"
+          href={`/c/${uuidv4()}`}
           className={cn(
             buttonVariants({ variant: "outline" }),
             "h-10 w-full justify-start bg-zinc-50 px-4 shadow-none transition-colors hover:bg-zinc-200/40 dark:bg-zinc-900 dark:hover:bg-zinc-300/10"
