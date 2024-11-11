@@ -98,8 +98,6 @@ export async function submitUserMessage({ content, model, system }: { content: M
     });
 
     return {
-      //id: uuidv4(),
-      //role: "assistant",
       content: result.value,
       stream: textStream.value,
     };
