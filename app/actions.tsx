@@ -59,11 +59,6 @@ export async function submitUserMessage({ content, model, system }: { content: M
         })),
       ],
       text: ({ content, done, delta }) => {
-        // if (!textStream) {
-        //   textStream = createStreamableValue("");
-        //   textNode = <BotMessage content={textStream.value} />;
-        // }
-
         if (done) {
           textStream.done();
           aiState.done({

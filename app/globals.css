@@ -86,3 +86,7 @@
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background-color: #868686;
 }
+
+.katex.katex {
+  font-size: 1.4rem;
+}

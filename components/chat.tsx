@@ -14,7 +14,7 @@ import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { useRouter } from "next/navigation";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
-
+import { Markdown } from "@/components/markdown";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import { MessageContent } from "@/lib/types";
 
@@ -172,7 +172,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                 </Avatar>
                 <div className="mt-1.5">
                   <p className="font-semibold">You</p>
-                  <div className="mt-1.5 text-sm text-zinc-500">
+                  <div className="mt-1.5 text-sm text-zinc-400 leading-relaxed">
                     {Array.isArray(m.content)
                       ? m.content.map((item: MessageContent, index: number) => (
                           <div key={index}>
@@ -197,7 +197,9 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                     <p className="font-semibold">Bot</p>
                     <CopyToClipboard message={m} className="-mt-1" />
                   </div>
-                  <div className="mt-2 text-sm text-zinc-500">{m.content}</div>
+                  <div className="mt-2 text-sm text-zinc-300 leading-relaxed">
+                    <Markdown>{m.content}</Markdown>
+                  </div>
                 </div>
               </div>
             )}
