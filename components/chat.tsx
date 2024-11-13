@@ -27,7 +27,12 @@ interface ClientMessage {
 export function Chat({ userId, id, initialModel, initialSystem }: { userId: string | null; id: string; initialModel: string; initialSystem: string }) {
   const router = useRouter();
   const [content, setContent] = useState<string>("");
-  const [model, setModel] = useState<string>(initialModel);
+  const [model, setModel] = useState<string>(() => {
+    if (initialModel === "claude-3-5-sonnet-20240620") {
+      return "claude-3-5-sonnet-20241022";
+    }
+    return initialModel;
+  });
   const [system, setSystem] = useState<string>(initialSystem);
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
@@ -144,6 +149,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
               <SelectItem value="gpt-4">OpenAI/GPT-4</SelectItem>
               <SelectItem value="gpt-4o-mini">OpenAI/GPT-4o-mini</SelectItem>
               <SelectItem value="claude-3-5-sonnet-20241022">Anthropic/Claude 3.5 Sonnet</SelectItem>
+              <SelectItem value="claude-3-5-haiku-20241022">Anthropic/Claude 3.5 Haiku</SelectItem>
               {/* <SelectItem value="claude-3-opus-20240229">Anthropic/Claude 3 Opus</SelectItem> */}
               <SelectItem value="claude-3-sonnet-20240229">Anthropic/Claude 3 Sonnet</SelectItem>
               <SelectItem value="claude-3-haiku-20240307">Anthropic/Claude 3 Haiku</SelectItem>

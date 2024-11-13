@@ -16,11 +16,12 @@ export function Changelog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">What's new</Button>
+        <Button variant="secondary">What's new</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>What is new in the app</AlertDialogTitle>
+          <AlertDialogDescription>13.11.2024 - GPT LaTeX rendering & image upload</AlertDialogDescription>
           <AlertDialogDescription>22.10.2024 - New Claude 3.5 Sonnet and Haiku models added</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

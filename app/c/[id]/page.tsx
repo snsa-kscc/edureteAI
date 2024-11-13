@@ -37,8 +37,6 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
         <Changelog />
         <div className="flex gap-2">
           <ModeToggle />
-          {/* <div className="flex items-center">{userId && <UserButton afterSignOutUrl="/sign-in" />}</div> */}
-          {/* 2DO - afterSignOutUrl is deprecated, let's monitor if removal is okay */}
           <div className="flex items-center">{userId && <UserButton />}</div>
         </div>
       </div>
