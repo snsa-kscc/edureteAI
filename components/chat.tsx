@@ -177,8 +177,8 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                   <AvatarFallback className="text-sm">U</AvatarFallback>
                 </Avatar>
                 <div className="mt-1.5">
-                  <p className="font-semibold">You</p>
-                  <div className="mt-1.5 text-sm text-zinc-400 leading-relaxed">
+                  <p className="font-semibold opacity-70">You</p>
+                  <div className="mt-1.5 text-sm leading-relaxed">
                     {Array.isArray(m.content)
                       ? m.content.map((item: MessageContent, index: number) => (
                           <div key={index}>
@@ -200,10 +200,10 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
                 </Avatar>
                 <div className="mt-1.5 w-full">
                   <div className="flex justify-between">
-                    <p className="font-semibold">Bot</p>
+                    <p className="font-semibold opacity-70">Bot</p>
                     <CopyToClipboard message={m} className="-mt-1" />
                   </div>
-                  <div className="mt-2 text-sm text-zinc-300 leading-relaxed">
+                  <div className="mt-2 text-sm leading-relaxed">
                     <Markdown>{m.content}</Markdown>
                   </div>
                 </div>

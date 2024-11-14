@@ -124,7 +124,7 @@ export async function getUserQuota(userId: string, model: string) {
       const newQuota: UserQuota = {
         userId,
         totalTokensUsed: 0,
-        quotaLimit: 66_666 * 5,
+        quotaLimit: 66_666 * 2,
       };
       await client.hset(key, newQuota);
       return newQuota;
@@ -143,7 +143,7 @@ export async function getUserQuota(userId: string, model: string) {
       const newQuota: UserQuota = {
         userId,
         totalTokensUsed: 0,
-        quotaLimit: 66_666 * 5,
+        quotaLimit: 66_666 * 2,
       };
       await client.hset(key, newQuota);
       return newQuota;
