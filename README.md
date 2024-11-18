@@ -34,3 +34,4 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 - Monthly token reset
 - Better token calculation
+- Clerk auth dev to prod migration
