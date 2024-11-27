@@ -1,7 +1,7 @@
 "use server";
 
 import { Redis } from "@upstash/redis";
-import { Chat, Usage, UserQuota } from "./types";
+import { Chat, Usage, UserQuota } from "@/types/types";
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { dollarsToTokens } from "./utils";

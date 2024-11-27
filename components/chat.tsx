@@ -16,7 +16,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 import { Markdown } from "@/components/markdown";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
-import { MessageContent } from "@/lib/types";
+import { MessageContent } from "@/types/types";
 
 interface ClientMessage {
   id: string;
@@ -144,6 +144,8 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Available Models</SelectLabel>
+              <SelectItem value="o1-preview">OpenAI/o1-preview</SelectItem>
+              <SelectItem value="o1-mini">OpenAI/o1-mini</SelectItem>
               <SelectItem value="gpt-4o">OpenAI/GPT-4o</SelectItem>
               <SelectItem value="gpt-4-turbo">OpenAI/GPT-4 Turbo</SelectItem>
               <SelectItem value="gpt-4">OpenAI/GPT-4</SelectItem>

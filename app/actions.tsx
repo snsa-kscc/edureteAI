@@ -4,10 +4,11 @@ import { ReactNode } from "react";
 import { createStreamableValue, getMutableAIState, streamUI } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/redis-actions";
-import { Usage, MessageContent } from "@/lib/types";
+import { Usage, MessageContent } from "@/types/types";
 import { handleModelProvider } from "@/lib/utils";
 import { BotMessage } from "@/components/bot-message";
 import { AI } from "@/app/ai";
+import { saveUsage as saveUsageNeon } from "@/lib/neon-actions";
 
 export async function submitUserMessage({ content, model, system }: { content: MessageContent[]; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
@@ -89,6 +90,7 @@ export async function submitUserMessage({ content, model, system }: { content: M
         };
 
         await saveUsage(usageData);
+        await saveUsageNeon(usageData);
       },
     });
 
