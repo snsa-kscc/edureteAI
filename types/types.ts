@@ -61,3 +61,9 @@ export type UserQuota = {
   totalTokensUsed: number;
   quotaLimit: number;
 };
+
+export type ModelPricing = {
+  inputPrice: number;
+  outputPrice: number;
+  family: "openai" | "anthropic";
+};
