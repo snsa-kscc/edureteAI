@@ -29,7 +29,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
     <main className="min-h-screen">
       <div className="flex flex-col sm:flex-row gap-2 p-8">
         <Title />
-        {orgRole && (
+        {orgRole === "org:admin" && (
           <Button variant="outline">
             <Link href="/dashboard">Dashboard</Link>
           </Button>

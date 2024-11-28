@@ -26,32 +26,33 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
-      {orgRole && (
-        <div className="space-y-2 p-2">
-          <Select
-            value={user!}
-            onValueChange={(value) => {
-              setChats([]);
-              setUser(value);
-              server_getChats(value);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Active Users" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Active Users</SelectLabel>
-                {userData.map(({ userId, firstName, lastName, emailAddress }) => (
-                  <SelectItem key={userId} value={userId} title={emailAddress}>
-                    {`${firstName} ${lastName}`}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+      {orgRole === "org:admin" ||
+        (orgRole === "org:member" && (
+          <div className="space-y-2 p-2">
+            <Select
+              value={user!}
+              onValueChange={(value) => {
+                setChats([]);
+                setUser(value);
+                server_getChats(value);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Active Users" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Active Users</SelectLabel>
+                  {userData.map(({ userId, firstName, lastName, emailAddress }) => (
+                    <SelectItem key={userId} value={userId} title={emailAddress}>
+                      {`${firstName} ${lastName}`}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
       {isPending ? (
         <div className="flex items-center justify-center p-8 text-center">
           <IconSpinner className="animate-spin mr-2" />

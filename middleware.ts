@@ -14,7 +14,7 @@ export default clerkMiddleware(async (auth, request) => {
 
     if (isDashboardRoute(request)) {
       const { orgRole } = await auth();
-      if (!orgRole) {
+      if (!orgRole || orgRole !== "org:admin") {
         return NextResponse.rewrite(new URL("/404", request.url));
       }
     }
