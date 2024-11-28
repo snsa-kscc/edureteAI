@@ -20,13 +20,15 @@ export async function getUsersData() {
   try {
     const userIds: string[] = await client.smembers("userIds");
     const clerk = await clerkClient();
-    const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string }[] = [];
+    const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
     for (const userId of userIds) {
       const user = await clerk.users.getUser(userId);
+      const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId });
+      const role = orgMemberships.data[0]?.role || "no-role";
       const emailAddress = user.emailAddresses[0].emailAddress;
       const firstName = user.firstName ?? "";
       const lastName = user.lastName ?? "";
-      usersData.push({ userId, firstName, lastName, emailAddress });
+      usersData.push({ userId, firstName, lastName, emailAddress, role });
       usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
     }
     return usersData;
