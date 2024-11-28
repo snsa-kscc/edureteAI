@@ -30,11 +30,11 @@ export async function uploadFileToR2(formData: FormData) {
     const image = sharp(buffer);
     const metadata = await image.metadata();
 
-    if (metadata.width && metadata.height && (metadata.width > 700 || metadata.height > 700)) {
+    if (metadata.width && metadata.height && (metadata.width > 1500 || metadata.height > 1500)) {
       const resizedBuffer = await image
-        .resize(700, 700, {
+        .resize(1500, 1500, {
           fit: "inside", // Maintains aspect ratio
-          withoutEnlargement: true, // Don't enlarge if smaller than 700px
+          withoutEnlargement: true, // Don't enlarge if smaller than 1500px
         })
         .toBuffer();
 

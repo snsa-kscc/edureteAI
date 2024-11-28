@@ -1,12 +1,11 @@
 "use server";
 
-import { ReactNode } from "react";
-import { createStreamableValue, getMutableAIState, streamUI } from "ai/rsc";
+import { streamText } from "ai";
+import { createStreamableValue, getMutableAIState } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/redis-actions";
 import { Usage, MessageContent } from "@/types/types";
 import { handleModelProvider } from "@/lib/utils";
-import { BotMessage } from "@/components/bot-message";
 import { AI } from "@/app/ai";
 import { saveUsage as saveUsageNeon } from "@/lib/neon-actions";
 
@@ -43,25 +42,19 @@ export async function submitUserMessage({ content, model, system }: { content: M
     ],
   });
 
-  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
-  let textNode: undefined | ReactNode;
-  if (!textStream) {
-    textStream = createStreamableValue("");
-    textNode = <BotMessage content={textStream.value} />;
-  }
+  const stream = createStreamableValue("");
   try {
-    const result = await streamUI({
-      model: handleModelProvider(aiState.get().model),
-      system: aiState.get().system,
-      messages: [
-        ...aiState.get().messages.map((message: any) => ({
-          role: message.role,
-          content: message.content,
-        })),
-      ],
-      text: ({ content, done, delta }) => {
-        if (done) {
-          textStream.done();
+    (async () => {
+      const { textStream } = streamText({
+        model: handleModelProvider(aiState.get().model),
+        system: ["o1-mini", "o1-preview"].includes(aiState.get().model) ? undefined : aiState.get().system,
+        messages: [
+          ...aiState.get().messages.map((message: any) => ({
+            role: message.role,
+            content: message.content,
+          })),
+        ],
+        onFinish: async (result) => {
           aiState.done({
             ...aiState.get(),
             messages: [
@@ -69,34 +62,34 @@ export async function submitUserMessage({ content, model, system }: { content: M
               {
                 id: uuidv4(),
                 role: "assistant",
-                content,
+                content: result.text,
               },
             ],
           });
-        } else {
-          textStream.update(delta);
-        }
 
-        return textNode;
-      },
-      onFinish: async (result) => {
-        const usageData: Usage = {
-          userId: aiState.get().userId!,
-          model: aiState.get().model,
-          promptTokens: result.usage.promptTokens,
-          completionTokens: result.usage.completionTokens,
-          totalTokens: result.usage.totalTokens,
-          timestamp: new Date(),
-        };
+          const usageData: Usage = {
+            userId: aiState.get().userId!,
+            model: aiState.get().model,
+            promptTokens: result.usage.promptTokens,
+            completionTokens: result.usage.completionTokens,
+            totalTokens: result.usage.totalTokens,
+            timestamp: new Date(),
+          };
 
-        await saveUsage(usageData);
-        await saveUsageNeon(usageData);
-      },
-    });
+          await saveUsage(usageData);
+          await saveUsageNeon(usageData);
+        },
+      });
+
+      for await (const chunk of textStream) {
+        stream.update(chunk);
+      }
+
+      stream.done();
+    })();
 
     return {
-      content: result.value,
-      stream: textStream.value,
+      stream: stream.value,
     };
   } catch (error: any) {
     return { error: error.message };

@@ -11,10 +11,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function handleModelProvider(model: string) {
-  if (model.startsWith("gpt")) {
-    return openai(model);
-  } else {
+  if (model.startsWith("claude")) {
     return anthropic(model);
+  } else {
+    return openai(model);
   }
 }
 
