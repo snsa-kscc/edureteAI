@@ -44,6 +44,8 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  const modelsWithoutImageSupport = ["o1-preview", "o1-mini", "claude-3-5-haiku-20241022"];
+
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
     if (messagesLength % 2 === 0 && messagesLength > 0) {
@@ -147,12 +149,12 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
               <SelectItem value="o1-preview">OpenAI/o1-preview</SelectItem>
               <SelectItem value="o1-mini">OpenAI/o1-mini</SelectItem>
               <SelectItem value="gpt-4o">OpenAI/GPT-4o</SelectItem>
+              <SelectItem value="gpt-4o-mini">OpenAI/GPT-4o-mini</SelectItem>
               <SelectItem value="gpt-4-turbo">OpenAI/GPT-4 Turbo</SelectItem>
               <SelectItem value="gpt-4">OpenAI/GPT-4</SelectItem>
-              <SelectItem value="gpt-4o-mini">OpenAI/GPT-4o-mini</SelectItem>
               <SelectItem value="claude-3-5-sonnet-20241022">Anthropic/Claude 3.5 Sonnet</SelectItem>
               <SelectItem value="claude-3-5-haiku-20241022">Anthropic/Claude 3.5 Haiku</SelectItem>
-              {/* <SelectItem value="claude-3-opus-20240229">Anthropic/Claude 3 Opus</SelectItem> */}
+              <SelectItem value="claude-3-opus-20240229">Anthropic/Claude 3 Opus</SelectItem>
               <SelectItem value="claude-3-sonnet-20240229">Anthropic/Claude 3 Sonnet</SelectItem>
               <SelectItem value="claude-3-haiku-20240307">Anthropic/Claude 3 Haiku</SelectItem>
             </SelectGroup>
@@ -232,7 +234,7 @@ export function Chat({ userId, id, initialModel, initialSystem }: { userId: stri
               variant="secondary"
               className="text-emerald-500 h-8 w-10"
               onClick={() => fileInputRef.current?.click()}
-              disabled={isPending || !!uploadedImage}
+              disabled={isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model)}
             >
               <ImageIcon className="h-5 w-5" />
             </Button>
