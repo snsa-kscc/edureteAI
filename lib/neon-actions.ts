@@ -51,7 +51,7 @@ export async function saveUsage(usageData: Usage) {
 
 export async function getYesterdayUsage(userId: string, modelFamily: string) {
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 3); // 3 days ago
+  yesterday.setDate(yesterday.getDate() - 1);
 
   const startOfYesterday = new Date(yesterday.setHours(0, 0, 0, 0));
   const endOfYesterday = new Date(yesterday.setHours(23, 59, 59, 999));
@@ -75,13 +75,10 @@ export async function getUserQuota(userId: string, modelFamily: string) {
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
 
-  const startOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1); // First day of the last month
-  const endOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0, 23, 59, 59, 999); // Last day of the last month
-
   const [quota] = await db
     .select()
     .from(quotas)
-    .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily), gt(quotas.updatedAt, startOfLastMonth), lt(quotas.updatedAt, endOfLastMonth)));
+    .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily), gt(quotas.updatedAt, startOfMonth), lt(quotas.updatedAt, endOfMonth)));
 
   if (!quota) {
     return {

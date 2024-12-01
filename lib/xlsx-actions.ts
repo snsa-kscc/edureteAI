@@ -3,15 +3,15 @@
 import * as XLSX from "xlsx-js-style";
 import { getUsersData } from "./redis-actions";
 import { formatWorksheet } from "./utils";
-import { getUsersUsageNeon, getUsersYesterdayUsage } from "./utils";
+import { getUsersUsage, getUsersYesterdayUsage } from "./utils";
 import { type ProviderData } from "@/types";
 
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   const MODELS = ["openai", "anthropic"];
   const usersData = await getUsersData();
 
-  const openaiCurrentUsers = await getUsersUsageNeon(usersData, MODELS[0]);
-  const anthropicCurrentUsers = await getUsersUsageNeon(usersData, MODELS[1]);
+  const openaiCurrentUsers = await getUsersUsage(usersData, MODELS[0]);
+  const anthropicCurrentUsers = await getUsersUsage(usersData, MODELS[1]);
 
   const openaiYesterdayUsers = await getUsersYesterdayUsage(usersData, MODELS[0]);
   const anthropicYesterdayUsers = await getUsersYesterdayUsage(usersData, MODELS[1]);
@@ -81,19 +81,20 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
       Model: "Grand Total",
       "Total Tokens": totalOpenaiTokens + totalAnthropicTokens,
       "Total Amount ($)": totalOpenaiAmount + totalAnthropicAmount,
-      "Average Token Price ($)": (totalOpenaiAmount + totalAnthropicAmount) / (totalOpenaiTokens + totalAnthropicTokens),
+      "Average Token Price ($)":
+        totalOpenaiTokens + totalAnthropicTokens === 0 ? 0 : (totalOpenaiAmount + totalAnthropicAmount) / (totalOpenaiTokens + totalAnthropicTokens),
     },
     {
       Model: "OpenAI (GPT)",
       "Total Tokens": totalOpenaiTokens,
       "Total Amount ($)": formatTotalAmount(totalOpenaiAmount),
-      "Average Token Price ($)": totalOpenaiAmount / totalOpenaiTokens,
+      "Average Token Price ($)": totalOpenaiTokens === 0 ? 0 : totalOpenaiAmount / totalOpenaiTokens,
     },
     {
       Model: "Anthropic (Claude)",
       "Total Tokens": totalAnthropicTokens,
       "Total Amount ($)": formatTotalAmount(totalAnthropicAmount),
-      "Average Token Price ($)": totalAnthropicAmount / totalAnthropicTokens,
+      "Average Token Price ($)": totalAnthropicTokens === 0 ? 0 : totalAnthropicAmount / totalAnthropicTokens,
     },
   ];
 
