@@ -29,10 +29,13 @@ export function dollarsToTokens(dollars: number): number {
 
 export async function getUsersUsage(usersData: UserData[], model: string) {
   const res = await Promise.all(
-    usersData.map(async ({ userId }) => {
+    usersData.map(async ({ firstName, lastName, emailAddress, userId }) => {
       const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, model);
       return {
         userId,
+        firstName,
+        lastName,
+        emailAddress,
         tokens: totalTokensUsed,
         amount: tokensToDollars(totalTokensUsed),
         limit: tokensToDollars(quotaLimit),
