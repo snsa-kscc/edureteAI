@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { UserQuota } from "@/types";
 
 interface User {
   userId: string;
@@ -24,12 +23,12 @@ interface NewLimits {
 
 export function Dashboard({
   initialUsers,
-  model,
+  modelFamily,
   updateUserLimit,
 }: {
   initialUsers: User[];
-  model: string;
-  updateUserLimit: (userId: string, model: string, newLimit: number) => Promise<UserQuota>;
+  modelFamily: string;
+  updateUserLimit: (userId: string, modelFamily: string, newLimit: number) => Promise<void>;
 }) {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [newLimits, setNewLimits] = useState<NewLimits>({});
@@ -52,7 +51,7 @@ export function Dashboard({
 
     startTransition(async () => {
       try {
-        await updateUserLimit(userId, model, newLimit);
+        await updateUserLimit(userId, modelFamily, newLimit);
         setUsers(users.map((user) => (user.userId === userId ? { ...user, limit: newLimit } : user)));
         setNewLimits((prev) => {
           const updated = { ...prev };
@@ -113,16 +112,16 @@ export function Dashboard({
             </TableHeader>
             <TableBody>
               {users.map((user) => {
-                const amount = user.limit === 0 ? "0" : (((user.limit - user.amount) / user.limit) * 100).toFixed(2);
+                const percentage = user.limit === 0 ? "0" : (((user.limit - user.amount) / user.limit) * 100).toFixed(2);
                 return (
                   <TableRow key={user.userId}>
-                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.firstName}</TableCell>
-                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.lastName}</TableCell>
-                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{user.emailAddress}</TableCell>
+                    <TableCell className={`${+percentage < 10 ? "text-red-500" : ""}`}>{user.firstName}</TableCell>
+                    <TableCell className={`${+percentage < 10 ? "text-red-500" : ""}`}>{user.lastName}</TableCell>
+                    <TableCell className={`${+percentage < 10 ? "text-red-500" : ""}`}>{user.emailAddress}</TableCell>
                     <TableCell>{user.tokens.toLocaleString()}</TableCell>
                     <TableCell>${user.amount.toFixed(4)}</TableCell>
                     <TableCell>${user.limit.toFixed(2)}</TableCell>
-                    <TableCell className={`${+amount < 10 ? "text-red-500" : ""}`}>{amount}%</TableCell>
+                    <TableCell className={`${+percentage < 10 ? "text-red-500" : ""}`}>{percentage}%</TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         <Input

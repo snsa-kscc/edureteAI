@@ -154,7 +154,8 @@ export async function updateUserLimit(userId: string, model: string, amount: num
   }
 }
 
-export async function checkQuota(userId: string, modelFamily: string): Promise<boolean> {
+export async function checkQuota(userId: string, model: string): Promise<boolean> {
+  const modelFamily = MODEL_CONFIGS[model].family;
   const quota = await getUserQuota(userId, modelFamily);
   return quota.totalCost < quota.quotaLimit;
 }
