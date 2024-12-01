@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/db";
 import { usage, quotas } from "@/db/schema";
 import { MODEL_CONFIGS } from "./model-config";
@@ -47,8 +49,7 @@ export async function saveUsage(usageData: Usage) {
   await updateUserQuota(usageData.userId, usageData.model, usageData.totalTokens, totalCost);
 }
 
-export async function getUserQuota(userId: string, model: string) {
-  const modelFamily = MODEL_CONFIGS[model].family;
+export async function getUserQuota(userId: string, modelFamily: string) {
   const currentDate = new Date();
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
@@ -140,8 +141,8 @@ export async function updateUserLimit(userId: string, model: string, amount: num
   }
 }
 
-export async function checkQuota(userId: string, model: string): Promise<boolean> {
-  const quota = await getUserQuota(userId, model);
+export async function checkQuota(userId: string, modelFamily: string): Promise<boolean> {
+  const quota = await getUserQuota(userId, modelFamily);
   return quota.totalCost < quota.quotaLimit;
 }
 

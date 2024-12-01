@@ -3,13 +3,11 @@
 import * as XLSX from "xlsx-js-style";
 import { getUsersData } from "./redis-actions";
 import { getUsersUsage } from "./utils";
+import { getUsersUsageNeon } from "./utils";
 
 type ProviderData =
   | {
       userId: string;
-      firstName: string;
-      lastName: string;
-      emailAddress: string;
       tokens: number;
       amount: number;
       limit: number;
@@ -17,15 +15,15 @@ type ProviderData =
   | undefined;
 
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
-  const MODELS = ["gpt", "claude"];
+  const MODELS = ["openai", "anthropic"];
   const usersData = await getUsersData();
 
-  const gptUsers = await getUsersUsage(usersData, MODELS[0]);
-  const claudeUsers = await getUsersUsage(usersData, MODELS[1]);
+  const openaiUsers = await getUsersUsageNeon(usersData, MODELS[0]);
+  const anthropicUsers = await getUsersUsageNeon(usersData, MODELS[1]);
 
   const combinedData = usersData.map((user) => {
-    const gptData = gptUsers.find((u) => u.userId === user.userId);
-    const claudeData = claudeUsers.find((u) => u.userId === user.userId);
+    const openaiData = openaiUsers.find((u) => u.userId === user.userId);
+    const anthropicData = anthropicUsers.find((u) => u.userId === user.userId);
 
     function getPercentageObject(data: ProviderData) {
       const percentage = data?.limit === 0 ? 0 : ((data!.limit - data!.amount) / data!.limit) * 100;
@@ -37,18 +35,19 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
     }
 
     return {
+      Role: user.role,
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
-      "Total ($)": gptData!.amount + claudeData!.amount,
-      "Anthropic num of tokens": claudeData?.tokens ?? 0,
-      "Anthropic amount ($)": claudeData?.amount ?? 0,
-      "Anthropic limit": claudeData?.limit ?? 0,
-      "Anthropic % of limit left": getPercentageObject(claudeData),
-      "OpenAI num of tokens": gptData?.tokens ?? 0,
-      "OpenAI amount ($)": gptData?.amount ?? 0,
-      "OpenAI limit": gptData?.limit ?? 0,
-      "OpenAI % of limit left": getPercentageObject(gptData),
+      "Total ($)": openaiData!.amount + anthropicData!.amount,
+      "Anthropic num of tokens": anthropicData?.tokens ?? 0,
+      "Anthropic amount ($)": anthropicData?.amount ?? 0,
+      "Anthropic limit": anthropicData?.limit ?? 0,
+      "Anthropic % of limit left": getPercentageObject(anthropicData),
+      "OpenAI num of tokens": openaiData?.tokens ?? 0,
+      "OpenAI amount ($)": openaiData?.amount ?? 0,
+      "OpenAI limit": openaiData?.limit ?? 0,
+      "OpenAI % of limit left": getPercentageObject(openaiData),
     };
   });
 
@@ -78,10 +77,10 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   ];
   instructorWs["!cols"] = columnWidths;
 
-  const totalGptTokens = gptUsers.reduce((sum, user) => sum + user.tokens, 0);
-  const totalGptAmount = gptUsers.reduce((sum, user) => sum + user.amount, 0);
-  const totalClaudeTokens = claudeUsers.reduce((sum, user) => sum + user.tokens, 0);
-  const totalClaudeAmount = claudeUsers.reduce((sum, user) => sum + user.amount, 0);
+  const totalOpenaiTokens = openaiUsers.reduce((sum, user) => sum + user.tokens, 0);
+  const totalOpenaiAmount = openaiUsers.reduce((sum, user) => sum + user.amount, 0);
+  const totalAnthropicTokens = anthropicUsers.reduce((sum, user) => sum + user.tokens, 0);
+  const totalAnthropicAmount = anthropicUsers.reduce((sum, user) => sum + user.amount, 0);
 
   function formatTotalAmount(amount: number) {
     return {
@@ -94,21 +93,21 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   const totalsData = [
     {
       Model: "Grand Total",
-      "Total Tokens": totalGptTokens + totalClaudeTokens,
-      "Total Amount ($)": totalGptAmount + totalClaudeAmount,
-      "Average Token Price ($)": (totalGptAmount + totalClaudeAmount) / (totalGptTokens + totalClaudeTokens),
+      "Total Tokens": totalOpenaiTokens + totalAnthropicTokens,
+      "Total Amount ($)": totalOpenaiAmount + totalAnthropicAmount,
+      "Average Token Price ($)": (totalOpenaiAmount + totalAnthropicAmount) / (totalOpenaiTokens + totalAnthropicTokens),
     },
     {
       Model: "OpenAI (GPT)",
-      "Total Tokens": totalGptTokens,
-      "Total Amount ($)": formatTotalAmount(totalGptAmount),
-      "Average Token Price ($)": totalGptAmount / totalGptTokens,
+      "Total Tokens": totalOpenaiTokens,
+      "Total Amount ($)": formatTotalAmount(totalOpenaiAmount),
+      "Average Token Price ($)": totalOpenaiAmount / totalOpenaiTokens,
     },
     {
       Model: "Anthropic (Claude)",
-      "Total Tokens": totalClaudeTokens,
-      "Total Amount ($)": formatTotalAmount(totalClaudeAmount),
-      "Average Token Price ($)": totalClaudeAmount / totalClaudeTokens,
+      "Total Tokens": totalAnthropicTokens,
+      "Total Amount ($)": formatTotalAmount(totalAnthropicAmount),
+      "Average Token Price ($)": totalAnthropicAmount / totalAnthropicTokens,
     },
   ];
 

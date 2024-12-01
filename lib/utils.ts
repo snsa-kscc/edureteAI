@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { getUserQuota } from "./redis-actions";
+import { getUserQuota as getUserQuotaNeon } from "./neon-actions";
 
 type UserData = { userId: string; firstName: string; lastName: string; emailAddress: string };
 
@@ -28,16 +29,28 @@ export function dollarsToTokens(dollars: number): number {
 
 export async function getUsersUsage(usersData: UserData[], model: string) {
   const res = await Promise.all(
-    usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
+    usersData.map(async ({ userId }) => {
       const { totalTokensUsed, quotaLimit } = await getUserQuota(userId, model);
       return {
         userId,
-        firstName,
-        lastName,
-        emailAddress,
         tokens: totalTokensUsed,
         amount: tokensToDollars(totalTokensUsed),
         limit: tokensToDollars(quotaLimit),
+      };
+    })
+  );
+  return res;
+}
+
+export async function getUsersUsageNeon(usersData: UserData[], modelFamily: string) {
+  const res = await Promise.all(
+    usersData.map(async ({ userId }) => {
+      const { totalTokensUsed, totalCost, quotaLimit } = await getUserQuotaNeon(userId, modelFamily);
+      return {
+        userId,
+        tokens: totalTokensUsed,
+        amount: +totalCost,
+        limit: +quotaLimit,
       };
     })
   );
