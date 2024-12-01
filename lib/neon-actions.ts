@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { usage, quotas } from "@/db/schema";
 import { MODEL_CONFIGS } from "./model-config";
 import { eq, and, gt, lt, sql } from "drizzle-orm";
-import { Usage } from "@/types/types";
+import { Usage } from "@/types";
 
 export async function saveUsage(usageData: Usage) {
   const modelConfig = MODEL_CONFIGS[usageData.model];
@@ -49,30 +49,46 @@ export async function saveUsage(usageData: Usage) {
   await updateUserQuota(usageData.userId, usageData.model, usageData.totalTokens, totalCost);
 }
 
+export async function getYesterdayUsage(userId: string, modelFamily: string) {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 3); // 3 days ago
+
+  const startOfYesterday = new Date(yesterday.setHours(0, 0, 0, 0));
+  const endOfYesterday = new Date(yesterday.setHours(23, 59, 59, 999));
+
+  const yesterdayUsage = await db
+    .select({
+      totalTokens: sql`SUM(${usage.totalTokens})`,
+      totalCost: sql`SUM(CAST(${usage.cost} AS DECIMAL(10,4)))`,
+    })
+    .from(usage)
+    .where(and(eq(usage.userId, userId), eq(usage.modelFamily, modelFamily), gt(usage.timestamp, startOfYesterday), lt(usage.timestamp, endOfYesterday)));
+
+  return {
+    totalTokens: yesterdayUsage[0].totalTokens || 0,
+    totalCost: Number(yesterdayUsage[0].totalCost || 0).toFixed(4),
+  };
+}
+
 export async function getUserQuota(userId: string, modelFamily: string) {
   const currentDate = new Date();
   const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0, 23, 59, 59, 999);
 
+  const startOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1); // First day of the last month
+  const endOfLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0, 23, 59, 59, 999); // Last day of the last month
+
   const [quota] = await db
     .select()
     .from(quotas)
-    .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily), gt(quotas.updatedAt, startOfMonth), lt(quotas.updatedAt, endOfMonth)));
+    .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily), gt(quotas.updatedAt, startOfLastMonth), lt(quotas.updatedAt, endOfLastMonth)));
 
   if (!quota) {
-    const [defaultQuota] = await db
-      .insert(quotas)
-      .values({
-        userId,
-        modelFamily,
-        totalTokensUsed: 0,
-        totalCost: "0",
-        quotaLimit: "2.0",
-        updatedAt: new Date(),
-      })
-      .returning();
-
-    return defaultQuota;
+    return {
+      totalTokensUsed: 0,
+      totalCost: 0,
+      quotaLimit: 2,
+    };
   }
 
   return {

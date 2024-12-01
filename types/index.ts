@@ -11,6 +11,12 @@ type Message = Omit<AiMessage, "content"> & {
   content: string | MessageContent[];
 };
 
+export interface ClientMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: ReactNode;
+}
+
 export interface Chat extends Record<string, any> {
   id: string;
   title: string;
@@ -61,6 +67,17 @@ export type UserQuota = {
   totalTokensUsed: number;
   quotaLimit: number;
 };
+
+export type UserData = { userId: string; firstName: string; lastName: string; emailAddress: string };
+
+export type ProviderData =
+  | {
+      userId: string;
+      tokens: number;
+      amount: number;
+      limit: number;
+    }
+  | undefined;
 
 export type ModelPricing = {
   inputPrice: number;

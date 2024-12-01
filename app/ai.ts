@@ -1,7 +1,7 @@
 import { createAI, getAIState } from "ai/rsc";
 import { submitUserMessage } from "@/app/actions";
 import { saveChat } from "@/lib/redis-actions";
-import { Chat, AIState, UIState, MessageContent } from "@/types/types";
+import type { Chat, AIState, UIState, MessageContent } from "@/types";
 
 export const AI = createAI<AIState, UIState>({
   actions: {

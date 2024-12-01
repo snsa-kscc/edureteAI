@@ -1,4 +1,4 @@
-import { ModelPricing } from "@/types/types";
+import { ModelPricing } from "@/types";
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "o1-preview": {

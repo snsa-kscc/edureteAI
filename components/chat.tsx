@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { readStreamableValue, useAIState, useActions, useUIState } from "ai/rsc";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,13 +16,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 import { Markdown } from "@/components/markdown";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
-import { MessageContent } from "@/types/types";
-
-interface ClientMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: ReactNode;
-}
+import type { MessageContent, ClientMessage } from "@/types";
 
 export function Chat({ userId, id, initialModel, initialSystem }: { userId: string | null; id: string; initialModel: string; initialSystem: string }) {
   const router = useRouter();

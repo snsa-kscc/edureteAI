@@ -1,6 +1,6 @@
 "use client";
 
-import { Chat } from "@/types/types";
+import { Chat } from "@/types";
 import { SidebarItems } from "./sidebar-items";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEffect, useState } from "react";

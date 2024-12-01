@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { buttonVariants } from "@/components/ui/button";
 import { IconMessage, IconSpinner } from "@/components/ui/icons";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { type Chat } from "@/types/types";
+import { type Chat } from "@/types";
 import { cn } from "@/lib/utils";
 
 export function SidebarItem({ index, chat, children }: { index: number; chat: Chat; children: React.ReactNode }) {

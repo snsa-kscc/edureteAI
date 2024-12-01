@@ -1,6 +1,6 @@
 "use client";
 
-import { Chat, ServerActionResult } from "@/types/types";
+import { Chat, ServerActionResult } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";

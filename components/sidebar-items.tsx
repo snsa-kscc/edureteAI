@@ -1,6 +1,6 @@
 "use client";
 
-import { Chat } from "@/types/types";
+import { Chat } from "@/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarActions } from "./sidebar-actions";

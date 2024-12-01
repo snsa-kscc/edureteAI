@@ -4,10 +4,10 @@ import { streamText } from "ai";
 import { createStreamableValue, getMutableAIState } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/redis-actions";
-import { Usage, MessageContent } from "@/types/types";
 import { handleModelProvider } from "@/lib/utils";
 import { AI } from "@/app/ai";
 import { saveUsage as saveUsageNeon } from "@/lib/neon-actions";
+import type { Usage, MessageContent } from "@/types";
 
 export async function submitUserMessage({ content, model, system }: { content: MessageContent[]; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
