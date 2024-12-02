@@ -32,7 +32,7 @@ export interface Chat extends Record<string, any> {
 }
 
 export type AIState = {
-  userId: string | null;
+  userId: string | null | undefined;
   chatId: string;
   model: string;
   system: string;

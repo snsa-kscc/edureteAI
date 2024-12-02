@@ -9,14 +9,14 @@ import { useMutation } from "@tanstack/react-query";
 import { IconSpinner } from "./ui/icons";
 
 interface SidebarListProps {
-  userId: string | null;
+  userId: string | null | undefined;
   userData: { userId: string; firstName: string; lastName: string; emailAddress: string }[];
   orgRole: string | null | undefined;
   chats?: Chat[];
 }
 
 export function SidebarList({ userId, userData, orgRole, chats: initialChats }: SidebarListProps) {
-  const [user, setUser] = useState<string | null>(userId);
+  const [user, setUser] = useState<string | null | undefined>(userId);
   const [chats, setChats] = useState<Chat[]>(initialChats || []);
   const { mutate: server_getChats, isPending } = useMutation({ mutationFn: getChats, onSuccess: setChats });
 

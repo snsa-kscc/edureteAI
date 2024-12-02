@@ -20,15 +20,18 @@ export async function getUsersData() {
   try {
     const userIds: string[] = await client.smembers("userIds");
     const clerk = await clerkClient();
+    const allUsers = await clerk.users.getUserList();
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
-    for (const userId of userIds) {
-      const user = await clerk.users.getUser(userId);
-      console.log(user);
-      const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId });
+    for (const storedId of userIds) {
+      const user = allUsers.data.find((u) => u.externalId === storedId || u.id === storedId);
+      const userId = user?.externalId || user!.id;
+
+      const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId: user!.id });
       const role = orgMemberships.data[0]?.role || "student";
-      const emailAddress = user.emailAddresses[0].emailAddress;
-      const firstName = user.firstName ?? "";
-      const lastName = user.lastName ?? "";
+
+      const emailAddress = user!.emailAddresses[0].emailAddress;
+      const firstName = user?.firstName ?? "";
+      const lastName = user?.lastName ?? "";
       usersData.push({ userId, firstName, lastName, emailAddress, role });
       usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
     }
@@ -39,7 +42,7 @@ export async function getUsersData() {
   }
 }
 
-export async function getChats(userId?: string | null) {
+export async function getChats(userId?: string | null | undefined) {
   if (!userId) {
     return [];
   }
@@ -89,7 +92,7 @@ export async function saveChat(chat: Chat) {
   }
 }
 
-export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null }) {
+export async function removeChat({ id, path, userId }: { id: string; path: string; userId: string | null | undefined }) {
   await client.del(`chat:${id}`);
   await client.zrem(`user:chat:${userId!}`, `chat:${id}`);
 

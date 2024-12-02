@@ -15,7 +15,7 @@ const loadChats = cache(async (userId: string) => {
   return await getChats(userId);
 });
 
-export async function Sidebar({ userId, orgRole }: { userId: string | null; orgRole: string | null | undefined }) {
+export async function Sidebar({ userId, orgRole }: { userId: string | null | undefined; orgRole: string | null | undefined }) {
   const chats = await loadChats(userId!);
   const userData = await loadUserData();
 

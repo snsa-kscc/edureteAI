@@ -22,8 +22,10 @@ type Params = Promise<{ id: string }>;
 
 export default async function ChatPage(props: { params: Promise<Params> }) {
   const params = await props.params;
-  const { userId, orgRole } = await auth();
   const chat = await getChat(params.id);
+
+  const { orgRole, sessionClaims } = await auth();
+  const userId = sessionClaims?.userId;
 
   return (
     <main className="min-h-screen">

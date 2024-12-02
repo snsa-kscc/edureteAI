@@ -24,8 +24,8 @@ export function SidebarActions({
   removeChat,
 }: {
   chat: Chat;
-  userId: string | null;
-  removeChat: ({ id, path, userId }: { id: string; path: string; userId: string | null }) => ServerActionResult<void>;
+  userId: string | null | undefined;
+  removeChat: ({ id, path, userId }: { id: string; path: string; userId: string | null | undefined }) => ServerActionResult<void>;
 }) {
   const router = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

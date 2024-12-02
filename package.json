@@ -12,7 +12,7 @@
     "@ai-sdk/anthropic": "^0.0.53",
     "@ai-sdk/openai": "^0.0.70",
     "@aws-sdk/client-s3": "^3.685.0",
-    "@clerk/nextjs": "^6.3.4",
+    "@clerk/nextjs": "^6.5.2",
     "@neondatabase/serverless": "^0.10.4",
     "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.1",

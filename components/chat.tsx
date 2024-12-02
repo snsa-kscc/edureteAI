@@ -18,7 +18,17 @@ import { Markdown } from "@/components/markdown";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import type { MessageContent, ClientMessage } from "@/types";
 
-export function Chat({ userId, id, initialModel, initialSystem }: { userId: string | null; id: string; initialModel: string; initialSystem: string }) {
+export function Chat({
+  userId,
+  id,
+  initialModel,
+  initialSystem,
+}: {
+  userId: string | null | undefined;
+  id: string;
+  initialModel: string;
+  initialSystem: string;
+}) {
   const router = useRouter();
   const [content, setContent] = useState<string>("");
   const [model, setModel] = useState<string>(() => {
