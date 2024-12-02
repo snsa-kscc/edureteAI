@@ -23,6 +23,7 @@ export async function getUsersData() {
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
     for (const userId of userIds) {
       const user = await clerk.users.getUser(userId);
+      console.log(user);
       const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId });
       const role = orgMemberships.data[0]?.role || "student";
       const emailAddress = user.emailAddresses[0].emailAddress;
