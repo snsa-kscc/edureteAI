@@ -96,6 +96,8 @@ export async function removeChat({ id, path, userId }: { id: string; path: strin
   return revalidatePath(path);
 }
 
+// deprecated
+
 export async function saveUsage(usage: Usage) {
   const key = `usage:${usage.userId}:${usage.model}:${usage.timestamp.toISOString().split("T")[0]}`;
 

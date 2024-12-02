@@ -18,6 +18,13 @@ export const quotas = pgTable("quotas", {
   modelFamily: text("model_family").notNull(),
   totalTokensUsed: integer("total_tokens_used").notNull().default(0),
   totalCost: decimal("total_cost", { precision: 10, scale: 4 }).notNull().default("0"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const limits = pgTable("limits", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  modelFamily: text("model_family").notNull(),
   quotaLimit: decimal("quota_limit", { precision: 10, scale: 2 }).notNull(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

@@ -7,14 +7,14 @@ import { getUsersUsage, getUsersYesterdayUsage } from "./utils";
 import { type ProviderData } from "@/types";
 
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
-  const MODELS = ["openai", "anthropic"];
+  const MODEL_FAMILY = ["openai", "anthropic"];
   const usersData = await getUsersData();
 
-  const openaiCurrentUsers = await getUsersUsage(usersData, MODELS[0]);
-  const anthropicCurrentUsers = await getUsersUsage(usersData, MODELS[1]);
+  const openaiCurrentUsers = await getUsersUsage(usersData, MODEL_FAMILY[0]);
+  const anthropicCurrentUsers = await getUsersUsage(usersData, MODEL_FAMILY[1]);
 
-  const openaiYesterdayUsers = await getUsersYesterdayUsage(usersData, MODELS[0]);
-  const anthropicYesterdayUsers = await getUsersYesterdayUsage(usersData, MODELS[1]);
+  const openaiYesterdayUsers = await getUsersYesterdayUsage(usersData, MODEL_FAMILY[0]);
+  const anthropicYesterdayUsers = await getUsersYesterdayUsage(usersData, MODEL_FAMILY[1]);
 
   const currentData = usersData.map((user) => {
     const openaiData = openaiCurrentUsers.find((u) => u.userId === user.userId);

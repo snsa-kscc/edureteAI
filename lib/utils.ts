@@ -29,14 +29,6 @@ export function formatWorksheet(worksheet: XLSX.WorkSheet, columnWidths: { wch: 
   return worksheet;
 }
 
-export function tokensToDollars(tokens: number): number {
-  return Number((tokens / 66_666).toFixed(4));
-}
-
-export function dollarsToTokens(dollars: number): number {
-  return Math.round(dollars * 66_666);
-}
-
 export async function getUsersUsage(usersData: UserData[], modelFamily: string) {
   const res = await Promise.all(
     usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
@@ -67,4 +59,14 @@ export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily:
     })
   );
   return res;
+}
+
+// deprecated
+
+export function tokensToDollars(tokens: number): number {
+  return Number((tokens / 66_666).toFixed(4));
+}
+
+export function dollarsToTokens(dollars: number): number {
+  return Math.round(dollars * 66_666);
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { usage, quotas } from "@/db/schema";
+import { usage, quotas, limits } from "@/db/schema";
 import { MODEL_CONFIGS } from "./model-config";
 import { eq, and, gt, lt, sql } from "drizzle-orm";
 import { Usage } from "@/types";
@@ -80,18 +80,25 @@ export async function getUserQuota(userId: string, modelFamily: string) {
     .from(quotas)
     .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily), gt(quotas.updatedAt, startOfMonth), lt(quotas.updatedAt, endOfMonth)));
 
+  const [userLimit] = await db
+    .select()
+    .from(limits)
+    .where(and(eq(limits.userId, userId), eq(limits.modelFamily, modelFamily)));
+
+  const defaultLimit = 2;
+
   if (!quota) {
     return {
       totalTokensUsed: 0,
-      totalCost: 0,
-      quotaLimit: 2,
+      totalCost: "0",
+      quotaLimit: userLimit?.quotaLimit ?? defaultLimit,
     };
   }
 
   return {
     totalTokensUsed: quota.totalTokensUsed,
     totalCost: quota.totalCost,
-    quotaLimit: quota.quotaLimit,
+    quotaLimit: userLimit?.quotaLimit ?? defaultLimit,
   };
 }
 
@@ -121,33 +128,29 @@ export async function updateUserQuota(userId: string, model: string, tokensUsed:
       modelFamily,
       totalTokensUsed: tokensUsed,
       totalCost: cost.toFixed(4),
-      quotaLimit: "2.0",
       updatedAt: new Date(),
     });
   }
 }
 
-export async function updateUserLimit(userId: string, model: string, amount: number) {
-  const modelFamily = MODEL_CONFIGS[model].family;
-  const [existingQuota] = await db
+export async function updateUserLimit(userId: string, modelFamily: string, amount: number) {
+  const [existingLimit] = await db
     .select()
-    .from(quotas)
-    .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, model)));
+    .from(limits)
+    .where(and(eq(limits.userId, userId), eq(limits.modelFamily, modelFamily)));
 
-  if (existingQuota) {
+  if (existingLimit) {
     await db
-      .update(quotas)
+      .update(limits)
       .set({
         quotaLimit: amount.toFixed(2),
         updatedAt: new Date(),
       })
-      .where(and(eq(quotas.userId, userId), eq(quotas.modelFamily, modelFamily)));
+      .where(and(eq(limits.userId, userId), eq(limits.modelFamily, modelFamily)));
   } else {
-    await db.insert(quotas).values({
+    await db.insert(limits).values({
       userId,
       modelFamily,
-      totalTokensUsed: 0,
-      totalCost: "0",
       quotaLimit: amount.toFixed(2),
       updatedAt: new Date(),
     });
@@ -158,38 +161,4 @@ export async function checkQuota(userId: string, model: string): Promise<boolean
   const modelFamily = MODEL_CONFIGS[model].family;
   const quota = await getUserQuota(userId, modelFamily);
   return quota.totalCost < quota.quotaLimit;
-}
-
-// Additional utility functions
-
-export async function getDailyUsage(userId: string, date: Date) {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
-
-  return await db
-    .select()
-    .from(usage)
-    .where(and(eq(usage.userId, userId), gt(usage.timestamp, startOfDay), lt(usage.timestamp, endOfDay)));
-}
-
-export async function getModelUsageSummary(userId: string, model: string) {
-  const [result] = await db
-    .select({
-      totalPromptTokens: usage.promptTokens,
-      totalCompletionTokens: usage.completionTokens,
-      totalCost: usage.cost,
-    })
-    .from(usage)
-    .where(and(eq(usage.userId, userId), eq(usage.model, model)));
-
-  return (
-    result || {
-      totalPromptTokens: 0,
-      totalCompletionTokens: 0,
-      totalCost: 0,
-    }
-  );
 }
