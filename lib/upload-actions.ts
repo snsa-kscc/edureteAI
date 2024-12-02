@@ -26,7 +26,6 @@ export async function uploadFileToR2(formData: FormData) {
 
     let buffer = Buffer.from(await file.arrayBuffer());
 
-    // Process image with Sharp
     const image = sharp(buffer);
     const metadata = await image.metadata();
 

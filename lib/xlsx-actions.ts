@@ -34,7 +34,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
-      "Total ($)": openaiData!.amount + anthropicData!.amount,
+      "Total ($)": (openaiData?.amount || 0) + (anthropicData?.amount || 0),
       "Anthropic num of tokens": anthropicData?.tokens ?? 0,
       "Anthropic amount ($)": anthropicData?.amount ?? 0,
       "Anthropic limit": anthropicData?.limit ?? 0,
