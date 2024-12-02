@@ -31,7 +31,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
     <main className="min-h-screen">
       <div className="flex flex-col sm:flex-row gap-2 p-8">
         <Title />
-        {orgRole === "org:admin" && (
+        {orgRole && (
           <Button variant="outline">
             <Link href="/dashboard">Dashboard</Link>
           </Button>
@@ -43,7 +43,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
         </div>
       </div>
       <div className="flex flex-col lg:flex-row justify-evenly">
-        <Sidebar userId={chat?.userId ?? userId} orgRole={orgRole} />
+        <Sidebar userId={chat?.userId ?? userId} />
         <AI
           initialAIState={{
             userId: chat?.userId ?? userId,

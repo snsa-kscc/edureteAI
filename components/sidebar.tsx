@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Suspense } from "react";
-import { buttonVariants } from "@/components/ui/button";
+import { Suspense, cache } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { currentUser } from "@clerk/nextjs/server";
 import { SidebarList } from "./sidebar-list";
 import { getUsersData, getChats } from "@/lib/redis-actions";
-import { cache } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { buttonVariants } from "@/components/ui/button";
 
-const loadUserData = cache(async () => {
+const loadUsersData = cache(async () => {
   return await getUsersData();
 });
 
@@ -15,9 +15,11 @@ const loadChats = cache(async (userId: string) => {
   return await getChats(userId);
 });
 
-export async function Sidebar({ userId, orgRole }: { userId: string | null | undefined; orgRole: string | null | undefined }) {
+export async function Sidebar({ userId }: { userId: string | null | undefined }) {
   const chats = await loadChats(userId!);
-  const userData = await loadUserData();
+  const userData = await loadUsersData();
+  const user = await currentUser();
+  const role = user?.privateMetadata.role as string | null | undefined;
 
   return (
     <div className="min-w-72 lg:w-72 max-h-[400px] lg:max-h-[720px] flex flex-col justify-top px-2">
@@ -41,7 +43,7 @@ export async function Sidebar({ userId, orgRole }: { userId: string | null | und
           </div>
         }
       >
-        <SidebarList userId={userId} userData={userData} orgRole={orgRole} chats={chats} />
+        <SidebarList userId={userId} userData={userData} role={role} chats={chats} />
       </Suspense>
     </div>
   );

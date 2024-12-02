@@ -11,11 +11,11 @@ import { IconSpinner } from "./ui/icons";
 interface SidebarListProps {
   userId: string | null | undefined;
   userData: { userId: string; firstName: string; lastName: string; emailAddress: string }[];
-  orgRole: string | null | undefined;
+  role: string | null | undefined;
   chats?: Chat[];
 }
 
-export function SidebarList({ userId, userData, orgRole, chats: initialChats }: SidebarListProps) {
+export function SidebarList({ userId, userData, role, chats: initialChats }: SidebarListProps) {
   const [user, setUser] = useState<string | null | undefined>(userId);
   const [chats, setChats] = useState<Chat[]>(initialChats || []);
   const { mutate: server_getChats, isPending } = useMutation({ mutationFn: getChats, onSuccess: setChats });
@@ -26,7 +26,7 @@ export function SidebarList({ userId, userData, orgRole, chats: initialChats }: 
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
-      {orgRole && (
+      {role && (
         <div className="space-y-2 p-2">
           <Select
             value={user!}

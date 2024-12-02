@@ -26,9 +26,10 @@ export async function getUsersData() {
       const user = allUsers.data.find((u) => u.externalId === storedId || u.id === storedId);
       const userId = user?.externalId || user!.id;
 
-      const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId: user!.id });
-      const role = orgMemberships.data[0]?.role || "student";
+      // const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId: user!.id });
+      // const role = orgMemberships.data[0]?.role || "student";
 
+      const role = (user?.privateMetadata.role as string) ?? "student";
       const emailAddress = user!.emailAddresses[0].emailAddress;
       const firstName = user?.firstName ?? "";
       const lastName = user?.lastName ?? "";
