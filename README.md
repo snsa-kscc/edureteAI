@@ -29,9 +29,3 @@ LLM chat application for [Edurete](https://edurete.com) platform using OpenAI an
 ---
 
 Made with ❤️ by [dvasadva](https://dvasadva.com).
-
-### 2DO
-
-- Monthly token reset
-- Better token calculation
-- Clerk auth dev to prod migration
