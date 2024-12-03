@@ -20,7 +20,7 @@ export async function getUsersData() {
   try {
     const userIds: string[] = await client.smembers("userIds");
     const clerk = await clerkClient();
-    const allUsers = await clerk.users.getUserList();
+    const allUsers = await clerk.users.getUserList({ limit: 499 });
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
     for (const storedId of userIds) {
       const user = allUsers.data.find((u) => u.externalId === storedId || u.id === storedId);
