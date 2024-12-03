@@ -24,15 +24,18 @@ export async function getUsersData() {
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
     for (const storedId of userIds) {
       const user = allUsers.data.find((u) => u.externalId === storedId || u.id === storedId);
-      const userId = user?.externalId || user!.id;
+      if (!user) {
+        continue;
+      }
+      const userId = user.externalId || user.id;
 
       // const orgMemberships = await clerk.users.getOrganizationMembershipList({ userId: user!.id });
       // const role = orgMemberships.data[0]?.role || "student";
 
-      const role = (user?.privateMetadata.role as string) ?? "student";
-      const emailAddress = user!.emailAddresses[0].emailAddress;
-      const firstName = user?.firstName ?? "";
-      const lastName = user?.lastName ?? "";
+      const role = (user.privateMetadata.role as string) ?? "student";
+      const emailAddress = user.emailAddresses[0].emailAddress;
+      const firstName = user.firstName ?? "No";
+      const lastName = user.lastName ?? "Name";
       usersData.push({ userId, firstName, lastName, emailAddress, role });
       usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
     }
