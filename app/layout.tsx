@@ -24,7 +24,7 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider dynamic>
-      <SyncActiveOrganization membership={sessionClaims?.membership} />
+      {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
         <head>
           <link
