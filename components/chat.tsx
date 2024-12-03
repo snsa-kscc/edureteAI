@@ -70,6 +70,11 @@ export function Chat({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 4 * 1024 * 1024) {
+      toast.error("File size exceeds 4MB limit");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
