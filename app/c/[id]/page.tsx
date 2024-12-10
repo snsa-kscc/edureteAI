@@ -81,6 +81,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           />
         </AI>
       </div>
+      <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>
     </main>
   );
 }
