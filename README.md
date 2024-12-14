@@ -34,7 +34,7 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 ### 2DO errors:
 
-```
+```json
 Unhandled Rejection: { type: 'overloaded_error', message: 'Overloaded' }
 Node.js process exited with exit status: 128. The logs above can help with debugging the issue.
 ```

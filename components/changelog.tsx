@@ -16,7 +16,7 @@ export function Changelog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="secondary">What's new</Button>
+        <Button variant="secondary">What is new</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
