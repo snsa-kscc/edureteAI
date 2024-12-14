@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import { getUsersDataXlsx } from "@/lib/xlsx-actions";
 import { headers } from "next/headers";
 
-export async function GET(req: Request) {
+export async function GET() {
   const headersList = await headers();
   const cronToken = headersList.get("authorization");
 
