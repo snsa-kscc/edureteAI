@@ -114,6 +114,9 @@ export function Chat({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (content.trim() === "" && !uploadedImage) {
+      return;
+    }
     const messageContent = uploadedImage
       ? [
           { type: "text", text: content },
@@ -256,7 +259,7 @@ export function Chat({
                 </div>
               </div>
             )}
-            <Button size="icon" type="submit" variant="secondary" disabled={isPending || content === ""} className="h-8 w-10">
+            <Button size="icon" type="submit" variant="secondary" disabled={isPending || (content.trim() === "" && !uploadedImage)} className="h-8 w-10">
               {isPending ? <Loader2 className="h-5 w-5 animate-spin text-emerald-500" /> : <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />}
             </Button>
           </div>

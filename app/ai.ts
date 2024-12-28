@@ -16,7 +16,7 @@ export const AI = createAI<AIState, UIState>({
       const path = `/c/${chatId}`;
 
       const firstMessage = messages[0];
-      let title = "untitled";
+      let title = "Picture";
 
       if (firstMessage) {
         if (Array.isArray(firstMessage.content)) {
@@ -24,9 +24,9 @@ export const AI = createAI<AIState, UIState>({
             .map((item: MessageContent) => (item.type === "text" ? item.text : ""))
             .join("\n")
             .trim();
-          title = textContent.substring(0, 100);
+          title = textContent.substring(0, 100) || title;
         } else {
-          title = firstMessage.content.substring(0, 100);
+          title = firstMessage.content.substring(0, 100) || title;
         }
       }
 
