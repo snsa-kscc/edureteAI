@@ -6,6 +6,7 @@ import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -148,6 +149,8 @@ export function Chat({
     });
   };
 
+  const hasImagesInConversation = conversation.some((m: ClientMessage) => Array.isArray(m.content) && m.content.some((c) => c.type === "image"));
+
   return (
     <div className="w-full p-4 flex flex-col h-[80vh]">
       <div className="flex justify-between">
@@ -155,20 +158,43 @@ export function Chat({
           <SelectTrigger className="max-w-72 mb-2">
             <SelectValue placeholder="OpenAI/GPT-3.5" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="overflow-visible">
             <SelectGroup>
               <SelectLabel>Available Models</SelectLabel>
-              <SelectItem value="o1-preview">OpenAI/o1-preview</SelectItem>
-              <SelectItem value="o1-mini">OpenAI/o1-mini</SelectItem>
-              <SelectItem value="gpt-4o">OpenAI/GPT-4o</SelectItem>
-              <SelectItem value="gpt-4o-mini">OpenAI/GPT-4o-mini</SelectItem>
-              <SelectItem value="gpt-4-turbo">OpenAI/GPT-4 Turbo</SelectItem>
-              <SelectItem value="gpt-4">OpenAI/GPT-4</SelectItem>
-              <SelectItem value="claude-3-5-sonnet-20241022">Anthropic/Claude 3.5 Sonnet</SelectItem>
-              <SelectItem value="claude-3-5-haiku-20241022">Anthropic/Claude 3.5 Haiku</SelectItem>
-              <SelectItem value="claude-3-opus-20240229">Anthropic/Claude 3 Opus</SelectItem>
-              <SelectItem value="claude-3-sonnet-20240229">Anthropic/Claude 3 Sonnet</SelectItem>
-              <SelectItem value="claude-3-haiku-20240307">Anthropic/Claude 3 Haiku</SelectItem>
+              <TooltipProvider>
+                {[
+                  { value: "o1-preview", label: "OpenAI/o1-preview" },
+                  { value: "o1-mini", label: "OpenAI/o1-mini" },
+                  { value: "gpt-4o", label: "OpenAI/GPT-4o" },
+                  { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
+                  { value: "gpt-4-turbo", label: "OpenAI/GPT-4 Turbo" },
+                  { value: "gpt-4", label: "OpenAI/GPT-4" },
+                  { value: "claude-3-5-sonnet-20241022", label: "Anthropic/Claude 3.5 Sonnet" },
+                  { value: "claude-3-5-haiku-20241022", label: "Anthropic/Claude 3.5 Haiku" },
+                  { value: "claude-3-opus-20240229", label: "Anthropic/Claude 3 Opus" },
+                  { value: "claude-3-sonnet-20240229", label: "Anthropic/Claude 3 Sonnet" },
+                  { value: "claude-3-haiku-20240307", label: "Anthropic/Claude 3 Haiku" },
+                ].map(({ value, label }) =>
+                  hasImagesInConversation && modelsWithoutImageSupport.includes(value) ? (
+                    <Tooltip key={value}>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <SelectItem value={value} disabled={hasImagesInConversation && modelsWithoutImageSupport.includes(value)}>
+                            {label}
+                          </SelectItem>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" sideOffset={15}>
+                        <p className="max-w-xs">Your chat history has images, but this model does not support image inputs. Please select a different model.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  )
+                )}
+              </TooltipProvider>
             </SelectGroup>
           </SelectContent>
         </Select>
