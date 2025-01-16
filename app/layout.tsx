@@ -21,7 +21,7 @@ export default async function RootLayout({
   // const { sessionClaims } = await auth();
 
   return (
-    <ClerkProvider dynamic>
+    <ClerkProvider>
       {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
         <head>
