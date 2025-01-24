@@ -32,7 +32,7 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 
 ---
 
-### 2DO errors:
+### 2DO error:
 
 ```json
 Unhandled Rejection: { type: 'overloaded_error', message: 'Overloaded' }
