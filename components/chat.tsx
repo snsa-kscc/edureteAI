@@ -2,20 +2,21 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { readStreamableValue, useAIState, useActions, useUIState } from "ai/rsc";
-import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { useRouter } from "next/navigation";
+import { SendHorizontalIcon, ImageIcon, Loader2, X } from "lucide-react";
+import { toast } from "sonner";
+import { Markdown } from "@/components/markdown";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { SendHorizontalIcon, ImageIcon, Loader2, X } from "lucide-react";
-import { useEnterSubmit } from "@/hooks/use-enter-submit";
-import { useRouter } from "next/navigation";
+import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { useImageUpload } from "@/hooks/use-image-upload";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { toast } from "sonner";
-import { Markdown } from "@/components/markdown";
+import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import type { MessageContent, ClientMessage } from "@/types";
 
@@ -67,32 +68,12 @@ export function Chat({
     ref.current.scrollTo(0, ref.current.scrollHeight);
   }, [conversation]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 4 * 1024 * 1024) {
-      toast.error("File size exceeds 4MB limit");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      startTransition(async () => {
-        const { success, url } = await uploadFileToR2(formData);
-        if (success && url) {
-          setUploadedImage(url);
-        } else {
-          throw new Error("Failed to upload image");
-        }
-      });
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      toast.error("Failed to upload image");
-    }
-  };
+  const { handleImageUpload } = useImageUpload({
+    onImageUpload: (url) => setUploadedImage(url),
+    uploadFileToR2,
+    startTransition,
+    disabled: isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model),
+  });
 
   const handleDeleteImage = async () => {
     if (!uploadedImage) return;
@@ -276,7 +257,7 @@ export function Chat({
             >
               <ImageIcon className="h-5 w-5" />
             </Button>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
             {uploadedImage && (
               <div className="relative h-9 w-9">
                 <img src={uploadedImage} alt="uploaded image" className="h-full w-full object-cover rounded-sm" />
