@@ -17,6 +17,17 @@ LLM chat application for [Edurete](https://edurete.com) platform using OpenAI an
 - Claude 3.5 Haiku
 - Claude 3 Haiku
 
+### Google models:
+
+- Gemini 1.5 Pro
+- Gemini 2.0 Flash Exp
+
+### Deepseek models:
+
+- Deepseek R1
+- Deepseek R1 Distill Llama 70B
+- Deepseek V3
+
 ### Technologies used:
 
 - [Next.js](https://nextjs.org)
