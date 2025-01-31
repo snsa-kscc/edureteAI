@@ -1,6 +1,31 @@
 import { ModelPricing } from "@/types";
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
+  "gemini-1.5-pro": {
+    inputPrice: 1.25,
+    outputPrice: 5,
+    family: "google",
+  },
+  "gemini-2.0-flash-exp": {
+    inputPrice: 0,
+    outputPrice: 0,
+    family: "google",
+  },
+  "deepseek-ai/DeepSeek-R1": {
+    inputPrice: 7,
+    outputPrice: 7,
+    family: "togetherai",
+  },
+  "deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free": {
+    inputPrice: 0,
+    outputPrice: 0,
+    family: "togetherai",
+  },
+  "deepseek-ai/DeepSeek-V3": {
+    inputPrice: 1.25,
+    outputPrice: 1.25,
+    family: "togetherai",
+  },
   "o1-preview": {
     inputPrice: 15.0,
     outputPrice: 60.0,

@@ -3,6 +3,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { togetherai } from "@ai-sdk/togetherai";
+import { google } from "@ai-sdk/google";
 import { getYesterdayUsage, getUserQuota } from "./neon-actions";
 import { type UserData } from "@/types";
 
@@ -13,6 +15,10 @@ export function cn(...inputs: ClassValue[]) {
 export function handleModelProvider(model: string) {
   if (model.startsWith("claude")) {
     return anthropic(model);
+  } else if (model.startsWith("deepseek")) {
+    return togetherai(model);
+  } else if (model.startsWith("gemini")) {
+    return google(model);
   } else {
     return openai(model);
   }

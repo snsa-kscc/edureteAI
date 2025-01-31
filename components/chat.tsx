@@ -144,6 +144,11 @@ export function Chat({
               <SelectLabel>Available Models</SelectLabel>
               <TooltipProvider>
                 {[
+                  { value: "deepseek-ai/DeepSeek-R1", label: "Deepseek/DeepSeek R1" },
+                  { value: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free", label: "Deepseek/DeepSeek R1 Distill Llama 70B" },
+                  { value: "deepseek-ai/DeepSeek-V3", label: "Deepseek/DeepSeek V3" },
+                  { value: "gemini-1.5-pro", label: "Google/Gemini 1.5 Pro" },
+                  { value: "gemini-2.0-flash-exp", label: "Google/Gemini 2.0 Flash Exp" },
                   { value: "o1-preview", label: "OpenAI/o1-preview" },
                   { value: "o1-mini", label: "OpenAI/o1-mini" },
                   { value: "gpt-4o", label: "OpenAI/GPT-4o" },
