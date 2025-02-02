@@ -26,14 +26,19 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 1.25,
     family: "togetherai",
   },
+  "o3-mini": {
+    inputPrice: 1.1,
+    outputPrice: 4.4,
+    family: "openai",
+  },
   "o1-preview": {
     inputPrice: 15.0,
     outputPrice: 60.0,
     family: "openai",
   },
   "o1-mini": {
-    inputPrice: 3.0,
-    outputPrice: 12.0,
+    inputPrice: 1.1,
+    outputPrice: 4.4,
     family: "openai",
   },
   "gpt-4o": {

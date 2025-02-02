@@ -149,6 +149,7 @@ export function Chat({
                   { value: "deepseek-ai/DeepSeek-V3", label: "Deepseek/DeepSeek V3" },
                   { value: "gemini-1.5-pro", label: "Google/Gemini 1.5 Pro" },
                   { value: "gemini-2.0-flash-exp", label: "Google/Gemini 2.0 Flash Exp" },
+                  { value: "o3-mini", label: "OpenAI/o3-mini" },
                   { value: "o1-preview", label: "OpenAI/o1-preview" },
                   { value: "o1-mini", label: "OpenAI/o1-mini" },
                   { value: "gpt-4o", label: "OpenAI/GPT-4o" },

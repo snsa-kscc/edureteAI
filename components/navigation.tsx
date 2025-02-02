@@ -40,6 +40,18 @@ export function Navigation() {
       >
         Anthropic Dashboard
       </Link>
+      <Link
+        href="/dashboard/togetherai"
+        className={`px-3 py-2 rounded-md ${pathname === "/dashboard/togetherai" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
+      >
+        DeepSeek Dashboard
+      </Link>
+      <Link
+        href="/dashboard/google"
+        className={`px-3 py-2 rounded-md ${pathname === "/dashboard/google" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
+      >
+        Google Dashboard
+      </Link>
       <Link href="/" className="px-3 py-2 rounded-md bg-secondary">
         Home
       </Link>
