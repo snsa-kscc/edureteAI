@@ -52,7 +52,7 @@ Node.js process exited with exit status: 128. The logs above can help with debug
 
 ### 2DO - 2.1.25.:
 
-[x] route params for providers
-[ ] core refactor for analytics
-[ ] switch to edge functions
-[ ] fix think tag
+- [x] route params for providers
+- [ ] core refactor for analytics
+- [ ] switch to edge functions
+- [ ] fix think tag
