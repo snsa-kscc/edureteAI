@@ -50,9 +50,9 @@ Unhandled Rejection: { type: 'overloaded_error', message: 'Overloaded' }
 Node.js process exited with exit status: 128. The logs above can help with debugging the issue.
 ```
 
-### 2DO - 2.1.25.:
+### 2DO - 3.2.25.:
 
 - [x] route params for providers
-- [ ] core refactor for analytics
-- [ ] switch to edge functions
+- [x] core refactor for analytics
+- [x] switch to edge functions
 - [ ] fix think tag
