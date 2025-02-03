@@ -6,6 +6,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { togetherai } from "@ai-sdk/togetherai";
 import { google } from "@ai-sdk/google";
 import { getYesterdayUsage, getUserQuota } from "./neon-actions";
+import { MODEL_CONFIGS } from "./model-config";
 import { type UserData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -65,6 +66,10 @@ export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily:
     })
   );
   return res;
+}
+
+export function getUniqueFamilies(): string[] {
+  return [...new Set(Object.values(MODEL_CONFIGS).map((model) => model.family))].sort();
 }
 
 // deprecated

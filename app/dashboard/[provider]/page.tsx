@@ -4,11 +4,12 @@ import { getUsersData } from "@/lib/redis-actions";
 import { updateUserLimit } from "@/lib/neon-actions";
 import { getUsersUsage } from "@/lib/utils";
 import { notFound } from "next/navigation";
+import { getUniqueFamilies } from "@/lib/utils";
 
 type Params = Promise<{ provider: string }>;
 
 export const dynamic = "force-dynamic";
-const providers = ["openai", "anthropic", "togetherai", "google"];
+const providers = getUniqueFamilies();
 
 export default async function ProviderPage(props: { params: Promise<Params> }) {
   const params = await props.params;

@@ -2,124 +2,101 @@
 
 import * as XLSX from "xlsx-js-style";
 import { getUsersData } from "./redis-actions";
-import { formatWorksheet } from "./utils";
-import { getUsersUsage, getUsersYesterdayUsage } from "./utils";
+import { formatWorksheet, getUsersUsage, getUsersYesterdayUsage, getUniqueFamilies } from "./utils";
 import { type ProviderData } from "@/types";
 
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
-  const MODEL_FAMILY = ["openai", "anthropic"];
+  const MODEL_FAMILY = getUniqueFamilies();
   const usersData = await getUsersData();
 
-  const openaiCurrentUsers = await getUsersUsage(usersData, MODEL_FAMILY[0]);
-  const anthropicCurrentUsers = await getUsersUsage(usersData, MODEL_FAMILY[1]);
-
-  const openaiYesterdayUsers = await getUsersYesterdayUsage(usersData, MODEL_FAMILY[0]);
-  const anthropicYesterdayUsers = await getUsersYesterdayUsage(usersData, MODEL_FAMILY[1]);
+  const currentUsageByFamily = await Promise.all(MODEL_FAMILY.map((family) => getUsersUsage(usersData, family)));
+  const yesterdayUsageByFamily = await Promise.all(MODEL_FAMILY.map((family) => getUsersYesterdayUsage(usersData, family)));
 
   const currentData = usersData.map((user) => {
-    const openaiData = openaiCurrentUsers.find((u) => u.userId === user.userId);
-    const anthropicData = anthropicCurrentUsers.find((u) => u.userId === user.userId);
-
-    function getPercentageObject(data: ProviderData) {
-      const percentage = data?.limit === 0 ? 0 : ((data!.limit - data!.amount) / data!.limit) * 100;
+    const modelData = MODEL_FAMILY.reduce((acc, family, index) => {
+      const data = currentUsageByFamily[index].find((u) => u.userId === user.userId);
       return {
-        v: percentage,
-        t: "n",
-        s: percentage < 10 ? { fill: { fgColor: { rgb: "FFFF0000" } } } : {},
+        ...acc,
+        [`${family} num of tokens`]: data?.tokens ?? 0,
+        [`${family} amount ($)`]: data?.amount ?? 0,
+        [`${family} limit`]: data?.limit ?? 0,
+        [`${family} % of limit left`]: getPercentageObject(data),
       };
-    }
+    }, {});
 
     return {
       Role: user.role,
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
-      "Total ($)": (openaiData?.amount || 0) + (anthropicData?.amount || 0),
-      "Anthropic num of tokens": anthropicData?.tokens ?? 0,
-      "Anthropic amount ($)": anthropicData?.amount ?? 0,
-      "Anthropic limit": anthropicData?.limit ?? 0,
-      "Anthropic % of limit left": getPercentageObject(anthropicData),
-      "OpenAI num of tokens": openaiData?.tokens ?? 0,
-      "OpenAI amount ($)": openaiData?.amount ?? 0,
-      "OpenAI limit": openaiData?.limit ?? 0,
-      "OpenAI % of limit left": getPercentageObject(openaiData),
+      "Total ($)": currentUsageByFamily.reduce((sum, familyData) => {
+        const userData = familyData.find((u) => u.userId === user.userId);
+        return sum + (userData?.amount || 0);
+      }, 0),
+      ...modelData,
     };
   });
 
   const yesterdayData = usersData.map((user) => {
-    const openaiData = openaiYesterdayUsers.find((u) => u.userId === user.userId);
-    const anthropicData = anthropicYesterdayUsers.find((u) => u.userId === user.userId);
+    const modelData = MODEL_FAMILY.reduce((acc, family, index) => {
+      const data = yesterdayUsageByFamily[index].find((u) => u.userId === user.userId);
+      return {
+        ...acc,
+        [`${family} tokens`]: data?.tokens ?? 0,
+        [`${family} amount ($)`]: data?.amount ?? 0,
+      };
+    }, {});
 
     return {
       Role: user.role,
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
-      "Total ($)": (openaiData?.amount || 0) + (anthropicData?.amount || 0),
-      "Anthropic tokens": anthropicData?.tokens ?? 0,
-      "Anthropic amount ($)": anthropicData?.amount ?? 0,
-      "OpenAI tokens": openaiData?.tokens ?? 0,
-      "OpenAI amount ($)": openaiData?.amount ?? 0,
+      "Total ($)": yesterdayUsageByFamily.reduce((sum, familyData) => {
+        const userData = familyData.find((u) => u.userId === user.userId);
+        return sum + (userData?.amount || 0);
+      }, 0),
+      ...modelData,
     };
   });
-
-  const totalOpenaiTokens = openaiCurrentUsers.reduce((sum, user) => sum + user.tokens, 0);
-  const totalOpenaiAmount = openaiCurrentUsers.reduce((sum, user) => sum + user.amount, 0);
-  const totalAnthropicTokens = anthropicCurrentUsers.reduce((sum, user) => sum + user.tokens, 0);
-  const totalAnthropicAmount = anthropicCurrentUsers.reduce((sum, user) => sum + user.amount, 0);
-
-  function formatTotalAmount(amount: number) {
-    return {
-      v: amount,
-      t: "n",
-      s: amount > 15 ? { fill: { fgColor: { rgb: "FFFFFF00" } } } : {},
-    };
-  }
 
   const totalsData = [
     {
       Model: "Grand Total",
-      "Total Tokens": totalOpenaiTokens + totalAnthropicTokens,
-      "Total Amount ($)": totalOpenaiAmount + totalAnthropicAmount,
-      "Average Token Price ($)":
-        totalOpenaiTokens + totalAnthropicTokens === 0 ? 0 : (totalOpenaiAmount + totalAnthropicAmount) / (totalOpenaiTokens + totalAnthropicTokens),
+      "Total Tokens": currentUsageByFamily.reduce((sum, familyData) => sum + familyData.reduce((familySum, user) => familySum + user.tokens, 0), 0),
+      "Total Amount ($)": currentUsageByFamily.reduce((sum, familyData) => sum + familyData.reduce((familySum, user) => familySum + user.amount, 0), 0),
+      "Average Token Price ($)": (() => {
+        const totalTokens = currentUsageByFamily.reduce((sum, familyData) => sum + familyData.reduce((familySum, user) => familySum + user.tokens, 0), 0);
+        const totalAmount = currentUsageByFamily.reduce((sum, familyData) => sum + familyData.reduce((familySum, user) => familySum + user.amount, 0), 0);
+        return totalTokens === 0 ? 0 : totalAmount / totalTokens;
+      })(),
     },
-    {
-      Model: "OpenAI (GPT)",
-      "Total Tokens": totalOpenaiTokens,
-      "Total Amount ($)": formatTotalAmount(totalOpenaiAmount),
-      "Average Token Price ($)": totalOpenaiTokens === 0 ? 0 : totalOpenaiAmount / totalOpenaiTokens,
-    },
-    {
-      Model: "Anthropic (Claude)",
-      "Total Tokens": totalAnthropicTokens,
-      "Total Amount ($)": formatTotalAmount(totalAnthropicAmount),
-      "Average Token Price ($)": totalAnthropicTokens === 0 ? 0 : totalAnthropicAmount / totalAnthropicTokens,
-    },
+    ...MODEL_FAMILY.map((family) => {
+      const familyIndex = MODEL_FAMILY.indexOf(family);
+      const familyData = currentUsageByFamily[familyIndex];
+      const totalTokens = familyData.reduce((sum, user) => sum + user.tokens, 0);
+      const totalAmount = familyData.reduce((sum, user) => sum + user.amount, 0);
+
+      return {
+        Model: `${family}`,
+        "Total Tokens": totalTokens,
+        "Total Amount ($)": formatTotalAmount(totalAmount),
+        "Average Token Price ($)": totalTokens === 0 ? 0 : totalAmount / totalTokens,
+      };
+    }),
   ];
+
+  const baseColumnWidths = [{ wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
+  const modelColumnWidths = MODEL_FAMILY.flatMap(() => Array(4).fill({ wch: 12 }));
 
   const workbook = XLSX.utils.book_new();
 
   const currentWorksheet = XLSX.utils.json_to_sheet(currentData);
-  formatWorksheet(currentWorksheet, [
-    { wch: 10 },
-    { wch: 15 },
-    { wch: 15 },
-    { wch: 25 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-  ]);
+  formatWorksheet(currentWorksheet, [...baseColumnWidths, ...modelColumnWidths]);
   XLSX.utils.book_append_sheet(workbook, currentWorksheet, "Current Usage");
 
   const yesterdayWorksheet = XLSX.utils.json_to_sheet(yesterdayData);
-  formatWorksheet(yesterdayWorksheet, [{ wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 25 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }]);
+  formatWorksheet(yesterdayWorksheet, [...baseColumnWidths, ...modelColumnWidths]);
   XLSX.utils.book_append_sheet(workbook, yesterdayWorksheet, "Yesterday Usage");
 
   const totalsWorksheet = XLSX.utils.json_to_sheet(totalsData);
@@ -137,4 +114,21 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   } else {
     return { blob };
   }
+}
+
+function getPercentageObject(data: ProviderData) {
+  const percentage = data?.limit === 0 ? 0 : ((data!.limit - data!.amount) / data!.limit) * 100;
+  return {
+    v: percentage,
+    t: "n",
+    s: percentage < 10 ? { fill: { fgColor: { rgb: "FFFF0000" } } } : {},
+  };
+}
+
+function formatTotalAmount(amount: number) {
+  return {
+    v: amount,
+    t: "n",
+    s: amount > 15 ? { fill: { fgColor: { rgb: "FFFFFF00" } } } : {},
+  };
 }

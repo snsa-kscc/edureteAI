@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "edureteAI",
@@ -32,7 +29,7 @@ export default async function RootLayout({
             crossOrigin="anonymous"
           />
         </head>
-        <body className={inter.className}>
+        <body>
           <Toaster position="top-center" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Providers>{children}</Providers>
