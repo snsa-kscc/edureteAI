@@ -19,6 +19,7 @@ function getBaseUrl() {
 
 export async function uploadFileToR2(formData: FormData) {
   try {
+    console.log(process.env.VERCEL_URL);
     const resizeUrl = new URL("/api/resize", getBaseUrl());
     const resizeResponse = await fetch(resizeUrl, {
       method: "POST",
