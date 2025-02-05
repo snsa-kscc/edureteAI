@@ -13,13 +13,13 @@ const S3 = new S3Client({
 });
 
 function getBaseUrl() {
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 }
 
 export async function uploadFileToR2(formData: FormData) {
   try {
-    console.log(process.env.VERCEL_URL);
+    console.log(process.env.VERCEL_PROJECT_PRODUCTION_URL);
     const resizeUrl = new URL("/api/resize", getBaseUrl());
     const resizeResponse = await fetch(resizeUrl, {
       method: "POST",
