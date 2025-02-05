@@ -14,10 +14,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { useImageUpload } from "@/hooks/use-image-upload";
+// import { useImageUpload } from "@/hooks/use-image-upload";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
-import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
+// import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import type { MessageContent, ClientMessage } from "@/types";
 
 export function Chat({
@@ -68,31 +68,31 @@ export function Chat({
     ref.current.scrollTo(0, ref.current.scrollHeight);
   }, [conversation]);
 
-  const { handleImageUpload } = useImageUpload({
-    onImageUpload: (url) => setUploadedImage(url),
-    uploadFileToR2,
-    startTransition,
-    disabled: isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model),
-  });
+  // const { handleImageUpload } = useImageUpload({
+  //   onImageUpload: (url) => setUploadedImage(url),
+  //   uploadFileToR2,
+  //   startTransition,
+  //   disabled: isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model),
+  // });
 
-  const handleDeleteImage = async () => {
-    if (!uploadedImage) return;
+  // const handleDeleteImage = async () => {
+  //   if (!uploadedImage) return;
 
-    startTransition(async () => {
-      try {
-        const { success } = await deleteFileFromR2(uploadedImage);
-        if (success) {
-          setUploadedImage(null);
-          toast.success("Image deleted successfully");
-        } else {
-          throw new Error("Failed to delete image");
-        }
-      } catch (error) {
-        console.error("Error deleting file:", error);
-        toast.error("Failed to delete image");
-      }
-    });
-  };
+  //   startTransition(async () => {
+  //     try {
+  //       const { success } = await deleteFileFromR2(uploadedImage);
+  //       if (success) {
+  //         setUploadedImage(null);
+  //         toast.success("Image deleted successfully");
+  //       } else {
+  //         throw new Error("Failed to delete image");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error deleting file:", error);
+  //       toast.error("Failed to delete image");
+  //     }
+  //   });
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -253,7 +253,7 @@ export function Chat({
             disabled={isPending}
           />
           <div className="flex items-center gap-3 mb-2 absolute bottom-2 right-2">
-            <Button
+            {/* <Button
               type="button"
               size="icon"
               variant="secondary"
@@ -262,16 +262,16 @@ export function Chat({
               disabled={isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model)}
             >
               <ImageIcon className="h-5 w-5" />
-            </Button>
-            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-            {uploadedImage && (
+            </Button> */}
+            {/* <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" /> */}
+            {/* {uploadedImage && (
               <div className="relative h-9 w-9">
                 <img src={uploadedImage} alt="uploaded image" className="h-full w-full object-cover rounded-sm" />
                 <div onClick={handleDeleteImage} className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer bg-slate-700 rounded-full">
                   <X className="h-4 w-4 text-emerald-500 m-1" />
                 </div>
               </div>
-            )}
+            )} */}
             <Button size="icon" type="submit" variant="secondary" disabled={isPending || (content.trim() === "" && !uploadedImage)} className="h-8 w-10">
               {isPending ? <Loader2 className="h-5 w-5 animate-spin text-emerald-500" /> : <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />}
             </Button>

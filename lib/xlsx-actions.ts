@@ -2,7 +2,7 @@
 
 import * as XLSX from "xlsx-js-style";
 import { getUsersData } from "./redis-actions";
-import { formatWorksheet, getUsersUsage, getUsersYesterdayUsage, getUniqueFamilies } from "./utils";
+import { getUsersUsage, getUsersYesterdayUsage, getUniqueFamilies } from "./utils";
 import { type ProviderData } from "@/types";
 
 export async function getUsersDataXlsx(returnBuffer: boolean = false) {
@@ -131,4 +131,15 @@ function formatTotalAmount(amount: number) {
     t: "n",
     s: amount > 15 ? { fill: { fgColor: { rgb: "FFFFFF00" } } } : {},
   };
+}
+
+function formatWorksheet(worksheet: XLSX.WorkSheet, columnWidths: { wch: number }[]) {
+  const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+  for (let C = range.s.c; C <= range.e.c; ++C) {
+    const address = XLSX.utils.encode_cell({ r: range.s.r, c: C });
+    if (!worksheet[address]) continue;
+    worksheet[address].s = { font: { bold: true } };
+  }
+  worksheet["!cols"] = columnWidths;
+  return worksheet;
 }

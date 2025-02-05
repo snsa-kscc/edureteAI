@@ -1,4 +1,3 @@
-import * as XLSX from "xlsx-js-style";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { openai } from "@ai-sdk/openai";
@@ -23,17 +22,6 @@ export function handleModelProvider(model: string) {
   } else {
     return openai(model);
   }
-}
-
-export function formatWorksheet(worksheet: XLSX.WorkSheet, columnWidths: { wch: number }[]) {
-  const range = XLSX.utils.decode_range(worksheet["!ref"]!);
-  for (let C = range.s.c; C <= range.e.c; ++C) {
-    const address = XLSX.utils.encode_cell({ r: range.s.r, c: C });
-    if (!worksheet[address]) continue;
-    worksheet[address].s = { font: { bold: true } };
-  }
-  worksheet["!cols"] = columnWidths;
-  return worksheet;
 }
 
 export async function getUsersUsage(usersData: UserData[], modelFamily: string) {
