@@ -14,7 +14,7 @@ const S3 = new S3Client({
 export async function uploadFileToR2(formData: FormData) {
   try {
     const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const resizeResponse = await fetch(`${baseUrl}/api/resize`, {
+    const response = await fetch(`${baseUrl}/api/upload-picture`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.CRON_SECRET}`,
@@ -22,31 +22,22 @@ export async function uploadFileToR2(formData: FormData) {
       body: formData,
     });
 
-    // Clone the response before reading
-    const responseClone = resizeResponse.clone();
-
-    let resizeData;
-    try {
-      resizeData = await resizeResponse.json();
-    } catch (parseError) {
-      const responseText = await responseClone.text();
-      console.error("Response status:", resizeResponse.status);
-      console.error("Response headers:", Object.fromEntries(resizeResponse.headers.entries()));
-      console.error("Raw response content:", responseText);
-      throw new Error(`Invalid response from server: ${responseText}`);
+    if (!response.ok) {
+      throw new Error(`Upload failed with status: ${response.status}`);
     }
 
-    if (!resizeResponse.ok || !resizeData.success) {
-      throw new Error(resizeData?.error || `Server error: ${resizeResponse.status}`);
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || "Upload failed");
     }
 
     return {
       success: true,
-      filename: resizeData.filename,
-      url: resizeData.url,
+      filename: data.filename,
+      url: data.url,
     };
   } catch (error) {
-    console.error("Error uploading file:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Failed to upload file",

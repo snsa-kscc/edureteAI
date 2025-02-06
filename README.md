@@ -55,6 +55,6 @@ Node.js process exited with exit status: 128. The logs above can help with debug
 - [x] route params for providers
 - [x] core refactor for analytics
 - [x] switch to edge functions
-- [ ] fix sharp dependency
+- [x] fix sharp dependency
 - [ ] fix document thingy
 - [ ] fix think tag
