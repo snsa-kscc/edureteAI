@@ -1,16 +1,8 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getUsersDataXlsx } from "@/lib/xlsx-actions";
-import { headers } from "next/headers";
 
 export async function GET() {
-  const headersList = await headers();
-  const cronToken = headersList.get("authorization");
-
-  if (cronToken !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     const { buffer } = await getUsersDataXlsx(true);
 
