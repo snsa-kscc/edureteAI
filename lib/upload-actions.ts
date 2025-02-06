@@ -19,17 +19,17 @@ function getBaseUrl() {
 
 export async function uploadFileToR2(formData: FormData) {
   try {
-    const resizeUrl = new URL("/api/resize", getBaseUrl());
-    const resizeResponse = await fetch(resizeUrl, {
-      method: "POST",
-      body: formData,
-    });
+    // const resizeUrl = new URL("/api/resize", getBaseUrl());
+    // const resizeResponse = await fetch(resizeUrl, {
+    //   method: "POST",
+    //   body: formData,
+    // });
 
-    const resizeData = await resizeResponse.json();
+    // const resizeData = await resizeResponse.json();
 
-    if (!resizeResponse.ok || !resizeData.success) {
-      throw new Error(resizeData.error || "Failed to resize image");
-    }
+    // if (!resizeResponse.ok || !resizeData.success) {
+    //   throw new Error(resizeData.error || "Failed to resize image");
+    // }
 
     const file = formData.get("file") as File;
     if (!file) {
@@ -38,14 +38,15 @@ export async function uploadFileToR2(formData: FormData) {
 
     //const fullBase64Data = resizeData.data.join("");
     // Convert base64 back to buffer for upload
-    const buffer = Buffer.from(resizeData.data, "base64");
+    // const buffer = Buffer.from(resizeData.data, "base64");
+    const buffer = Buffer.from(await file.arrayBuffer());
     const uniqueFilename = `${uuidv4()}-${file.name}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
       Key: uniqueFilename,
       Body: buffer,
-      ContentType: resizeData.contentType,
+      ContentType: file.type,
     });
 
     await S3.send(command);
