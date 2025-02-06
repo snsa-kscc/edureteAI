@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
+import { headers } from "next/headers";
 
 const S3 = new S3Client({
   region: "auto",
@@ -13,6 +14,13 @@ const S3 = new S3Client({
 });
 
 export async function POST(request: NextRequest) {
+  const headersList = await headers();
+  const cronToken = headersList.get("authorization");
+
+  if (cronToken !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
