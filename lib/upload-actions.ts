@@ -18,11 +18,10 @@ function getBaseUrl() {
 
 export async function uploadFileToR2(formData: FormData) {
   try {
-    const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
     console.log("Base URL:", baseUrl);
+    console.log("Vercel branch:", process.env.VERCEL_BRANCH_URL);
     const resizeResponse = await fetch(`${baseUrl}/api/resize`, {
       method: "POST",
       body: formData,
