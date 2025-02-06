@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
+
+const S3 = new S3Client({
+  region: "auto",
+  endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY!,
+  },
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,20 +39,23 @@ export async function POST(request: NextRequest) {
         .toBuffer();
     }
 
-    // Convert the buffer to base64 for safe transmission
-    const base64Data = resizedBuffer.toString("base64");
-    // const chunkSize = 500000; // Approximately 500KB chunks
-    // const chunks = [];
-    // for (let i = 0; i < base64Data.length; i += chunkSize) {
-    //   chunks.push(base64Data.slice(i, i + chunkSize));
-    // }
+    const uniqueFilename = `${uuidv4()}-${file.name}`;
+    const command = new PutObjectCommand({
+      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
+      Key: uniqueFilename,
+      Body: resizedBuffer,
+      ContentType: file.type,
+    });
+
+    await S3.send(command);
+
     return NextResponse.json({
       success: true,
-      data: base64Data,
-      contentType: file.type,
+      filename: uniqueFilename,
+      url: `${process.env.CLOUDFLARE_R2_PUBLIC_URL}/${uniqueFilename}`,
     });
   } catch (error) {
-    console.error("Error resizing image:", error);
-    return NextResponse.json({ success: false, error: "Failed to resize image" }, { status: 500 });
+    console.error("Error processing image:", error);
+    return NextResponse.json({ success: false, error: "Failed to process image" }, { status: 500 });
   }
 }

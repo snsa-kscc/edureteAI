@@ -1,7 +1,6 @@
 "use server";
 
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { v4 as uuidv4 } from "uuid";
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 const S3 = new S3Client({
   region: "auto",
@@ -19,42 +18,22 @@ function getBaseUrl() {
 
 export async function uploadFileToR2(formData: FormData) {
   try {
-    // const resizeUrl = new URL("/api/resize", getBaseUrl());
-    // const resizeResponse = await fetch(resizeUrl, {
-    //   method: "POST",
-    //   body: formData,
-    // });
-
-    // const resizeData = await resizeResponse.json();
-
-    // if (!resizeResponse.ok || !resizeData.success) {
-    //   throw new Error(resizeData.error || "Failed to resize image");
-    // }
-
-    const file = formData.get("file") as File;
-    if (!file) {
-      throw new Error("No file provided");
-    }
-
-    //const fullBase64Data = resizeData.data.join("");
-    // Convert base64 back to buffer for upload
-    // const buffer = Buffer.from(resizeData.data, "base64");
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const uniqueFilename = `${uuidv4()}-${file.name}`;
-
-    const command = new PutObjectCommand({
-      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
-      Key: uniqueFilename,
-      Body: buffer,
-      ContentType: file.type,
+    const resizeUrl = new URL("/api/resize", getBaseUrl());
+    const resizeResponse = await fetch(resizeUrl, {
+      method: "POST",
+      body: formData,
     });
 
-    await S3.send(command);
+    const resizeData = await resizeResponse.json();
+
+    if (!resizeResponse.ok || !resizeData.success) {
+      throw new Error(resizeData.error || "Failed to process image");
+    }
 
     return {
       success: true,
-      filename: uniqueFilename,
-      url: `${process.env.CLOUDFLARE_R2_PUBLIC_URL}/${uniqueFilename}`,
+      filename: resizeData.filename,
+      url: resizeData.url,
     };
   } catch (error) {
     console.error("Error uploading file:", error);
