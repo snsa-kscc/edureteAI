@@ -20,16 +20,19 @@ export async function uploadFileToR2(formData: FormData) {
   try {
     const resizeUrl = new URL("/api/resize", getBaseUrl());
     console.log(resizeUrl);
-    const resizeResponse = await fetch(resizeUrl, {
+    const resizeResponse = await fetch(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/api/resize`, {
       method: "POST",
       body: formData,
     });
+
+    // Clone the response before reading
+    const responseClone = resizeResponse.clone();
 
     let resizeData;
     try {
       resizeData = await resizeResponse.json();
     } catch (parseError) {
-      console.error("Failed to parse response:", await resizeResponse.text());
+      console.error("Failed to parse response:", await responseClone.text());
       throw new Error("Invalid response from server");
     }
 
