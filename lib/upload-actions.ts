@@ -16,6 +16,9 @@ export async function uploadFileToR2(formData: FormData) {
     const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const resizeResponse = await fetch(`${baseUrl}/api/resize`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CRON_SECRET}`,
+      },
       body: formData,
     });
 
