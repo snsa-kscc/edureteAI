@@ -32,8 +32,11 @@ export async function uploadFileToR2(formData: FormData) {
     try {
       resizeData = await resizeResponse.json();
     } catch (parseError) {
-      console.error("Failed to parse response:", await responseClone.text());
-      throw new Error("Invalid response from server");
+      const responseText = await responseClone.text();
+      console.error("Response status:", resizeResponse.status);
+      console.error("Response headers:", Object.fromEntries(resizeResponse.headers.entries()));
+      console.error("Raw response content:", responseText);
+      throw new Error(`Invalid response from server: ${responseText}`);
     }
 
     if (!resizeResponse.ok || !resizeData.success) {
