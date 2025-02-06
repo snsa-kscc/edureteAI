@@ -30,14 +30,14 @@ export async function POST(request: NextRequest) {
 
     // Convert the buffer to base64 for safe transmission
     const base64Data = resizedBuffer.toString("base64");
-    const chunkSize = 500000; // Approximately 500KB chunks
-    const chunks = [];
-    for (let i = 0; i < base64Data.length; i += chunkSize) {
-      chunks.push(base64Data.slice(i, i + chunkSize));
-    }
+    // const chunkSize = 500000; // Approximately 500KB chunks
+    // const chunks = [];
+    // for (let i = 0; i < base64Data.length; i += chunkSize) {
+    //   chunks.push(base64Data.slice(i, i + chunkSize));
+    // }
     return NextResponse.json({
       success: true,
-      data: chunks,
+      data: base64Data,
       contentType: file.type,
     });
   } catch (error) {

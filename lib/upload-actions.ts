@@ -36,9 +36,9 @@ export async function uploadFileToR2(formData: FormData) {
       throw new Error("No file provided");
     }
 
-    const fullBase64Data = resizeData.data.join("");
+    //const fullBase64Data = resizeData.data.join("");
     // Convert base64 back to buffer for upload
-    const buffer = Buffer.from(fullBase64Data, "base64");
+    const buffer = Buffer.from(resizeData.data, "base64");
     const uniqueFilename = `${uuidv4()}-${file.name}`;
 
     const command = new PutObjectCommand({
