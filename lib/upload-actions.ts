@@ -19,15 +19,22 @@ function getBaseUrl() {
 export async function uploadFileToR2(formData: FormData) {
   try {
     const resizeUrl = new URL("/api/resize", getBaseUrl());
+    console.log(resizeUrl);
     const resizeResponse = await fetch(resizeUrl, {
       method: "POST",
       body: formData,
     });
 
-    const resizeData = await resizeResponse.json();
+    let resizeData;
+    try {
+      resizeData = await resizeResponse.json();
+    } catch (parseError) {
+      console.error("Failed to parse response:", await resizeResponse.text());
+      throw new Error("Invalid response from server");
+    }
 
     if (!resizeResponse.ok || !resizeData.success) {
-      throw new Error(resizeData.error || "Failed to process image");
+      throw new Error(resizeData?.error || `Server error: ${resizeResponse.status}`);
     }
 
     return {
@@ -39,7 +46,7 @@ export async function uploadFileToR2(formData: FormData) {
     console.error("Error uploading file:", error);
     return {
       success: false,
-      error: "Failed to upload file",
+      error: error instanceof Error ? error.message : "Failed to upload file",
     };
   }
 }
