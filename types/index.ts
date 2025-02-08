@@ -27,15 +27,15 @@ export interface Chat extends Record<string, any> {
   rightMessages?: Message[];
   leftModel?: string;
   rightModel?: string;
-  leftSystemPrompt?: string;
-  rightSystemPrompt?: string;
+  leftSystemPrompt?: string | undefined;
+  rightSystemPrompt?: string | undefined;
 }
 
 export type AIState = {
   userId: string | null | undefined;
   chatId: string;
   model: string;
-  system: string;
+  system: string | undefined;
   chatAreaId: string;
   messages: Message[];
 };

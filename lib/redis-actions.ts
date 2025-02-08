@@ -3,7 +3,7 @@
 import { Redis } from "@upstash/redis";
 import { Chat, Usage, UserQuota } from "@/types";
 import { revalidatePath } from "next/cache";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient, type User } from "@clerk/nextjs/server";
 import { dollarsToTokens } from "./utils";
 
 const client = new Redis({
@@ -23,7 +23,7 @@ export async function getUsersData() {
     const allUsers = await clerk.users.getUserList({ limit: 499 });
     const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
     for (const storedId of userIds) {
-      const user = allUsers.data.find((u) => u.externalId === storedId || u.id === storedId);
+      const user = allUsers.data.find((u: User) => u.externalId === storedId || u.id === storedId);
       if (!user) {
         continue;
       }
@@ -81,9 +81,11 @@ export async function getChat(id: string) {
 
 export async function saveChat(chat: Chat) {
   try {
+    // Filter out null values and convert them to empty strings because system can be null
+    const cleanChat = Object.fromEntries(Object.entries(chat).map(([key, value]) => [key, value ?? ""]));
     const pipeline = client.pipeline();
 
-    pipeline.hmset(`chat:${chat.id}`, chat);
+    pipeline.hmset(`chat:${chat.id}`, cleanChat);
     pipeline.zadd(`user:chat:${chat.userId}`, {
       score: Date.now(),
       member: `chat:${chat.id}`,
