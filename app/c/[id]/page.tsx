@@ -4,7 +4,6 @@ import { auth } from "@clerk/nextjs/server";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Chat } from "@/components/chat";
-import { Changelog } from "@/components/changelog";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -38,7 +37,6 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
               <Link href="/dashboard">Dashboard</Link>
             </Button>
           )}
-          <Changelog />
           <div className="flex gap-2">
             <ModeToggle />
             <div className="flex items-center">{userId && <UserButton />}</div>
