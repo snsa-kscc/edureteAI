@@ -38,3 +38,8 @@ Made with ❤️ by [dvasadva](https://dvasadva.com).
 Unhandled Rejection: { type: 'overloaded_error', message: 'Overloaded' }
 Node.js process exited with exit status: 128. The logs above can help with debugging the issue.
 ```
+
+### 2DO:
+
+- [ ] Add Google api
+- [ ] Add TogetherAI api
