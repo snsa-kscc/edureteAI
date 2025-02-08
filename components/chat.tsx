@@ -29,7 +29,7 @@ export function Chat({
   userId: string | null | undefined;
   id: string;
   initialModel: string;
-  initialSystem: string;
+  initialSystem: string | undefined;
 }) {
   const router = useRouter();
   const [content, setContent] = useState<string>("");
@@ -39,7 +39,7 @@ export function Chat({
     }
     return initialModel;
   });
-  const [system, setSystem] = useState<string>(initialSystem);
+  const [system, setSystem] = useState<string | undefined>(initialSystem);
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
   const ref = useRef<HTMLDivElement>(null);

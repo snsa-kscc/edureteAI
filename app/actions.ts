@@ -5,6 +5,7 @@ import { createStreamableValue, getMutableAIState } from "ai/rsc";
 import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
+import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { AI } from "@/app/ai";
 import type { Usage, MessageContent } from "@/types";
 
@@ -46,7 +47,7 @@ export async function submitUserMessage({ content, model, system }: { content: M
     (async () => {
       const { textStream } = streamText({
         model: handleModelProvider(aiState.get().model),
-        system: ["o1-mini", "o1-preview"].includes(aiState.get().model) ? undefined : aiState.get().system,
+        system: ["o1-mini", "o1-preview"].includes(aiState.get().model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + aiState.get().system,
         messages: [
           ...aiState.get().messages.map((message: any) => ({
             role: message.role,

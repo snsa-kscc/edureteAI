@@ -14,8 +14,6 @@ import { AI } from "@/app/ai";
 export const maxDuration = 60;
 // export const runtime = "edge";
 export const dynamic = "force-dynamic";
-
-const DEFAULT_SYSTEM_PROMPT = `As an assistant, when providing mathematical content, ensure that all formulas and equations are written in plain text or Unicode. Do not use LaTeX or any other coding format. Present the information in a straightforward and accessible manner.`;
 const DEFAULT_LEFT_MODEL = "gpt-4o";
 const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20241022";
 
@@ -56,16 +54,11 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
               chatAreaId: "left",
               messages: chat?.leftMessages ?? [],
               model: chat?.leftModel ?? DEFAULT_LEFT_MODEL,
-              system: chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT,
+              system: chat?.leftSystemPrompt,
             }}
             initialUIState={[]}
           >
-            <Chat
-              userId={userId}
-              id={params.id}
-              initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
-              initialSystem={chat?.leftSystemPrompt ?? DEFAULT_SYSTEM_PROMPT}
-            />
+            <Chat userId={userId} id={params.id} initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL} initialSystem={chat?.leftSystemPrompt} />
           </AI>
           <AI
             initialAIState={{
@@ -74,16 +67,11 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
               chatAreaId: "right",
               messages: chat?.rightMessages ?? [],
               model: chat?.rightModel ?? DEFAULT_RIGHT_MODEL,
-              system: chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT,
+              system: chat?.rightSystemPrompt,
             }}
             initialUIState={[]}
           >
-            <Chat
-              userId={userId}
-              id={params.id}
-              initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
-              initialSystem={chat?.rightSystemPrompt ?? DEFAULT_SYSTEM_PROMPT}
-            />
+            <Chat userId={userId} id={params.id} initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL} initialSystem={chat?.rightSystemPrompt} />
           </AI>
         </div>
         <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>
