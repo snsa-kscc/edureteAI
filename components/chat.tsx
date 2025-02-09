@@ -42,15 +42,20 @@ export function Chat({
   const [system, setSystem] = useState<string | undefined>(initialSystem);
   const [conversation, setConversation] = useUIState();
   const { submitUserMessage } = useActions();
-  const ref = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { formRef, onKeyDown } = useEnterSubmit();
   const [aiState] = useAIState();
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [userScrolled, setUserScrolled] = useState(false);
 
   const modelsWithoutImageSupport = ["o1-preview", "o1-mini", "claude-3-5-haiku-20241022"];
+
+  useEffect(() => {
+    setNewChatId(id);
+  }, []);
 
   useEffect(() => {
     const messagesLength = aiState.messages?.length;
@@ -60,13 +65,27 @@ export function Chat({
   }, [aiState.messages, router]);
 
   useEffect(() => {
-    setNewChatId(id);
-  });
+    const viewport = scrollAreaRef.current;
+    if (!viewport) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      if (scrollTop + clientHeight < scrollHeight) {
+        setUserScrolled(true);
+      }
+    };
+
+    viewport.addEventListener("scroll", handleScroll);
+    return () => {
+      setUserScrolled(false);
+      viewport.removeEventListener("scroll", handleScroll);
+    };
+  }, [conversation.length % 2 === 0]);
 
   useEffect(() => {
-    if (ref.current === null) return;
-    ref.current.scrollTo(0, ref.current.scrollHeight);
-  }, [conversation]);
+    if (scrollAreaRef.current === null || userScrolled) return;
+    scrollAreaRef.current.scrollTo(0, scrollAreaRef.current.scrollHeight);
+  }, [conversation, userScrolled]);
 
   const { handleImageUpload } = useImageUpload({
     onImageUpload: (url) => setUploadedImage(url),
@@ -196,7 +215,7 @@ export function Chat({
           </PopoverContent>
         </Popover>
       </div>
-      <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
+      <ScrollArea className="mb-2 grow rounded-md border p-4" ref={scrollAreaRef}>
         {conversation.map((m: any) => (
           <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
             {m.role === "user" && (
