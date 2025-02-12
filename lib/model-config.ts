@@ -1,6 +1,11 @@
 import { ModelPricing } from "@/types";
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
+  "accounts/fireworks/models/deepseek-r1": {
+    inputPrice: 3,
+    outputPrice: 8,
+    family: "fireworks",
+  },
   "gemini-1.5-pro": {
     inputPrice: 1.25,
     outputPrice: 5,

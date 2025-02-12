@@ -82,5 +82,5 @@ export type ProviderData =
 export type ModelPricing = {
   inputPrice: number;
   outputPrice: number;
-  family: "openai" | "anthropic" | "togetherai" | "google";
+  family: "openai" | "anthropic" | "togetherai" | "google" | "fireworks";
 };

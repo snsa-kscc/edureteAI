@@ -20,6 +20,16 @@ import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import type { MessageContent, ClientMessage } from "@/types";
 
+const CHAT_MODELS = [
+  { value: "accounts/fireworks/models/deepseek-r1", label: "Deepseek/DeepSeek R1" },
+  { value: "gemini-2.0-flash", label: "Google/Gemini 2.0 Flash" },
+  { value: "o1-preview", label: "OpenAI/o1-preview" },
+  { value: "o1-mini", label: "OpenAI/o1-mini" },
+  { value: "gpt-4o", label: "OpenAI/GPT-4o" },
+  { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
+  { value: "claude-3-5-sonnet-20241022", label: "Anthropic/Claude 3.5 Sonnet" },
+];
+
 export function Chat({
   userId,
   id,
@@ -34,10 +44,8 @@ export function Chat({
   const router = useRouter();
   const [content, setContent] = useState<string>("");
   const [model, setModel] = useState<string>(() => {
-    if (initialModel === "claude-3-5-sonnet-20240620") {
-      return "claude-3-5-sonnet-20241022";
-    }
-    return initialModel;
+    const isValidModel = CHAT_MODELS.some((model) => model.value === initialModel);
+    return isValidModel ? initialModel : "gpt-4o";
   });
   const [system, setSystem] = useState<string | undefined>(initialSystem);
   const [conversation, setConversation] = useUIState();
@@ -162,25 +170,7 @@ export function Chat({
             <SelectGroup>
               <SelectLabel>Available Models</SelectLabel>
               <TooltipProvider>
-                {[
-                  { value: "deepseek-ai/DeepSeek-R1", label: "Deepseek/DeepSeek R1" },
-                  { value: "deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free", label: "Deepseek/DeepSeek R1 Distill Llama 70B" },
-                  { value: "deepseek-ai/DeepSeek-V3", label: "Deepseek/DeepSeek V3" },
-                  { value: "gemini-1.5-pro", label: "Google/Gemini 1.5 Pro" },
-                  { value: "gemini-2.0-flash-exp", label: "Google/Gemini 2.0 Flash Exp" },
-                  { value: "o3-mini", label: "OpenAI/o3-mini" },
-                  { value: "o1-preview", label: "OpenAI/o1-preview" },
-                  { value: "o1-mini", label: "OpenAI/o1-mini" },
-                  { value: "gpt-4o", label: "OpenAI/GPT-4o" },
-                  { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
-                  { value: "gpt-4-turbo", label: "OpenAI/GPT-4 Turbo" },
-                  { value: "gpt-4", label: "OpenAI/GPT-4" },
-                  { value: "claude-3-5-sonnet-20241022", label: "Anthropic/Claude 3.5 Sonnet" },
-                  { value: "claude-3-5-haiku-20241022", label: "Anthropic/Claude 3.5 Haiku" },
-                  { value: "claude-3-opus-20240229", label: "Anthropic/Claude 3 Opus" },
-                  { value: "claude-3-sonnet-20240229", label: "Anthropic/Claude 3 Sonnet" },
-                  { value: "claude-3-haiku-20240307", label: "Anthropic/Claude 3 Haiku" },
-                ].map(({ value, label }) =>
+                {CHAT_MODELS.map(({ value, label }) =>
                   hasImagesInConversation && modelsWithoutImageSupport.includes(value) ? (
                     <Tooltip key={value}>
                       <TooltipTrigger asChild>

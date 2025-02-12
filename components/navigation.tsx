@@ -44,13 +44,19 @@ export function Navigation() {
         href="/dashboard/togetherai"
         className={`px-3 py-2 rounded-md ${pathname === "/dashboard/togetherai" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
       >
-        DeepSeek Dashboard
+        TogetherAI Dashboard
       </Link>
       <Link
         href="/dashboard/google"
         className={`px-3 py-2 rounded-md ${pathname === "/dashboard/google" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
       >
         Google Dashboard
+      </Link>
+      <Link
+        href="/dashboard/fireworks"
+        className={`px-3 py-2 rounded-md ${pathname === "/dashboard/fireworks" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}
+      >
+        Fireworks Dashboard
       </Link>
       <Link href="/" className="px-3 py-2 rounded-md bg-secondary">
         Home
