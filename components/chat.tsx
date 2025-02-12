@@ -30,6 +30,8 @@ const CHAT_MODELS = [
   { value: "claude-3-5-sonnet-20241022", label: "Anthropic/Claude 3.5 Sonnet" },
 ];
 
+const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/fireworks/models/deepseek-r1"];
+
 export function Chat({
   userId,
   id,
@@ -45,7 +47,7 @@ export function Chat({
   const [content, setContent] = useState<string>("");
   const [model, setModel] = useState<string>(() => {
     const isValidModel = CHAT_MODELS.some((model) => model.value === initialModel);
-    return isValidModel ? initialModel : "gpt-4o";
+    return isValidModel ? initialModel : "gemini-2.0-flash";
   });
   const [system, setSystem] = useState<string | undefined>(initialSystem);
   const [conversation, setConversation] = useUIState();
@@ -58,8 +60,6 @@ export function Chat({
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [userScrolled, setUserScrolled] = useState(false);
-
-  const modelsWithoutImageSupport = ["o1-preview", "o1-mini", "claude-3-5-haiku-20241022"];
 
   useEffect(() => {
     setNewChatId(id);
@@ -99,7 +99,7 @@ export function Chat({
     onImageUpload: (url) => setUploadedImage(url),
     uploadFileToR2,
     startTransition,
-    disabled: isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model),
+    disabled: isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
   });
 
   const handleDeleteImage = async () => {
@@ -164,18 +164,18 @@ export function Chat({
       <div className="flex justify-between">
         <Select onValueChange={setModel} value={model}>
           <SelectTrigger className="max-w-72 mb-2">
-            <SelectValue placeholder="OpenAI/GPT-3.5" />
+            <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent className="overflow-visible">
             <SelectGroup>
               <SelectLabel>Available Models</SelectLabel>
               <TooltipProvider>
                 {CHAT_MODELS.map(({ value, label }) =>
-                  hasImagesInConversation && modelsWithoutImageSupport.includes(value) ? (
+                  hasImagesInConversation && MODELS_WITHOUT_IMAGE_SUPPORT.includes(value) ? (
                     <Tooltip key={value}>
                       <TooltipTrigger asChild>
                         <div>
-                          <SelectItem value={value} disabled={hasImagesInConversation && modelsWithoutImageSupport.includes(value)}>
+                          <SelectItem value={value} disabled={hasImagesInConversation && MODELS_WITHOUT_IMAGE_SUPPORT.includes(value)}>
                             {label}
                           </SelectItem>
                         </div>
@@ -268,7 +268,7 @@ export function Chat({
               variant="secondary"
               className="text-emerald-500 h-8 w-10"
               onClick={() => fileInputRef.current?.click()}
-              disabled={isPending || !!uploadedImage || modelsWithoutImageSupport.includes(model)}
+              disabled={isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
             >
               <ImageIcon className="h-5 w-5" />
             </Button>
