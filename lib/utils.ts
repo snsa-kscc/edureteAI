@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { fireworks } from "@ai-sdk/fireworks";
+import { togetherai } from "@ai-sdk/togetherai";
 import { google } from "@ai-sdk/google";
 import { getYesterdayUsage, getUserQuota } from "./neon-actions";
 import { MODEL_CONFIGS } from "./model-config";
@@ -19,6 +20,8 @@ export function handleModelProvider(model: string) {
     return fireworks(model);
   } else if (model.startsWith("gemini")) {
     return google(model);
+  } else if (model.startsWith("deepseek")) {
+    return togetherai(model);
   } else {
     return openai(model);
   }
