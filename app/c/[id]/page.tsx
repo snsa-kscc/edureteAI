@@ -20,7 +20,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
   const params = await props.params;
   const chat = await getChat(params.id);
 
-  const { orgRole, sessionClaims } = await auth();
+  const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId;
 
   return (
@@ -32,7 +32,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
         </div>
         <div className="flex flex-col sm:flex-row gap-4 px-8 pt-2 pb-4">
           <Title />
-          {orgRole && (
+          {sessionClaims?.membership && Object.keys(sessionClaims.membership).length > 0 && (
             <Button variant="outline">
               <Link href="/dashboard">Dashboard</Link>
             </Button>
