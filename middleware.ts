@@ -9,8 +9,8 @@ export default clerkMiddleware(async (auth, request) => {
     await auth.protect();
 
     if (isDashboardRoute(request)) {
-      const { orgRole } = await auth();
-      if (!orgRole) {
+      const { sessionClaims } = await auth();
+      if (sessionClaims?.membership && Object.keys(sessionClaims.membership).length === 0) {
         return NextResponse.rewrite(new URL("/404", request.url));
       }
     }
