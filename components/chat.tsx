@@ -236,11 +236,11 @@ export function Chat({
               <div className="mb-6 flex gap-3">
                 <Avatar>
                   <AvatarImage src="" />
-                  <AvatarFallback className="bg-emerald-500 text-white">AI</AvatarFallback>
+                  <AvatarFallback className="bg-emerald-500 text-white">eAI</AvatarFallback>
                 </Avatar>
                 <div className="mt-1.5 w-full">
                   <div className="flex justify-between">
-                    <p className="font-semibold opacity-70">Bot</p>
+                    <p className="font-semibold opacity-70">edureteAI</p>
                     <CopyToClipboard message={m} className="-mt-1" />
                   </div>
                   <div className="mt-2 text-sm leading-relaxed">
