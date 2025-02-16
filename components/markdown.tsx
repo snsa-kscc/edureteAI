@@ -11,10 +11,14 @@ interface MarkdownProps {
 }
 
 const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
-  const processedContent = children.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
+  const processedThinkTags = children.replace(
+    /<think>(.*?)<\/think>/gs,
+    (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
+  );
+  const processedContent = processedThinkTags.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
 
   const remarkMathOptions = {
-    singleDollarTextMath: false,
+    singleDollarTextMath: true,
   };
 
   const components = {
