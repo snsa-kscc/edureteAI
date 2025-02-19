@@ -12,11 +12,11 @@ export async function POST(req: Request) {
   try {
     const { messages, id, userId, model, system, chatAreaId } = await req.json();
 
-    const hasQuotaAvailable = await checkQuota(userId, model);
+    // const hasQuotaAvailable = await checkQuota(userId, model);
 
-    if (!hasQuotaAvailable) {
-      return Response.json({ error: "You have exceeded your quota. Please contact support.", status: 429 });
-    }
+    // if (!hasQuotaAvailable) {
+    //   return Response.json({ error: "You have exceeded your quota. Please contact support.", status: 429 });
+    // }
 
     const result = streamText({
       model: handleModelProvider(model),
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
           totalTokens: result.usage.totalTokens,
           timestamp: new Date(),
         };
-        await saveUsage(usageData);
+        // await saveUsage(usageData);
 
         const chat: Chat = {
           id: uuidv4(),
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
           path: `/c/${id}`,
           createdAt: new Date(),
         };
-        await saveChat(chat);
+        // await saveChat(chat);
       },
     });
 
