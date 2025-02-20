@@ -128,10 +128,9 @@ export function Chat({
     if (content.trim() === "" && !uploadedImage) {
       return;
     }
-    const messageTextWithImage = content.trim() === "" && uploadedImage ? "Analiziraj sliku." : content;
     const messageContent = uploadedImage
       ? [
-          { type: "text", text: messageTextWithImage },
+          { type: "text", text: content },
           { type: "image", image: uploadedImage },
         ]
       : content;
