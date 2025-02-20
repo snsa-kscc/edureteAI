@@ -55,7 +55,7 @@ export function Chat({
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     id: `${id}-${chatAreaId}`,
     initialMessages,
     body: {
@@ -70,7 +70,7 @@ export function Chat({
   // const { handleImageUpload } = useImageUpload({
   //   onImageUpload: (url) => setUploadedImage(url),
   //   uploadFileToR2,
-  //   disabled: isLoading || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
+  //   disabled: status === 'streaming' || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
   // });
 
   const handleDeleteImage = async () => {
@@ -189,7 +189,7 @@ export function Chat({
           onChange={handleInputChange}
           placeholder="Ask me anything..."
           className={`placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500 ${uploadedImage ? "pr-40" : "pr-28"}`}
-          disabled={isLoading}
+          disabled={status === "streaming"}
         />
         <div className="flex items-center gap-3 mb-2 absolute bottom-2 right-2">
           <Button
@@ -198,7 +198,7 @@ export function Chat({
             variant="secondary"
             className="text-emerald-500 h-8 w-10"
             onClick={() => fileInputRef.current?.click()}
-            disabled={isLoading || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
+            disabled={status === "streaming" || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
           >
             <ImageIcon className="h-5 w-5" />
           </Button>
@@ -211,8 +211,18 @@ export function Chat({
               </div>
             </div>
           )}
-          <Button size="icon" type="submit" variant="secondary" disabled={isLoading || (input.trim() === "" && !uploadedImage)} className="h-8 w-10">
-            {isLoading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-500" /> : <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />}
+          <Button
+            size="icon"
+            type="submit"
+            variant="secondary"
+            disabled={status === "streaming" || (input.trim() === "" && !uploadedImage)}
+            className="h-8 w-10"
+          >
+            {status === "streaming" ? (
+              <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+            ) : (
+              <SendHorizontalIcon className="h-5 w-5 text-emerald-500" />
+            )}
           </Button>
         </div>
       </form>
