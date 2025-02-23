@@ -13,6 +13,7 @@ import { AI } from "@/app/ai";
 export const runtime = "edge";
 const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
 const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20241022";
+const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";
 
 type Params = Promise<{ id: string }>;
 
@@ -50,11 +51,16 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
               chatAreaId: "left",
               messages: chat?.leftMessages ?? [],
               model: chat?.leftModel ?? DEFAULT_LEFT_MODEL,
-              system: chat?.leftSystemPrompt,
+              system: chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT,
             }}
             initialUIState={[]}
           >
-            <Chat userId={userId} id={params.id} initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL} initialSystem={chat?.leftSystemPrompt} />
+            <Chat
+              userId={userId}
+              id={params.id}
+              initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
+              initialSystem={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            />
           </AI>
           <AI
             initialAIState={{
@@ -63,11 +69,16 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
               chatAreaId: "right",
               messages: chat?.rightMessages ?? [],
               model: chat?.rightModel ?? DEFAULT_RIGHT_MODEL,
-              system: chat?.rightSystemPrompt,
+              system: chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT,
             }}
             initialUIState={[]}
           >
-            <Chat userId={userId} id={params.id} initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL} initialSystem={chat?.rightSystemPrompt} />
+            <Chat
+              userId={userId}
+              id={params.id}
+              initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
+              initialSystem={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            />
           </AI>
         </div>
         <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>

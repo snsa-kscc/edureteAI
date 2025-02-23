@@ -16,6 +16,11 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 0.4,
     family: "google",
   },
+  "gemini-2.0-flash-thinking-exp-01-21": {
+    inputPrice: 0,
+    outputPrice: 0,
+    family: "google",
+  },
   "deepseek-ai/DeepSeek-R1": {
     inputPrice: 7,
     outputPrice: 7,
