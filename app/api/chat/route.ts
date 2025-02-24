@@ -1,4 +1,4 @@
-import { streamText, UIMessage, Message, Attachment, CoreMessage, convertToCoreMessages } from "ai";
+import { streamText, UIMessage, Message, convertToCoreMessages, appendResponseMessages } from "ai";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
@@ -65,17 +65,18 @@ export async function POST(req: Request) {
         };
         await saveUsage(usageData);
 
+        const combinedMessages = appendResponseMessages({ messages, responseMessages: result.response.messages });
         const chat: Chat = {
           id,
           userId,
           ...(chatAreaId === "left"
             ? {
-                leftMessages: [...messages, { role: "assistant", content: result.text }],
+                leftMessages: combinedMessages,
                 leftModel: model,
                 leftSystemPrompt: system,
               }
             : {
-                rightMessages: [...messages, { role: "assistant", content: result.text }],
+                rightMessages: combinedMessages,
                 rightModel: model,
                 rightSystemPrompt: system,
               }),

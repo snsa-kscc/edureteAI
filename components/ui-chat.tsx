@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Markdown } from "@/components/markdown";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import type { Message, MessageContent } from "@/types";
+import type { MessageContent, Message as LocalMessage } from "@/types";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "next/navigation";
 
@@ -48,7 +48,7 @@ export function Chat({
   chatAreaId: "left" | "right";
   initialModel: string;
   initialSystem?: string;
-  initialMessages?: Message[];
+  initialMessages?: LocalMessage[];
 }) {
   const router = useRouter();
   const [model, setModel] = useState(() => {
@@ -64,7 +64,9 @@ export function Chat({
   const [userScrolled, setUserScrolled] = useState(false);
 
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
-    initialMessages: initialMessages as any,
+    // @ts-ignore - required because of legacy code how handling pictures was implemented
+    initialMessages,
+    sendExtraMessageFields: true,
     body: {
       id,
       userId,
@@ -187,8 +189,8 @@ export function Chat({
       </div>
 
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={scrollAreaRef}>
-        {messages.map((message, idx) => (
-          <div key={message.id ?? idx} className="mr-6 whitespace-pre-wrap md:mr-12">
+        {messages.map((message) => (
+          <div key={message.id} className="mr-6 whitespace-pre-wrap md:mr-12">
             {message.role === "user" ? (
               <div className="mb-6 flex gap-3">
                 <Avatar>

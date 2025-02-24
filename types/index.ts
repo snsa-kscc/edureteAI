@@ -7,8 +7,7 @@ export type MessageContent = {
   image?: string;
 };
 
-export type Message = Omit<AiMessage, "content" | "id"> & {
-  id?: string;
+export type Message = Omit<AiMessage, "content"> & {
   content: string | MessageContent[];
 };
 
