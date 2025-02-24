@@ -47,8 +47,6 @@ export function SimpleChat({ params: { id } }: SimpleChatProps) {
     });
   };
 
-  console.log(messages);
-
   return (
     <div>
       {status === "streaming" && <div className="fixed">Streaming...</div>}

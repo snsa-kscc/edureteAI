@@ -11,6 +11,7 @@ import { getChat } from "@/lib/redis-actions";
 
 const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
 const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20241022";
+const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";
 
 type Params = Promise<{ id: string }>;
 
@@ -41,13 +42,21 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row justify-evenly">
-          <Chat userId={userId} id={params.id} chatAreaId="left" initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL} initialSystem={chat?.leftSystemPrompt} />
+          <Chat
+            userId={userId}
+            id={params.id}
+            chatAreaId="left"
+            initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
+            initialSystem={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialMessages={chat?.leftMessages}
+          />
           <Chat
             userId={userId}
             id={params.id}
             chatAreaId="right"
             initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
-            initialSystem={chat?.rightSystemPrompt}
+            initialSystem={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialMessages={chat?.rightMessages}
           />
         </div>
         <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>

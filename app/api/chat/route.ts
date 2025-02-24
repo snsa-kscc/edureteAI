@@ -4,12 +4,12 @@ import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import type { Usage, Chat } from "@/types";
-import { v4 as uuidv4 } from "uuid";
 
 export const runtime = "edge";
 
 interface ChatRequest {
   messages: Message[];
+  id: string;
   userId: string;
   model: string;
   system: string;
@@ -22,8 +22,7 @@ interface ChatRequest {
 
 export async function POST(req: Request) {
   try {
-    const { messages, userId, model, system, chatAreaId }: ChatRequest = await req.json();
-
+    const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
     // const hasQuotaAvailable = await checkQuota(userId, model);
 
     // if (!hasQuotaAvailable) {
@@ -64,30 +63,29 @@ export async function POST(req: Request) {
           totalTokens: result.usage.totalTokens,
           timestamp: new Date(),
         };
-        // await saveUsage(usageData);
+        await saveUsage(usageData);
 
-        // const chat: Chat = {
-        //   id: uuidv4(),
-        //   userId,
-        //   ...(chatAreaId === "left"
-        //     ? {
-        //         leftMessages: [...messages, { role: "assistant", content: result.text }],
-        //         leftModel: model,
-        //         leftSystemPrompt: system,
-        //       }
-        //     : {
-        //         rightMessages: [...messages, { role: "assistant", content: result.text }],
-        //         rightModel: model,
-        //         rightSystemPrompt: system,
-        //       }),
-        //   title: messages[0]?.content?.substring?.(0, 100) || "New Chat",
-        //   path: `/c/${id}`,
-        //   createdAt: new Date(),
-        // };
-        // await saveChat(chat);
+        const chat: Chat = {
+          id,
+          userId,
+          ...(chatAreaId === "left"
+            ? {
+                leftMessages: [...messages, { role: "assistant", content: result.text }],
+                leftModel: model,
+                leftSystemPrompt: system,
+              }
+            : {
+                rightMessages: [...messages, { role: "assistant", content: result.text }],
+                rightModel: model,
+                rightSystemPrompt: system,
+              }),
+          title: messages[0]?.content?.substring?.(0, 100) || "New Chat",
+          path: `/chat/${id}`,
+          createdAt: new Date(),
+        };
+        await saveChat(chat);
       },
     });
-
     return result.toDataStreamResponse();
   } catch (error) {
     console.error(error);

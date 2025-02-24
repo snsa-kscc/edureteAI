@@ -41,8 +41,6 @@ export const AI = createAI<AIState, UIState>({
         path,
       };
 
-      console.log(chat);
-
       await saveChat(chat);
     } else {
       return;

@@ -209,8 +209,8 @@ export function Chat({
         </Popover>
       </div>
       <ScrollArea className="mb-2 grow rounded-md border p-4" ref={scrollAreaRef}>
-        {conversation.map((m: any) => (
-          <div key={m.id} className="mr-6 whitespace-pre-wrap md:mr-12">
+        {conversation.map((m: any, i: number) => (
+          <div key={m.id ?? i} className="mr-6 whitespace-pre-wrap md:mr-12">
             {m.role === "user" && (
               <div className="mb-6 flex gap-3">
                 <Avatar>
