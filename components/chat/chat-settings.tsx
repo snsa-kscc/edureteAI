@@ -56,7 +56,7 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-96 m-4">
-          <Textarea className="p-2 h-48" value={system || ""} onChange={(e) => onSystemChange(e.target.value)} placeholder="Unesite sistemsku uputu" />
+          <Textarea className="p-2 h-48" value={system || ""} onChange={(e) => onSystemChange(e.target.value)} placeholder="Unesi sistemsku uputu" />
         </PopoverContent>
       </Popover>
     </div>

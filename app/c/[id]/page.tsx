@@ -3,14 +3,12 @@ import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Chat } from "@/components/chat";
+import { Chat } from "@/components/use-chat";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
 import { getChat } from "@/lib/redis-actions";
-import { AI } from "@/app/ai";
 
-export const runtime = "edge";
 const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
 const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";
 const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";
@@ -44,42 +42,24 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row justify-evenly">
-          <AI
-            initialAIState={{
-              userId: chat?.userId ?? userId,
-              chatId: params.id,
-              chatAreaId: "left",
-              messages: chat?.leftMessages ?? [],
-              model: chat?.leftModel ?? DEFAULT_LEFT_MODEL,
-              system: chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT,
-            }}
-            initialUIState={[]}
-          >
-            <Chat
-              userId={userId}
-              id={params.id}
-              initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
-              initialSystem={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
-            />
-          </AI>
-          <AI
-            initialAIState={{
-              userId: chat?.userId ?? userId,
-              chatId: params.id,
-              chatAreaId: "right",
-              messages: chat?.rightMessages ?? [],
-              model: chat?.rightModel ?? DEFAULT_RIGHT_MODEL,
-              system: chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT,
-            }}
-            initialUIState={[]}
-          >
-            <Chat
-              userId={userId}
-              id={params.id}
-              initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
-              initialSystem={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
-            />
-          </AI>
+          <Chat
+            isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
+            userId={userId}
+            id={params.id}
+            chatAreaId="left"
+            initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
+            initialSystem={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialMessages={chat?.leftMessages}
+          />
+          <Chat
+            isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
+            userId={userId}
+            id={params.id}
+            chatAreaId="right"
+            initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
+            initialSystem={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialMessages={chat?.rightMessages}
+          />
         </div>
         <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>
       </main>

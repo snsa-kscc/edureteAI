@@ -42,6 +42,7 @@ export function Chat({
   const [isPending, startTransition] = useTransition();
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
   const [userScrolled, setUserScrolled] = useState(false);
+  const [initialMessagesCount, setInitialMessagesCount] = useState<number | null>(null);
 
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     // @ts-ignore - required because of legacy code how handling pictures was implemented
@@ -61,11 +62,14 @@ export function Chat({
   }, []);
 
   useEffect(() => {
-    const messagesLength = messages?.length;
-    if (messagesLength % 2 === 0 && messagesLength > 0 && status === "ready") {
+    if (initialMessagesCount === null && messages.length > 0) {
+      setInitialMessagesCount(messages.length);
+      return;
+    }
+    if (initialMessagesCount !== null && messages.length > initialMessagesCount && messages.length % 2 === 0 && status === "ready") {
       router.refresh();
     }
-  }, [messages, router, status]);
+  }, [messages, status, initialMessagesCount]);
 
   useEffect(() => {
     const viewport = scrollAreaRef.current;
