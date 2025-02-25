@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ChatSettingsProps {
   model: string;
@@ -19,14 +20,31 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
         <SelectTrigger className="max-w-72 mb-2">
           <SelectValue placeholder="" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="overflow-visible">
           <SelectGroup>
-            <SelectLabel>Available Models</SelectLabel>
-            {CHAT_MODELS.map(({ value, label }) => (
-              <SelectItem key={value} value={value} disabled={hasImagesInConversation && MODELS_WITHOUT_IMAGE_SUPPORT.includes(value)}>
-                {label}
-              </SelectItem>
-            ))}
+            <SelectLabel>Dostupni modeli</SelectLabel>
+            <TooltipProvider>
+              {CHAT_MODELS.map(({ value, label }) =>
+                hasImagesInConversation && MODELS_WITHOUT_IMAGE_SUPPORT.includes(value) ? (
+                  <Tooltip key={value}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <SelectItem value={value} disabled={hasImagesInConversation && MODELS_WITHOUT_IMAGE_SUPPORT.includes(value)}>
+                          {label}
+                        </SelectItem>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" sideOffset={15}>
+                      <p className="max-w-xs">Vaš razgovor sadrži slike, ali ovaj model ne podržava unos slika. Molimo odaberite drugi model.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                )
+              )}
+            </TooltipProvider>
           </SelectGroup>
         </SelectContent>
       </Select>
@@ -38,7 +56,7 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-96 m-4">
-          <Textarea className="p-2 h-48" value={system || ""} onChange={(e) => onSystemChange(e.target.value)} placeholder="Enter a system prompt" />
+          <Textarea className="p-2 h-48" value={system || ""} onChange={(e) => onSystemChange(e.target.value)} placeholder="Unesite sistemsku uputu" />
         </PopoverContent>
       </Popover>
     </div>
