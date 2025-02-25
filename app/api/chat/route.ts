@@ -19,11 +19,11 @@ interface ChatRequest {
 export async function POST(req: Request) {
   try {
     const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
-    // const hasQuotaAvailable = await checkQuota(userId, model);
+    const hasQuotaAvailable = await checkQuota(userId, model);
 
-    // if (!hasQuotaAvailable) {
-    //   return Response.json({ error: "You have exceeded your quota. Please contact support.", status: 429 });
-    // }
+    if (!hasQuotaAvailable) {
+      return Response.json({ error: "You have exceeded your quota. Please contact support.", status: 429 });
+    }
 
     const initialMessages = messages.slice(0, -1);
     const currentMessage = messages[messages.length - 1];
