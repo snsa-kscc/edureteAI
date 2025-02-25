@@ -1,4 +1,4 @@
-import { streamText, UIMessage, Message, convertToCoreMessages, appendResponseMessages } from "ai";
+import { streamText, Message, appendResponseMessages } from "ai";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
@@ -16,10 +16,6 @@ interface ChatRequest {
   chatAreaId: string;
 }
 
-// interface ExtendedMessage extends Omit<Message, "content"> {
-//   content: string | Array<{ type: string; text?: string; image?: URL }>;
-// }
-
 export async function POST(req: Request) {
   try {
     const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
@@ -34,7 +30,7 @@ export async function POST(req: Request) {
 
     const content = currentMessage.experimental_attachments?.some((attachment) => attachment.contentType?.startsWith("image/"))
       ? [
-          { type: "text", text: currentMessage.content },
+          { type: "text", text: currentMessage.content.trim() || "Analiziraj sliku." },
           ...currentMessage.experimental_attachments
             .filter((attachment) => attachment.contentType?.startsWith("image/"))
             .map((attachment) => ({
@@ -42,7 +38,7 @@ export async function POST(req: Request) {
               image: new URL(attachment.url),
             })),
         ]
-      : currentMessage.content;
+      : currentMessage.content.trim();
 
     const result = streamText({
       model: handleModelProvider(model),
@@ -80,7 +76,7 @@ export async function POST(req: Request) {
                 rightModel: model,
                 rightSystemPrompt: system,
               }),
-          title: messages[0]?.content?.substring?.(0, 100) || "New Chat",
+          title: messages[0]?.content?.substring?.(0, 100) || "Novi razgovor",
           path: `/chat/${id}`,
           createdAt: new Date(),
         };

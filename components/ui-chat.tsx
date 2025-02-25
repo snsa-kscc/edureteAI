@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useRef, useTransition, useEffect } from "react";
-import { useChat } from "@ai-sdk/react";
-import { toast } from "sonner";
-import { useImageUpload } from "@/hooks/use-image-upload";
-import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
-import type { Message as LocalMessage } from "@/types";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "next/navigation";
-import { ChatMessages } from "./chat/chat-messages";
-import { ChatForm } from "./chat/chat-form";
-import { ChatSettings } from "./chat/chat-settings";
+import { useChat } from "@ai-sdk/react";
+import { useImageUpload } from "@/hooks/use-image-upload";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { ChatMessages } from "@/components/chat/chat-messages";
+import { ChatForm } from "@/components/chat/chat-form";
+import { ChatSettings } from "@/components/chat/chat-settings";
+import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT } from "@/lib/chat-config";
+import { toast } from "sonner";
+import type { Message as LocalMessage } from "@/types";
 
 export function Chat({
   userId,
@@ -41,7 +41,7 @@ export function Chat({
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
   const [userScrolled, setUserScrolled] = useState(false);
 
-  const { messages, input, handleInputChange, handleSubmit, status } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, status, setInput, append } = useChat({
     // @ts-ignore - required because of legacy code how handling pictures was implemented
     initialMessages,
     sendExtraMessageFields: true,
@@ -117,10 +117,7 @@ export function Chat({
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const messageText = input.trim() === "" && uploadedImage ? "Analize picture" : input;
-
     handleSubmit(e, {
-      data: { text: messageText + "bla" },
       allowEmptySubmit: true,
       experimental_attachments: uploadedImage
         ? [
