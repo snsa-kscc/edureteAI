@@ -3,7 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Chat } from "@/components/chat-action";
+import { Chat } from "@/components/action-chat";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
