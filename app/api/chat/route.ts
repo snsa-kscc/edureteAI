@@ -77,7 +77,7 @@ export async function POST(req: Request) {
                 rightSystemPrompt: system,
               }),
           title: messages[0]?.content?.substring?.(0, 100) || "Novi razgovor",
-          path: `/chat/${id}`,
+          path: `/c/${id}`,
           createdAt: new Date(),
         };
         await saveChat(chat);
