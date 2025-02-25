@@ -10,7 +10,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { getChat } from "@/lib/redis-actions";
 
 const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
-const DEFAULT_RIGHT_MODEL = "claude-3-5-sonnet-20241022";
+const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";
 const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";
 
 type Params = Promise<{ id: string }>;

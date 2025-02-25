@@ -2,5 +2,5 @@ import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
-  redirect(`/chat/${uuidv4()}`);
+  redirect(`/c/${uuidv4()}`);
 }
