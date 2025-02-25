@@ -52,11 +52,20 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="mb-2">
-            System Prompt
+            Značajke razgovora
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-96 m-4">
-          <Textarea className="p-2 h-48" value={system || ""} onChange={(e) => onSystemChange(e.target.value)} placeholder="Unesi sistemsku uputu" />
+          <Textarea
+            className="p-2 h-48"
+            value={system || ""}
+            onChange={(e) => onSystemChange(e.target.value)}
+            placeholder="Primjeri matematičkih uputa:
+            • Budi strpljivi učitelj matematike koji objašnjava korak po korak
+            • Koristi konkretne primjere iz stvarnog života za objašnjavanje formula
+            • Kad rješavaš zadatke, prikaži međukorake i objasni svaki postupak
+            • Ako učenik pogriješi, objasni gdje je greška i kako je ispraviti"
+          />
         </PopoverContent>
       </Popover>
     </div>
