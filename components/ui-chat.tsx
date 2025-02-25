@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import type { Message as LocalMessage } from "@/types";
 
 export function Chat({
+  isOwner,
   userId,
   id,
   chatAreaId,
@@ -21,6 +22,7 @@ export function Chat({
   initialSystem,
   initialMessages,
 }: {
+  isOwner: boolean;
   userId: string | undefined;
   id: string;
   chatAreaId: "left" | "right";
@@ -41,7 +43,7 @@ export function Chat({
   const [_, setNewChatId] = useLocalStorage("newChatId", id);
   const [userScrolled, setUserScrolled] = useState(false);
 
-  const { messages, input, handleInputChange, handleSubmit, status, setInput, append } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     // @ts-ignore - required because of legacy code how handling pictures was implemented
     initialMessages,
     sendExtraMessageFields: true,
@@ -58,12 +60,12 @@ export function Chat({
     setNewChatId(id);
   }, []);
 
-  // useEffect(() => {
-  //   const messagesLength = messages?.length;
-  //   if (messagesLength % 2 === 0 && messagesLength > 0) {
-  //     router.refresh();
-  //   }
-  // }, [messages, router]);
+  useEffect(() => {
+    const messagesLength = messages?.length;
+    if (messagesLength % 2 === 0 && messagesLength > 0 && status === "ready") {
+      router.refresh();
+    }
+  }, [messages, router, status]);
 
   useEffect(() => {
     const viewport = scrollAreaRef.current;
@@ -151,17 +153,18 @@ export function Chat({
       />
 
       <ChatMessages ref={scrollAreaRef} messages={messages} />
-
-      <ChatForm
-        input={input}
-        onInputChange={handleInputChange}
-        onSubmit={onSubmit}
-        onImageUpload={handleImageUpload}
-        onDeleteImage={handleDeleteImage}
-        uploadedImage={uploadedImage}
-        isLoading={status === "streaming" || isPending}
-        isImageUploadDisabled={MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
-      />
+      {isOwner && (
+        <ChatForm
+          input={input}
+          onInputChange={handleInputChange}
+          onSubmit={onSubmit}
+          onImageUpload={handleImageUpload}
+          onDeleteImage={handleDeleteImage}
+          uploadedImage={uploadedImage}
+          isLoading={status === "streaming" || isPending}
+          isImageUploadDisabled={MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
+        />
+      )}
     </div>
   );
 }

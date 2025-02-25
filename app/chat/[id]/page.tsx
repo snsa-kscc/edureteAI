@@ -43,6 +43,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
         </div>
         <div className="flex flex-col lg:flex-row justify-evenly">
           <Chat
+            isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
             id={params.id}
             chatAreaId="left"
@@ -51,6 +52,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
             initialMessages={chat?.leftMessages}
           />
           <Chat
+            isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
             id={params.id}
             chatAreaId="right"
