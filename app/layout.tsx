@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { hrHR } from "@clerk/localizations";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -18,7 +19,7 @@ export default async function RootLayout({
   // const { sessionClaims } = await auth();
 
   return (
-    <ClerkProvider afterSignOutUrl={"/sign-in"}>
+    <ClerkProvider afterSignOutUrl={"/sign-in"} localization={hrHR}>
       {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
         <head>
