@@ -7,11 +7,8 @@ import { Chat } from "@/components/use-chat";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
+import { DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL, DEFAULT_USER_SYSTEM_PROMPT } from "@/lib/chat-config";
 import { getChat } from "@/lib/redis-actions";
-
-const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
-const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";
-const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";
 
 type Params = Promise<{ id: string }>;
 

@@ -12,3 +12,7 @@ export const CHAT_MODELS = [
 ];
 
 export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
+
+export const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
+export const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";
+export const DEFAULT_USER_SYSTEM_PROMPT = "Write your answer in LaTeX notation.";

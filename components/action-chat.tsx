@@ -5,6 +5,7 @@ import { readStreamableValue, useAIState, useActions, useUIState } from "ai/rsc"
 import { useRouter } from "next/navigation";
 import { SendHorizontalIcon, ImageIcon, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
+import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT } from "@/lib/chat-config";
 import { Markdown } from "@/components/markdown";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -19,21 +20,6 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import type { MessageContent, ClientMessage } from "@/types";
-
-const CHAT_MODELS = [
-  { value: "accounts/fireworks/models/deepseek-r1", label: "Deepseek/DeepSeek R1 via Fireworks" },
-  { value: "deepseek-ai/DeepSeek-R1", label: "Deepseek/DeepSeek R1 via TogetherAI" },
-  { value: "gemini-2.0-flash", label: "Google/Gemini 2.0 Flash" },
-  { value: "gemini-2.0-flash-thinking-exp-01-21", label: "Google/Gemini 2.0 Flash Thinking Experimental" },
-  { value: "o1-preview", label: "OpenAI/o1-preview" },
-  { value: "o1-mini", label: "OpenAI/o1-mini" },
-  { value: "gpt-4o", label: "OpenAI/GPT-4o" },
-  { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
-  { value: "claude-3-7-sonnet-latest", label: "Anthropic/Claude 3.7 Sonnet" },
-  { value: "claude-3-5-sonnet-latest", label: "Anthropic/Claude 3.5 Sonnet" },
-];
-
-const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
 
 export function Chat({
   userId,

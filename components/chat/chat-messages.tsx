@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
+import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Markdown } from "@/components/markdown";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import type { UIMessage } from "ai";
-import Image from "next/image";
 
 interface ChatMessagesProps {
   messages: UIMessage[];

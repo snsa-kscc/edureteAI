@@ -8,7 +8,6 @@ import { getUniqueFamilies } from "@/lib/utils";
 
 type Params = Promise<{ provider: string }>;
 
-export const dynamic = "force-dynamic";
 const providers = getUniqueFamilies();
 
 export default async function ProviderPage(props: { params: Promise<Params> }) {

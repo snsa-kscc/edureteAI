@@ -1,8 +1,8 @@
 import { useRef } from "react";
+import Image from "next/image";
 import { Loader2, SendHorizontalIcon, ImageIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image";
 import { useEnterSubmit } from "@/hooks/use-enter-submit";
 
 interface ChatFormProps {
