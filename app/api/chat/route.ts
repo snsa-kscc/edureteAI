@@ -1,4 +1,5 @@
-import { streamText, Message, appendResponseMessages } from "ai";
+import { streamText, type Message, appendResponseMessages } from "ai";
+import { auth } from "@clerk/nextjs/server";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
@@ -17,6 +18,13 @@ interface ChatRequest {
 }
 
 export async function POST(req: Request) {
+  const { sessionClaims } = await auth();
+  const userId = sessionClaims?.userId;
+
+  if (!userId) {
+    return Response.json({ error: "Unauthorized", status: 401 });
+  }
+
   try {
     const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
     const hasQuotaAvailable = await checkQuota(userId, model);
