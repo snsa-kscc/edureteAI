@@ -173,6 +173,8 @@ export function Chat({
       "image/*": [],
     },
     maxFiles: 1,
+    noClick: true,
+    noKeyboard: true,
     disabled: status === "streaming" || isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
   });
 
