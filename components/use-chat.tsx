@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useTransition, useEffect } from "react";
+import { useState, useRef, useTransition, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { useImageUpload } from "@/hooks/use-image-upload";
@@ -11,6 +11,7 @@ import { ChatSettings } from "@/components/chat/chat-settings";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT } from "@/lib/chat-config";
 import { toast } from "sonner";
+import { useDropzone } from "react-dropzone";
 import type { Message as LocalMessage } from "@/types";
 
 export function Chat({
@@ -146,8 +147,44 @@ export function Chat({
   const hasImagesInConversation =
     hasLegacyImagesInConversation || messages.some((m) => m.experimental_attachments?.some((a) => a.contentType?.startsWith("image/*")));
 
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (status === "streaming" || isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)) {
+        return;
+      }
+
+      const file = acceptedFiles[0];
+      if (file) {
+        const fakeEvent = {
+          target: {
+            files: [file],
+          },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+        handleImageUpload(fakeEvent);
+      }
+    },
+    [status, isPending, uploadedImage, model, handleImageUpload]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [],
+    },
+    maxFiles: 1,
+    disabled: status === "streaming" || isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
+  });
+
   return (
-    <div className="w-full p-4 flex flex-col h-[80vh]">
+    <div {...getRootProps()} className={`w-full p-4 flex flex-col h-[80vh] relative ${isDragActive ? "bg-emerald-50/10" : ""}`}>
+      {isDragActive && (
+        <div className="absolute inset-0 bg-emerald-500/10 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-dashed border-emerald-500">
+          <p className="text-emerald-700 font-medium">Ubaci sliku ovdje...</p>
+        </div>
+      )}
+      <input {...getInputProps()} />
+
       <ChatSettings
         model={model}
         system={system}
