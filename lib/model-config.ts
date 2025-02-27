@@ -51,6 +51,11 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 4.4,
     family: "openai",
   },
+  "gpt-4.5-preview": {
+    inputPrice: 75.0,
+    outputPrice: 150.0,
+    family: "openai",
+  },
   "gpt-4o": {
     inputPrice: 2.5,
     outputPrice: 10.0,
