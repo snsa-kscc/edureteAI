@@ -45,7 +45,7 @@ export function Chat({
   const [userScrolled, setUserScrolled] = useState(false);
   const [initialMessagesCount, setInitialMessagesCount] = useState<number | null>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, status } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, status, error } = useChat({
     // @ts-ignore - required because of legacy code how handling pictures was implemented
     initialMessages,
     sendExtraMessageFields: true,
@@ -177,6 +177,18 @@ export function Chat({
     noKeyboard: true,
     disabled: status === "streaming" || isPending || !!uploadedImage || MODELS_WITHOUT_IMAGE_SUPPORT.includes(model),
   });
+
+  useEffect(() => {
+    if (error) {
+      if (error.message.includes("Failed to fetch")) {
+        toast.error("Greška u povezivanju sa serverom. Molimo provjerite vašu internet vezu.");
+      } else if (error.message.includes("Too many requests")) {
+        toast.error("Previše zahtjeva. Molimo pričekajte nekoliko trenutaka.");
+      } else {
+        toast.error(`Došlo je do greške: ${error.message}`);
+      }
+    }
+  }, [error]);
 
   return (
     <div {...getRootProps()} className={`w-full p-4 flex flex-col h-[80vh] relative ${isDragActive ? "bg-emerald-50/10" : ""}`}>
