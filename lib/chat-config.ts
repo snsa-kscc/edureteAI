@@ -28,3 +28,5 @@ Only after showing the formula, proceed to explain concepts/solve the problem.  
 
 // za premium tier - x messages -3k messages
 // 4o i 3.7 sonnet su cappped na manje - 500 messages
+
+// pokusati izvuci cijenu po upitima

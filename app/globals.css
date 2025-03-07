@@ -208,21 +208,3 @@
 .katex-display.katex-display > .katex {
   white-space: normal;
 }
-
-.katex-display::-webkit-scrollbar {
-  height: 4px;
-}
-
-.katex-display::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 2px;
-}
-
-.katex-display::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 2px;
-}
-
-.katex-display::-webkit-scrollbar-thumb:hover {
-  background: #666;
-}
