@@ -191,7 +191,7 @@ export function Chat({
   }, [error]);
 
   return (
-    <div {...getRootProps()} className={`w-full p-4 flex flex-col h-[80vh] relative ${isDragActive ? "bg-emerald-50/10" : ""}`}>
+    <div {...getRootProps()} className={`basis-1/2 p-4 flex flex-col h-[80vh] relative ${isDragActive ? "bg-emerald-50/10" : ""}`}>
       {isDragActive && (
         <div className="absolute inset-0 bg-emerald-500/10 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-dashed border-emerald-500">
           <p className="text-emerald-700 font-medium">Ubaci sliku ovdje...</p>

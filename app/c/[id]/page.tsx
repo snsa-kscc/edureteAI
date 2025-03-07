@@ -38,7 +38,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
             <div className="flex items-center">{userId && <UserButton />}</div>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row justify-evenly">
+        <div className="flex flex-col lg:flex-row">
           <Chat
             isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
