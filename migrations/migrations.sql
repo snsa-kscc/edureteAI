@@ -30,9 +30,19 @@ CREATE TABLE IF NOT EXISTS limits (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create referrals table
+CREATE TABLE IF NOT EXISTS referrals (
+  id SERIAL PRIMARY KEY,
+  referrer_id TEXT NOT NULL,
+  referred_id TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(referred_id)
+);
+
 -- Create indexes for better performance
 CREATE INDEX idx_usage_user_id ON usage(user_id);
 CREATE INDEX idx_usage_user_model ON usage(user_id, model);
 CREATE INDEX idx_usage_timestamp ON usage(timestamp);
 CREATE INDEX idx_quotas_user_model_family ON quotas(user_id, model_family);
 CREATE INDEX idx_limits_user_model_family ON limits(user_id, model_family);
+CREATE INDEX idx_referrals_referrer ON referrals(referrer_id);

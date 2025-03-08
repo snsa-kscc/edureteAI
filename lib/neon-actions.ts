@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { usage, quotas, limits } from "@/db/schema";
+import { usage, quotas, limits, referrals } from "@/db/schema";
 import { MODEL_CONFIGS } from "./model-config";
 import { eq, and, gt, lt, sql } from "drizzle-orm";
 import { Usage } from "@/types";
@@ -161,4 +161,16 @@ export async function checkQuota(userId: string, model: string): Promise<boolean
   const modelFamily = MODEL_CONFIGS[model].family;
   const quota = await getUserQuota(userId, modelFamily);
   return quota.totalCost < quota.quotaLimit;
+}
+
+export async function saveReferral(referrerId: string, referredId: string) {
+  await db.insert(referrals).values({
+    referrerId,
+    referredId,
+    createdAt: new Date(),
+  });
+}
+
+export async function getReferrals(referrerId: string) {
+  return await db.select().from(referrals).where(eq(referrals.referrerId, referrerId));
 }

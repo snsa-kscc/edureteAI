@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp, decimal } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, decimal, primaryKey } from "drizzle-orm/pg-core";
 
 export const usage = pgTable("usage", {
   id: serial("id").primaryKey(),
@@ -27,4 +27,11 @@ export const limits = pgTable("limits", {
   modelFamily: text("model_family").notNull(),
   quotaLimit: decimal("quota_limit", { precision: 10, scale: 2 }).notNull(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const referrals = pgTable("referrals", {
+  id: serial("id").primaryKey(),
+  referrerId: text("referrer_id").notNull(),
+  referredId: text("referred_id").notNull().unique(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
