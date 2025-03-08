@@ -14,7 +14,7 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
   return (
     <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
       {messages.map((message) => (
-        <div key={message.id} className="mr-6 whitespace-pre-wrap md:mr-12">
+        <div key={message.id} className="sm:mr-6 whitespace-pre-wrap md:mr-12">
           {message.role === "user" ? (
             <div className="mb-6 flex gap-3">
               <Avatar>

@@ -193,13 +193,13 @@
   background-color: #868686;
 }
 
-.katex.katex {
-  font-size: 1.4rem;
+@media (min-width: 640px) {
+  .katex.katex {
+    font-size: 1.4rem;
+  }
 }
 
 .katex-display {
-  overflow-x: scroll;
-  overflow-y: hidden;
   border-radius: 0.5rem;
   padding: 1rem;
   background: oklch(0.279 0.041 260.031);
@@ -207,4 +207,17 @@
 
 .katex-display.katex-display > .katex {
   white-space: normal;
+}
+
+.katex.katex .base {
+  width: auto;
+  white-space: normal;
+}
+
+.katex.katex .boxpad {
+  display: inline;
+}
+
+.katex.katex .fbox {
+  display: none;
 }
