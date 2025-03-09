@@ -202,6 +202,10 @@
 .katex-display {
   border-radius: 0.5rem;
   padding: 1rem;
+  background: oklch(0.92 0.004 286.32);
+}
+
+.dark .katex-display {
   background: oklch(0.279 0.041 260.031);
 }
 

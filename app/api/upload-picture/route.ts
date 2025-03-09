@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import { v4 as uuidv4 } from "uuid";
 import { headers } from "next/headers";
 
-const S3 = new S3Client({
+const s3 = new S3Client({
   region: "auto",
   endpoint: process.env.CLOUDFLARE_R2_ENDPOINT,
   credentials: {
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     const image = sharp(buffer);
     const metadata = await image.metadata();
 
-    let resizedBuffer = buffer;
+    let resizedBuffer;
     if (metadata.width && metadata.height && (metadata.width > 1500 || metadata.height > 1500)) {
       resizedBuffer = await image
         .resize(1500, 1500, {
@@ -48,14 +49,17 @@ export async function POST(request: NextRequest) {
     }
 
     const uniqueFilename = `${uuidv4()}-${file.name}`;
-    const command = new PutObjectCommand({
-      Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
-      Key: uniqueFilename,
-      Body: resizedBuffer,
-      ContentType: file.type,
+    const upload = new Upload({
+      client: s3,
+      params: {
+        Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
+        Key: uniqueFilename,
+        Body: resizedBuffer || buffer,
+        ContentType: file.type,
+      },
     });
 
-    await S3.send(command);
+    await upload.done();
 
     return NextResponse.json({
       success: true,

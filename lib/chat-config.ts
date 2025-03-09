@@ -6,7 +6,6 @@ export const CHAT_MODELS = [
   { value: "gpt-4o", label: "OpenAI/GPT-4o" },
   { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
   { value: "claude-3-7-sonnet-latest", label: "Anthropic/Claude 3.7 Sonnet" },
-  { value: "claude-3-5-sonnet-latest", label: "Anthropic/Claude 3.5 Sonnet" },
 ];
 
 export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
