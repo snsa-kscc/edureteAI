@@ -12,10 +12,4 @@ export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/
 
 export const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
 export const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";
-export const DEFAULT_USER_SYSTEM_PROMPT = `Write your answer in LaTeX notation.
-
-When the user provides LaTeX code, follow this structure strictly:
-
-Immediately display the rendered formula (compiled via your API) as the first output.
-
-Only after showing the formula, proceed to explain concepts/solve the problem.  After performing the integration, verify your result by differentiating and comparing it with the original integrand.`;
+export const DEFAULT_USER_SYSTEM_PROMPT = "";
