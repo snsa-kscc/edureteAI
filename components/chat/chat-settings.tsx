@@ -52,7 +52,7 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" className="mb-2">
-            Značajke razgovora
+            Prilagodi sebi
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-96 m-4">
@@ -60,11 +60,7 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
             className="p-2 h-48"
             value={system || ""}
             onChange={(e) => onSystemChange(e.target.value)}
-            placeholder="Primjeri matematičkih uputa:
-            • Budi strpljivi učitelj matematike koji objašnjava korak po korak
-            • Koristi konkretne primjere iz stvarnog života za objašnjavanje formula
-            • Kad rješavaš zadatke, prikaži međukorake i objasni svaki postupak
-            • Ako učenik pogriješi, objasni gdje je greška i kako je ispraviti"
+            placeholder="Pozdrav, pripremam se za maturu/ispit/usmeni ispit i trebao/la bih pomoć pri rješavanju zadatka. Molim te da mi pružiš detaljno/vrlo detaljno/sažeto objašnjenje teorije potrebne za njegovo rješavanje, zatim da samostalno riješiš zadatak uz sažetak ključnih koraka. Nakon toga, želio/željela bih tvoju asistenciju korak po korak dok ga pokušavam riješiti sam/a. Kada završim, ponudi mi generiranje sličnog/težeg/lakšeg zadatka za dodatnu vježbu."
           />
         </PopoverContent>
       </Popover>
