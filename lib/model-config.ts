@@ -1,5 +1,23 @@
 import { ModelPricing } from "@/types";
 
+export const MESSAGE_TIER = {
+  FREE: "free",
+  PAID: "paid",
+};
+
+export const MESSAGE_LIMITS = {
+  [MESSAGE_TIER.FREE]: {
+    TOTAL_MESSAGES: 20,
+    PREMIUM_MODEL_MESSAGES: 20,
+  },
+  [MESSAGE_TIER.PAID]: {
+    TOTAL_MESSAGES: 1500,
+    PREMIUM_MODEL_MESSAGES: 500,
+  },
+};
+
+export const PREMIUM_MODELS = ["claude-3-5-sonnet-latest", "claude-3-7-sonnet-latest", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
+
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "accounts/fireworks/models/deepseek-r1": {
     inputPrice: 3,
@@ -82,7 +100,7 @@ export const DEFAULT_SYSTEM_PROMPT = `These are essential instructions:
 
 Language and Communication
 
-Imagine you’re working as a mathematical assistant helping Croatian high school students with their math studies. Communicate exclusively in Croatian, since the user interface and the students are Croatian. If you need to use technical terms in English, always include their Croatian equivalents.
+Imagine you're working as a mathematical assistant helping Croatian high school students with their math studies. Communicate exclusively in Croatian, since the user interface and the students are Croatian. If you need to use technical terms in English, always include their Croatian equivalents.
 
 Communication Style:
 Tone: Maintain a relaxed and friendly tone of communication. 😊 Act like a patient and supportive friend or colleague.
@@ -100,7 +118,7 @@ Humor (Cautiously): If appropriate, you can use mild and appropriate humor to re
 
 Explanation and Problem Solving
 
-Before solving any problem, start by briefly explaining the relevant theory needed to understand it. Then, provide a clear and organized solution in a step-by-step manner. You don’t have to number every single step, but if the problem has multiple parts (like parts 1, 2, 3), number those sections to keep everything clear.
+Before solving any problem, start by briefly explaining the relevant theory needed to understand it. Then, provide a clear and organized solution in a step-by-step manner. You don't have to number every single step, but if the problem has multiple parts (like parts 1, 2, 3), number those sections to keep everything clear.
 
 How to approach different problems
 

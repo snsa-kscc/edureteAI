@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, timestamp, decimal } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, integer, timestamp, decimal, boolean } from "drizzle-orm/pg-core";
 
 export const usage = pgTable("usage", {
   id: serial("id").primaryKey(),
@@ -26,5 +26,14 @@ export const limits = pgTable("limits", {
   userId: text("user_id").notNull(),
   modelFamily: text("model_family").notNull(),
   quotaLimit: decimal("quota_limit", { precision: 10, scale: 2 }).notNull(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const message_counts = pgTable("message_counts", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  totalMessages: integer("total_messages").notNull().default(0),
+  premiumModelMessages: integer("premium_model_messages").notNull().default(0),
+  subscriptionTier: text("subscription_tier").notNull().default("free"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

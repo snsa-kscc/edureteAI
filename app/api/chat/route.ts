@@ -4,6 +4,7 @@ import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
+import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import type { Usage, Chat } from "@/types";
 
 export const runtime = "edge";
@@ -27,8 +28,13 @@ export async function POST(req: Request) {
 
   try {
     const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
-    const hasQuotaAvailable = await checkQuota(userId, model);
 
+    const messageAvailability = await checkMessageAvailability(userId, model);
+    if (!messageAvailability.hasAvailability) {
+      return Response.json({ error: messageAvailability.message, status: 429 });
+    }
+
+    const hasQuotaAvailable = await checkQuota(userId, model);
     if (!hasQuotaAvailable) {
       return Response.json({ error: "You have exceeded your quota. Please contact support.", status: 429 });
     }
@@ -67,6 +73,8 @@ export async function POST(req: Request) {
           totalTokens: result.usage.totalTokens,
           timestamp: new Date(),
         };
+
+        await incrementMessageCount(userId, model);
         await saveUsage(usageData);
 
         const combinedMessages = appendResponseMessages({ messages, responseMessages: result.response.messages });
