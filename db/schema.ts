@@ -37,3 +37,16 @@ export const message_counts = pgTable("message_counts", {
   subscriptionTier: text("subscription_tier").notNull().default("free"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const subscriptions = pgTable("subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  stripePriceId: text("stripe_price_id"),
+  stripeCurrentPeriodEnd: timestamp("stripe_current_period_end"),
+  tier: text("tier").notNull().default("free"), // "free", "paid", "paid_plus"
+  status: text("status").notNull().default("inactive"), // "active", "canceled", "past_due", "inactive"
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});

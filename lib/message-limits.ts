@@ -5,7 +5,19 @@ import { message_counts } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { MESSAGE_TIER, MESSAGE_LIMITS, PREMIUM_MODELS } from "./model-config";
 
-export async function getUserMessageCounts(userId: string) {
+/**
+ * Gets message counts for given user. If user is not present, assigns new user in free tier.
+ * @param userId
+ * @returns counts object
+ */
+export async function getUserMessageCounts(userId: string): Promise<{
+  id: number;
+  userId: string;
+  updatedAt: Date;
+  totalMessages: number;
+  premiumModelMessages: number;
+  subscriptionTier: string;
+}> {
   const [existingCounts] = await db.select().from(message_counts).where(eq(message_counts.userId, userId));
 
   if (!existingCounts) {
@@ -30,6 +42,12 @@ function isPremiumModel(modelName: string): boolean {
   return PREMIUM_MODELS.includes(modelName);
 }
 
+/**
+ * Checks whether user has enough number of messages to chat with the model.
+ * @param userId
+ * @param modelName
+ * @returns Availability object.
+ */
 export async function checkMessageAvailability(
   userId: string,
   modelName: string
@@ -57,7 +75,7 @@ export async function checkMessageAvailability(
   }
 
   // For paid tier users, check premium model usage separately
-  if (tier === MESSAGE_TIER.PAID && isPremium) {
+  if (tier === (MESSAGE_TIER.PAID || MESSAGE_TIER.PAID_PLUS) && isPremium) {
     const premiumRemaining = tierLimits.PREMIUM_MODEL_MESSAGES - userCounts.premiumModelMessages;
     if (premiumRemaining <= 0) {
       return {
@@ -82,6 +100,11 @@ export async function checkMessageAvailability(
   };
 }
 
+/**
+ * Increments number of messages.
+ * @param userId The user ID
+ * @param modelName Model name
+ */
 export async function incrementMessageCount(userId: string, modelName: string): Promise<void> {
   const userCounts = await getUserMessageCounts(userId);
   const isPremium = isPremiumModel(modelName);
@@ -96,16 +119,47 @@ export async function incrementMessageCount(userId: string, modelName: string): 
     .where(eq(message_counts.userId, userId));
 }
 
+/**
+ * Update a user's subscription tier in the message counts table. If no user is found, adds new user.
+ * @param userId The user ID
+ * @param tier The subscription tier
+ */
 export async function updateUserSubscriptionTier(userId: string, tier: string): Promise<void> {
   // Validate tier is a valid option
   if (!Object.values(MESSAGE_TIER).includes(tier)) {
     throw new Error(`Invalid tier: ${tier}`);
   }
 
+  const existingRecord = await db.select().from(message_counts).where(eq(message_counts.userId, userId)).limit(1);
+
+  if (existingRecord.length) {
+    await db
+      .update(message_counts)
+      .set({
+        subscriptionTier: tier,
+        updatedAt: new Date(),
+      })
+      .where(eq(message_counts.userId, userId));
+  } else {
+    await db.insert(message_counts).values({
+      userId,
+      subscriptionTier: tier,
+      totalMessages: 0,
+      premiumModelMessages: 0,
+    });
+  }
+}
+
+/**
+ * Reset a user's message counts to zero
+ * @param userId The user ID
+ */
+export async function resetUserMessageCounts(userId: string): Promise<void> {
   await db
     .update(message_counts)
     .set({
-      subscriptionTier: tier,
+      totalMessages: 0,
+      premiumModelMessages: 0,
       updatedAt: new Date(),
     })
     .where(eq(message_counts.userId, userId));

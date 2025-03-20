@@ -3,6 +3,7 @@ import { ModelPricing } from "@/types";
 export const MESSAGE_TIER = {
   FREE: "free",
   PAID: "paid",
+  PAID_PLUS: "paid_plus",
 };
 
 export const MESSAGE_LIMITS = {
@@ -13,6 +14,29 @@ export const MESSAGE_LIMITS = {
   [MESSAGE_TIER.PAID]: {
     TOTAL_MESSAGES: 1500,
     PREMIUM_MODEL_MESSAGES: 500,
+  },
+  [MESSAGE_TIER.PAID_PLUS]: {
+    TOTAL_MESSAGES: 1500,
+    PREMIUM_MODEL_MESSAGES: 500,
+  },
+};
+
+export const SUBSCRIPTION_PLANS = {
+  [MESSAGE_TIER.PAID]: {
+    name: "EdureteAI Premium",
+    description: "Premium subscription with 1,500 messages and 500 premium model messages",
+    priceId: process.env.STRIPE_PRICE_ID_PAID || "",
+    totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].TOTAL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
+    tier: MESSAGE_TIER.PAID,
+  },
+  [MESSAGE_TIER.PAID_PLUS]: {
+    name: "EdureteAI Premium Plus",
+    description: "Premium Plus subscription with 1,500 messages and 500 premium model messages",
+    priceId: process.env.STRIPE_PRICE_ID_PAID_PLUS || "",
+    totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].TOTAL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
+    tier: MESSAGE_TIER.PAID_PLUS,
   },
 };
 
