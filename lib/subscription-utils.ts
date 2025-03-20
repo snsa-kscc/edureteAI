@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/db";
 import { subscriptions } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -110,6 +112,13 @@ export async function getSubscriptionPaymentStatus(userId: string) {
  */
 export async function getUserMessageLimits(userId: string) {
   const subscription = await getUserSubscription(userId);
+
+  if (!subscription) {
+    return {
+      totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
+      premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
+    };
+  }
 
   // Default to free tier
   let totalMessages = MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES;

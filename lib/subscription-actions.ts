@@ -67,8 +67,8 @@ export async function createCheckoutSession(plan: CheckoutPlan, returnUrl: strin
         },
       ],
       mode: "subscription",
-      success_url: `${returnUrl}/settings?success=true`,
-      cancel_url: `${returnUrl}/settings?canceled=true`,
+      success_url: `${returnUrl}/success`,
+      cancel_url: `${returnUrl}/`,
       metadata: {
         userId,
         plan,

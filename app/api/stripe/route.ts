@@ -2,6 +2,7 @@ import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { updateSubscriptionInDatabase, getUserIdFromCustomer } from "@/lib/subscription-actions";
+import { updateUserSubscriptionTier, resetUserMessageCounts } from "@/lib/message-limits";
 import { MESSAGE_TIER } from "@/lib/model-config";
 import type Stripe from "stripe";
 
@@ -51,6 +52,8 @@ export async function POST(req: Request) {
             subscription.status,
             new Date(subscription.current_period_end * 1000)
           );
+          await updateUserSubscriptionTier(userId, tier);
+          await resetUserMessageCounts(userId);
         }
         break;
       }

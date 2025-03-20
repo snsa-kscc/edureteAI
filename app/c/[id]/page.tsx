@@ -9,6 +9,7 @@ import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL, DEFAULT_USER_SYSTEM_PROMPT } from "@/lib/chat-config";
 import { getChat } from "@/lib/redis-actions";
+import { SubscriptionButton } from "@/components/subscription-button";
 
 type Params = Promise<{ id: string }>;
 
@@ -34,6 +35,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
             </Button>
           )}
           <div className="flex gap-2">
+            <SubscriptionButton />
             <ModeToggle />
             <div className="flex items-center">{userId && <UserButton />}</div>
           </div>

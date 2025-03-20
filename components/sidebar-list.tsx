@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getChats } from "@/lib/redis-actions";
 import { useMutation } from "@tanstack/react-query";
 import { IconSpinner } from "./ui/icons";
+import { MessageUsageProgress } from "./message-usage-progress";
 
 interface SidebarListProps {
   userId: string | null | undefined;
@@ -26,6 +27,7 @@ export function SidebarList({ userId, userData, role, chats: initialChats }: Sid
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
+      <MessageUsageProgress userId={userId!} />
       {role && (
         <div className="space-y-2 p-2">
           <Select
