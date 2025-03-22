@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL, DEFAULT_USER_SYSTEM_PROMPT } from "@/lib/chat-config";
 import { getChat } from "@/lib/redis-actions";
 import { AI } from "@/app/ai";
+import DashboardLayout from "@/components/layouts/dashboard.tsx";
 
 type Params = Promise<{ id: string }>;
 
@@ -21,7 +22,8 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
   const userId = sessionClaims?.userId;
 
   return (
-    <SidebarProvider>
+    <DashboardLayout>
+      <SidebarProvider>
       <AppSidebar userId={chat?.userId ?? userId} />
       <main className="w-full">
         <div className="m-4">
@@ -80,5 +82,6 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
         <div className="text-xs opacity-40 px-4 py-2">AI may make mistakes. Double-check your work.</div>
       </main>
     </SidebarProvider>
+    </DashboardLayout>
   );
 }
