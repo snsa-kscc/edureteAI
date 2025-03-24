@@ -24,6 +24,7 @@ The app is developed as a chatbot arena web application that uses various LLM AP
 
 - Node.js 20+
 - pnpm 9+
+- Stripe CLI
 
 ## How to run the app locally
 
@@ -39,7 +40,7 @@ git clone https://github.com/snsa-kscc/edureteAI.git
 pnpm install
 ```
 
-3. Create a `.env.local` file and add the following variables:
+3. Create a `.env.local` file and add the variables from `.env.example` file
 
 ```bash
 cp .env.example .env.local
