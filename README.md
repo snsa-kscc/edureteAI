@@ -20,6 +20,43 @@ The app is developed as a chatbot arena web application that uses various LLM AP
 
 ![arch_diagram](https://github.com/user-attachments/assets/c34a6f85-7040-45af-a185-6f65b301f50f)
 
+## Requirements
+
+- Node.js 20+
+- pnpm 9+
+
+## How to run the app locally
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/snsa-kscc/edureteAI.git
+```
+
+2. Install dependencies
+
+```bash
+pnpm install
+```
+
+3. Create a `.env.local` file and add the following variables:
+
+```bash
+cp .env.example .env.local
+```
+
+4. Run the app
+
+```bash
+pnpm dev --turbo
+```
+
+5. Open the app in your browser
+
+```bash
+http://localhost:3000
+```
+
 ---
 
 Made with ❤️ by [dvasadva](https://dvasadva.com).
