@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
 
     let resizedBuffer = buffer;
     if (metadata.width && metadata.height && (metadata.width > 1500 || metadata.height > 1500)) {
+      //@ts-ignore
       resizedBuffer = await image
         .resize(1500, 1500, {
           fit: "inside",
