@@ -7,10 +7,19 @@ on:
 
 jobs:
   notify:
-    if: ${{ secrets.DISCORD_WEBHOOK != '' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check for Discord Webhook
+        id: check-webhook
+        run: |
+          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
+            echo "webhook_present=false" >> $GITHUB_OUTPUT
+          else
+            echo "webhook_present=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Discord Notification
+        if: steps.check-webhook.outputs.webhook_present == 'true'
         uses: tsickert/discord-webhook@v5.3.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
