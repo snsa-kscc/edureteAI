@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Chat } from "@/components/use-chat";
@@ -16,7 +16,7 @@ type Params = Promise<{ id: string }>;
 export default async function ChatPage(props: { params: Promise<Params> }) {
   const params = await props.params;
   const chat = await getChat(params.id);
-
+  const user = await currentUser();
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId;
 
@@ -44,6 +44,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           <Chat
             isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
+            userName={user?.firstName}
             id={params.id}
             chatAreaId="left"
             initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
@@ -53,6 +54,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
           <Chat
             isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
+            userName={user?.firstName}
             id={params.id}
             chatAreaId="right"
             initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
