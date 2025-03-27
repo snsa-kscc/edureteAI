@@ -178,3 +178,4 @@ Use \displaystyle for all fractions and wrap complex expressions in equation blo
 
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.`;
 
+
