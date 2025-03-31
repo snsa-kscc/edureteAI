@@ -6,6 +6,7 @@ import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import type { Usage, Chat } from "@/types";
+import type { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 
 export const runtime = "edge";
 
@@ -64,6 +65,14 @@ export async function POST(req: Request) {
           content,
         } as Message,
       ],
+      providerOptions:
+        model === "o3-mini"
+          ? {
+              openai: {
+                reasoningEffort: "high",
+              } satisfies OpenAIResponsesProviderOptions,
+            }
+          : {},
       onFinish: async (result) => {
         const usageData: Usage = {
           userId,
