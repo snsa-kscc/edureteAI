@@ -8,9 +8,10 @@ import type { UIMessage } from "ai";
 
 interface ChatMessagesProps {
   messages: UIMessage[];
+  userName: string | null | undefined;
 }
 
-export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ messages }, ref) => {
+export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ messages, userName }, ref) => {
   return (
     <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
       {messages.map((message) => (
@@ -19,10 +20,10 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
             <div className="mb-6 flex gap-3">
               <Avatar>
                 <AvatarImage src="" />
-                <AvatarFallback className="text-sm">U</AvatarFallback>
+                <AvatarFallback className="text-sm">{userName?.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="mt-1.5">
-                <p className="font-semibold opacity-70">You</p>
+                <p className="font-semibold opacity-70">{userName}</p>
                 <div className="mt-1.5 text-sm leading-relaxed">
                   {/* start legacy  */}
                   {Array.isArray(message.content)

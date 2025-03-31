@@ -17,6 +17,7 @@ import type { Message as LocalMessage } from "@/types";
 export function Chat({
   isOwner,
   userId,
+  userName,
   id,
   chatAreaId,
   initialModel,
@@ -25,6 +26,7 @@ export function Chat({
 }: {
   isOwner: boolean;
   userId: string | undefined;
+  userName: string | null | undefined;
   id: string;
   chatAreaId: "left" | "right";
   initialModel: string;
@@ -207,7 +209,7 @@ export function Chat({
         hasImagesInConversation={hasImagesInConversation}
       />
 
-      <ChatMessages ref={scrollAreaRef} messages={messages} />
+      <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} />
       {isOwner && (
         <ChatForm
           input={input}
