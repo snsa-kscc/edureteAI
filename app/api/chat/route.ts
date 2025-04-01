@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { streamText, type Message, appendResponseMessages } from "ai";
+import { streamText, type Message, appendResponseMessages, createDataStreamResponse } from "ai";
 import { auth } from "@clerk/nextjs/server";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
@@ -58,66 +58,73 @@ export async function POST(req: Request) {
         ]
       : currentMessage.content.trim();
 
-    const result = streamText({
-      model: handleModelProvider(model),
-      system: ["o1-mini", "o1-preview"].includes(model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + system,
-      messages: [
-        ...initialMessages,
-        {
-          role: "user",
-          content,
-        } as Message,
-      ],
-      providerOptions:
-        model === "o3-mini"
-          ? {
-              openai: {
-                reasoningEffort: "high",
-              } satisfies OpenAIResponsesProviderOptions,
-            }
-          : {},
-      onFinish: async (result) => {
-        const usageData: Usage = {
-          userId,
-          model,
-          promptTokens: result.usage.promptTokens,
-          completionTokens: result.usage.completionTokens,
-          totalTokens: result.usage.totalTokens,
-          timestamp: new Date(),
-        };
+    return createDataStreamResponse({
+      execute: (dataStream) => {
+        const result = streamText({
+          model: handleModelProvider(model),
+          system: ["o1-mini", "o1-preview"].includes(model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + system,
+          messages: [
+            ...initialMessages,
+            {
+              role: "user",
+              content,
+            } as Message,
+          ],
+          providerOptions:
+            model === "o3-mini"
+              ? {
+                  openai: {
+                    reasoningEffort: "high",
+                  } satisfies OpenAIResponsesProviderOptions,
+                }
+              : {},
+          onFinish: async (result) => {
+            const usageData: Usage = {
+              userId,
+              model,
+              promptTokens: result.usage.promptTokens,
+              completionTokens: result.usage.completionTokens,
+              totalTokens: result.usage.totalTokens,
+              timestamp: new Date(),
+            };
 
-        await incrementMessageCount(userId, model);
-        await saveUsage(usageData);
+            await incrementMessageCount(userId, model);
+            await saveUsage(usageData);
 
-        const combinedMessages = appendResponseMessages({ messages, responseMessages: result.response.messages });
-        const chat: Chat = {
-          id,
-          userId,
-          ...(chatAreaId === "left"
-            ? {
-                leftMessages: combinedMessages,
-                leftModel: model,
-                leftSystemPrompt: system,
-              }
-            : {
-                rightMessages: combinedMessages,
-                rightModel: model,
-                rightSystemPrompt: system,
-              }),
-          title: messages[0]?.content?.substring?.(0, 100) || "Novi razgovor",
-          path: `/c/${id}`,
-          createdAt: new Date(),
-        };
-        await saveChat(chat);
+            const combinedMessages = appendResponseMessages({ messages, responseMessages: result.response.messages });
+            const chat: Chat = {
+              id,
+              userId,
+              ...(chatAreaId === "left"
+                ? {
+                    leftMessages: combinedMessages,
+                    leftModel: model,
+                    leftSystemPrompt: system,
+                  }
+                : {
+                    rightMessages: combinedMessages,
+                    rightModel: model,
+                    rightSystemPrompt: system,
+                  }),
+              title: messages[0]?.content?.substring?.(0, 100) || "Novi razgovor",
+              path: `/c/${id}`,
+              createdAt: new Date(),
+            };
+            await saveChat(chat);
+          },
+          onError: async (error) => {
+            console.error("Error in onFinish callback:", error);
+          },
+        });
+
+        result.consumeStream();
+        result.mergeIntoDataStream(dataStream);
       },
-      onError: async (error) => {
-        console.error("Error in onFinish callback:", error);
-        throw new Error("Failed to process request.");
+      onError: () => {
+        return "Greška prilikom obrade zahtjeva!";
       },
     });
-    return result.toDataStreamResponse();
   } catch (error) {
-    console.error("Error in route handler:", error);
     return new NextResponse("Failed to process request.", { status: 500 });
   }
 }

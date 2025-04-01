@@ -187,7 +187,7 @@ export function Chat({
       } else if (error.message.includes("Too many requests")) {
         toast.error("Previše zahtjeva. Molimo pričekajte nekoliko trenutaka.");
       } else {
-        toast.error(`Došlo je do greške: ${error.message}`);
+        toast.error(`Opis greške: ${error.message}`);
       }
     }
   }, [error]);
