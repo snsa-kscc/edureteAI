@@ -3,7 +3,6 @@ import React, { memo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 interface MarkdownProps {
@@ -15,11 +14,23 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
     /<think>(.*?)<\/think>/gs,
     (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
   );
-  const processedContent = processedThinkTags.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
+  // const processedContent = processedThinkTags.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
 
   const remarkMathOptions = {
     singleDollarTextMath: true,
   };
+
+  let processedContent = processedThinkTags;
+
+  processedContent = processedContent.replace(/\\\[([\s\S]+?)\\\]/g, (_, math) => `<div class="math-display">${math}</div>`);
+  processedContent = processedContent.replace(/\\\(([\\s\\S]+?)\\\)/g, (_, math) => `<span class="math-inline">${math}</span>`);
+  processedContent = processedContent.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => `<div class="math-display">${math}</div>`);
+  processedContent = processedContent.replace(/\$([^$]+?)\$/g, (match, math) => {
+    if (/^\s*\d+(\.\d+)?\s*$/.test(math)) {
+      return match;
+    }
+    return `<span class="math-inline">${math}</span>`;
+  });
 
   const components = {
     code: ({ node, inline, className, children, ...props }: any) => {
@@ -64,7 +75,10 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   return (
     <ReactMarkdown
       components={components}
-      remarkPlugins={[[remarkMath, remarkMathOptions], remarkGfm]}
+      remarkPlugins={[
+        //[remarkMath, remarkMathOptions],
+        remarkGfm,
+      ]}
       rehypePlugins={[rehypeRaw, [rehypeKatex, { output: "htmlAndMathml" }]]}
     >
       {processedContent}

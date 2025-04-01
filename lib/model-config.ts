@@ -195,4 +195,6 @@ This prevents compression and ensures clear formatting.
 
 Use \displaystyle for all fractions and wrap complex expressions in equation blocks ($$...$$) to improve legibility.
 
+Under no circumstances output $$ casually outside LaTeX notation. This is very important because we have custom regex matchers to detect LaTeX notation and casual $$ output will break the pattern. You can output single $ sign when dealing with amounts of money in dollars, but never use double $$ outside of LaTeX notation.
+
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.`;
