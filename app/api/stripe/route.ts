@@ -50,7 +50,7 @@ export async function POST(req: Request) {
             priceId,
             tier,
             subscription.status,
-            new Date(subscription.current_period_end * 1000)
+            new Date(subscription.items.data[0].current_period_end * 1000)
           );
           await updateUserSubscriptionTier(userId, tier);
           await resetUserMessageCounts(userId);
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
           priceId,
           tier,
           subscription.status,
-          new Date(subscription.current_period_end * 1000)
+          new Date(subscription.items.data[0].current_period_end * 1000)
         );
         break;
       }
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
           priceId,
           MESSAGE_TIER.FREE,
           "canceled",
-          new Date(subscription.current_period_end * 1000)
+          new Date(subscription.items.data[0].current_period_end * 1000)
         );
         break;
       }
