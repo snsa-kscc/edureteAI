@@ -11,20 +11,16 @@ interface SubscriptionButtonProps extends ButtonProps {
   label?: string;
 }
 
-export function SubscriptionButton({
-  className,
-  variant = "default",
-  size = "default",
-  showIcon = true,
-  label = "Upgrade",
-  ...props
-}: SubscriptionButtonProps) {
+export function SubscriptionButton({ className, variant = "default", size = "lg", showIcon = true, label = "Nadogradi", ...props }: SubscriptionButtonProps) {
   return (
     <StripeCheckoutDrawer>
       <Button
-        variant={variant}
+        variant="outline"
         size={size}
-        className={cn("font-medium", className)}
+        className={cn(
+          "font-medium w-full border-purple-500 text-white dark:text-purple-500 bg-gradient-to-b from-purple-500 to-purple-300 dark:from-purple-500/30 dark:to-transparent hover:text-gray-200 dark:hover:text-gray-300 transition-all",
+          className
+        )}
         {...props}
       >
         {showIcon && <CreditCard className="mr-2 h-4 w-4" />}
