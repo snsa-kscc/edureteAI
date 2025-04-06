@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL, DEFAULT_USER_SYSTEM_PROMPT } from "@/lib/chat-config";
 import { getChat } from "@/lib/redis-actions";
 import { AI } from "@/app/ai";
+import { currentUser } from "@clerk/nextjs/server";
 
 type Params = Promise<{ id: string }>;
 
@@ -19,10 +20,11 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
 
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId;
+  const user = await currentUser();
 
   return (
     <SidebarProvider>
-      <AppSidebar userId={chat?.userId ?? userId} />
+      <AppSidebar userId={chat?.userId ?? userId} user={user} />
       <main className="w-full">
         <div className="m-4">
           <SidebarTrigger />
