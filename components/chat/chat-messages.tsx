@@ -13,7 +13,7 @@ interface ChatMessagesProps {
 
 export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ messages, userName }, ref) => {
   return (
-    <ScrollArea className="mb-2 grow rounded-md border p-4" ref={ref}>
+    <ScrollArea className="mb-2 grow rounded-md border p-4 h-full min-h-32" ref={ref}>
       {messages.map((message) => (
         <div key={message.id} className="sm:mr-6 whitespace-pre-wrap md:mr-12">
           {message.role === "user" ? (

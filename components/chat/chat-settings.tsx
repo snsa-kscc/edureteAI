@@ -15,7 +15,7 @@ interface ChatSettingsProps {
 
 export function ChatSettings({ model, system, onModelChange, onSystemChange, hasImagesInConversation }: ChatSettingsProps) {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between pb-1">
       <Select onValueChange={onModelChange} value={model}>
         <SelectTrigger className="max-w-72 mb-2">
           <SelectValue placeholder="" />
