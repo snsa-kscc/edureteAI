@@ -10,17 +10,18 @@ interface MarkdownProps {
 }
 
 const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
-  const processedThinkTags = children.replace(
-    /<think>(.*?)<\/think>/gs,
-    (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
-  );
+  // const processedThinkTags = children.replace(
+  //   /<think>(.*?)<\/think>/gs,
+  //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
+  // );
+
   // const processedContent = processedThinkTags.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
 
   const remarkMathOptions = {
     singleDollarTextMath: true,
   };
 
-  let processedContent = processedThinkTags;
+  let processedContent = children;
 
   processedContent = processedContent.replace(/\\\[([\s\S]+?)\\\]/g, (_, math) => `<div class="math-display">${math}</div>`);
   processedContent = processedContent.replace(/\\\(([\\s\\S]+?)\\\)/g, (_, math) => `<span class="math-inline">${math}</span>`);

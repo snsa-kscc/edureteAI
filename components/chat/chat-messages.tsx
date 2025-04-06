@@ -65,6 +65,12 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                   <p className="font-semibold opacity-70">edureteAI</p>
                   <CopyToClipboard message={message} className="-mt-1" />
                 </div>
+                {message.parts && message.parts.length > 0 && message.parts.some((part) => part.type === "reasoning") && (
+                  <div className="my-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-md">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Razmišljanje:</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{message.parts.find((part) => part.type === "reasoning")?.reasoning}</p>
+                  </div>
+                )}
                 <div className="mt-2 text-sm leading-relaxed">
                   <Markdown>{message.content}</Markdown>
                 </div>

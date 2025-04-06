@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { openai } from "@ai-sdk/openai";
+import { openai, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { fireworks } from "@ai-sdk/fireworks";
 import { togetherai } from "@ai-sdk/togetherai";
@@ -8,10 +8,65 @@ import { google } from "@ai-sdk/google";
 import { getYesterdayUsage, getUserQuota } from "./neon-actions";
 import { MODEL_CONFIGS } from "./model-config";
 import { type UserData } from "@/types";
+import { customProvider, wrapLanguageModel, defaultSettingsMiddleware, extractReasoningMiddleware } from "ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const modelProvider = customProvider({
+  languageModels: {
+    "accounts/fireworks/models/deepseek-r1": wrapLanguageModel({
+      middleware: extractReasoningMiddleware({
+        tagName: "think",
+      }),
+      model: fireworks("accounts/fireworks/models/deepseek-r1"),
+    }),
+    "gemini-2.5-pro-exp-03-25": google("gemini-2.5-pro-exp-03-25"),
+    "gemini-2.0-flash": google("gemini-2.0-flash"),
+    "gemini-2.0-flash-thinking-exp-01-21": google("gemini-2.0-flash-thinking-exp-01-21"),
+    "o1-mini": openai("o1-mini"),
+    "o3-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              reasoningEffort: "high",
+            } satisfies OpenAIResponsesProviderOptions,
+          },
+        },
+      }),
+      model: openai("o3-mini"),
+    }),
+    "gpt-4o": openai("gpt-4o"),
+    "gpt-4o-mini": openai("gpt-4o-mini"),
+    "claude-3-7-sonnet-latest": anthropic("claude-3-7-sonnet-latest"),
+    "claude-3.7-sonnet": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            anthropic: {
+              thinking: { type: "disabled", budgetTokens: 12000 },
+            },
+          },
+        },
+      }),
+      model: anthropic("claude-3-7-sonnet-latest"),
+    }),
+    "claude-3.7-sonnet-thinking": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            anthropic: {
+              thinking: { type: "enabled", budgetTokens: 5000 },
+            },
+          },
+        },
+      }),
+      model: anthropic("claude-3-7-sonnet-latest"),
+    }),
+  },
+});
 
 export function handleModelProvider(model: string) {
   if (model.startsWith("claude")) {
