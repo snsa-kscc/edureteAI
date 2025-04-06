@@ -114,13 +114,13 @@ export function Chat({
         const { success } = await deleteFileFromR2(uploadedImage);
         if (success) {
           setUploadedImage(null);
-          toast.success("Image deleted successfully");
+          toast.success("Slika je obrisana");
         } else {
           throw new Error("Failed to delete image");
         }
       } catch (error) {
         console.error("Error deleting file:", error);
-        toast.error("Failed to delete image");
+        toast.error("Greška pri brisanju slike");
       }
     });
   };

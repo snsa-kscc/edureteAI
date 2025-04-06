@@ -35,7 +35,7 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="right" sideOffset={15}>
-                      <p className="max-w-xs">Vaš razgovor sadrži slike, ali ovaj model ne podržava unos slika. Molimo odaberite drugi model.</p>
+                      <p className="max-w-xs">Tvoj razgovor sadrži slike, ali ovaj model ne podržava unos slika. Odaberi drugi model.</p>
                     </TooltipContent>
                   </Tooltip>
                 ) : (

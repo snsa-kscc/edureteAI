@@ -18,7 +18,7 @@ export function SubscriptionButton({ className, variant = "default", size = "lg"
         variant="outline"
         size={size}
         className={cn(
-          "font-medium w-full border-purple-500 text-white dark:text-purple-500 bg-gradient-to-b from-purple-500 to-purple-300 dark:from-purple-500/30 dark:to-transparent hover:text-gray-200 dark:hover:text-gray-300 transition-all",
+          "font-medium w-full border-purple-500 text-white dark:text-purple-500 bg-gradient-to-b from-purple-500 to-purple-300 dark:from-purple-500/30 dark:to-transparent hover:text-gray-200 dark:hover:text-gray-300 transition-all cursor-pointer",
           className
         )}
         {...props}
