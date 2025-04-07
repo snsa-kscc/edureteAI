@@ -209,7 +209,7 @@ export function Chat({
         hasImagesInConversation={hasImagesInConversation}
       />
 
-      <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} />
+      <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} status={status} />
       {isOwner && (
         <ChatForm
           input={input}
