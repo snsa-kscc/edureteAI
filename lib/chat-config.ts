@@ -10,7 +10,7 @@ export const CHAT_MODELS = [
   { value: "claude-3-7-sonnet-latest", label: "Anthropic/Claude 3.7 Sonnet" },
 ];
 
-export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
+export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "o3-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
 
 export const DEFAULT_LEFT_MODEL = "gemini-2.0-flash";
 export const DEFAULT_RIGHT_MODEL = "claude-3-7-sonnet-latest";

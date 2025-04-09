@@ -1,15 +1,16 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { MessageUsageProgress } from "@/components/message-usage-progress";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { getUserSubscriptionDetails } from "@/lib/subscription-actions";
 import { SubscriptionManagement } from "@/components/subscription-management";
 import { DeleteAccountSection } from "@/components/delete-account-section";
+import { SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
 export default async function AccountPage() {
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
+  const user = await currentUser();
   const subscriptionDetails = await getUserSubscriptionDetails();
 
   if (!userId) {
@@ -21,7 +22,7 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="container max-w-5xl space-y-8">
+    <div className="container space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Postavke računa</h1>
         <p className="text-muted-foreground">Upravljaj postavkama računa i pretplatom.</p>
@@ -40,16 +41,20 @@ export default async function AccountPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Pretplata</CardTitle>
+            <CardTitle>
+              {user?.firstName} {user?.lastName}
+            </CardTitle>
             <CardDescription>
-              {subscriptionDetails.isSubscribed ? `Trenutno si na ${subscriptionDetails.plan} planu.` : "Trenutno si na besplatnom planu."}
+              {subscriptionDetails.isSubscribed
+                ? `Trenutno koristiš ${SUBSCRIPTION_PLANS[subscriptionDetails.plan!].name} plan.`
+                : "Trenutno koristiš besplatni plan."}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Plan</span>
-                <span className="font-medium">{subscriptionDetails.isSubscribed ? subscriptionDetails.plan : "Besplatno"}</span>
+                <span className="font-medium">{subscriptionDetails.isSubscribed ? SUBSCRIPTION_PLANS[subscriptionDetails.plan!].name : "Besplatni plan"}</span>
               </div>
               <div className="flex justify-between">
                 <span>Ukupno poruka</span>
@@ -62,7 +67,7 @@ export default async function AccountPage() {
               {subscriptionDetails.isSubscribed && subscriptionDetails.periodEnd && (
                 <div className="flex justify-between">
                   <span>Obnavljanje</span>
-                  <span className="font-medium">{new Date(subscriptionDetails.periodEnd).toLocaleDateString()}</span>
+                  <span className="font-medium">{new Date(subscriptionDetails.periodEnd).toLocaleDateString("hr-HR")}</span>
                 </div>
               )}
             </div>
@@ -75,12 +80,12 @@ export default async function AccountPage() {
 
       <Separator className="my-8" />
 
-      <div>
+      <div className="w-full md:w-1/2">
         <h2 className="text-xl font-semibold text-destructive mb-4">Opasna zona</h2>
-        <Card className="border-destructive/20">
+        <Card className="border-destructive/20 hover:bg-red-300/10">
           <CardHeader>
             <CardTitle>Brisanje računa</CardTitle>
-            <CardDescription>Trajno izbriši svoj račun i sve povezane podatke. Ova radnja se ne može poništiti.</CardDescription>
+            <CardDescription>Trajno izbriši svoj račun i sve povezane podatke. Klikaj odgovorno jer poslije ovog nema natrag.</CardDescription>
           </CardHeader>
           <CardFooter>
             <DeleteAccountSection userId={userId} />

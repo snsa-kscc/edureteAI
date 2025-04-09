@@ -52,7 +52,7 @@ export function DeleteAccountSection({ userId }: DeleteAccountSectionProps) {
       )}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="destructive" className="w-full">
+          <Button variant="destructive" className="w-full cursor-pointer">
             Izbriši račun
           </Button>
         </DialogTrigger>
@@ -68,10 +68,10 @@ export function DeleteAccountSection({ userId }: DeleteAccountSectionProps) {
             <Input value={confirmation} onChange={(e) => setConfirmation(e.target.value)} placeholder="Upiši DELETE za potvrdu" className="col-span-3" />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="cursor-pointer">
               Odustani
             </Button>
-            <Button variant="destructive" onClick={handleDeleteAccount} disabled={isLoading || confirmation !== "DELETE"}>
+            <Button variant="destructive" onClick={handleDeleteAccount} disabled={isLoading || confirmation !== "DELETE"} className="cursor-pointer">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

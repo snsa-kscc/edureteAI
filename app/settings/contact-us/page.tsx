@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Clock, MapPin, Facebook, Twitter, Instagram, Linkedin, Github, MessageSquare } from "lucide-react";
+import { Mail, Clock, MapPin, Facebook, Instagram, Linkedin, Github, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 export default function ContactUsPage() {
@@ -17,16 +17,18 @@ export default function ContactUsPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-start gap-3">
-            <Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <Mail className="h-5 w-5 mt-0.5 text-pink-500" />
             <div>
               <h3 className="font-medium">E-mail</h3>
-              <p className="text-muted-foreground">support@edureteai.com</p>
-              <p className="text-sm text-muted-foreground mt-1">Obično odgovaramo unutar 24 sata tijekom radnih dana.</p>
+              <p className="text-muted-foreground">
+                <a href="mailto:podrska@edurete.com">podrska@edurete.com</a>
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">Obično odgovaramo unutar nekoliko sati tijekom radnog vremena.</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <Clock className="h-5 w-5 mt-0.5 text-pink-500" />
             <div>
               <h3 className="font-medium">Radno vrijeme</h3>
               <p className="text-muted-foreground">Ponedjeljak - Petak, 9:00 - 17:00 CET</p>
@@ -35,7 +37,7 @@ export default function ContactUsPage() {
           </div>
 
           <div className="flex items-start gap-3">
-            <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+            <MapPin className="h-5 w-5 mt-0.5 text-pink-500" />
             <div>
               <h3 className="font-medium">Lokacija</h3>
               <p className="text-muted-foreground">Zagreb, Hrvatska</p>
@@ -46,8 +48,11 @@ export default function ContactUsPage() {
           <div className="mt-4 p-4 bg-muted rounded-md">
             <h3 className="font-medium mb-2">Pronašao/la si grešku?</h3>
             <p className="text-sm">
-              Ako si našao/la grešku u aplikaciji ili imaš problema s API kvotama, molimo te da nam pošalješ detaljan opis problema na{" "}
-              <span className="font-medium">bugs@edureteai.com</span> ili prijaviš problem na našem GitHub repozitoriju.
+              Ako si našao/la grešku u aplikaciji ili imaš problem s porukama, molimo te da nam pošalješ detaljan opis problema na{" "}
+              <span className="font-medium">
+                <a href="mailto:podrska@edurete.com">podrska@edurete.com</a>
+              </span>
+              .
             </p>
           </div>
         </CardContent>
@@ -60,11 +65,11 @@ export default function ContactUsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <SocialLink icon={<Facebook className="h-4 w-4" />} href="https://facebook.com/edureteai" small />
-            <SocialLink icon={<Instagram className="h-4 w-4" />} href="https://instagram.com/edureteai" small />
-            <SocialLink icon={<Linkedin className="h-4 w-4" />} href="https://linkedin.com/company/edureteai" small />
-            <SocialLink icon={<Github className="h-4 w-4" />} href="https://github.com/edureteai" small />
-            <SocialLink icon={<MessageSquare className="h-4 w-4" />} href="https://discord.gg/edureteai" small />
+            <SocialLink icon={<Facebook className="h-4 w-4 text-emerald-400" />} href="https://facebook.com/edureteai" small />
+            <SocialLink icon={<Instagram className="h-4 w-4 text-emerald-400" />} href="https://instagram.com/edureteai" small />
+            <SocialLink icon={<Linkedin className="h-4 w-4 text-emerald-400" />} href="https://linkedin.com/company/edureteai" small />
+            <SocialLink icon={<Github className="h-4 w-4 text-emerald-400" />} href="https://github.com/edureteai" small />
+            <SocialLink icon={<MessageSquare className="h-4 w-4 text-emerald-400" />} href="https://discord.gg/edureteai" small />
           </div>
         </CardContent>
       </Card>
