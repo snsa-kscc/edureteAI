@@ -26,6 +26,7 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
   const userData = await loadUsersData();
   const role = user?.privateMetadata.role as string | null | undefined;
   const { subscriptionTier } = await getUserMessageCounts(userId!);
+  console.log("subscriptionTier", subscriptionTier);
 
   return (
     <Sidebar>
@@ -63,7 +64,7 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
               <p className="text-sm">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-xs opacity-40">{SUBSCRIPTION_PLANS[subscriptionTier].name}</p>
+              <p className="text-xs opacity-40">{SUBSCRIPTION_PLANS[subscriptionTier as keyof typeof SUBSCRIPTION_PLANS]?.name ?? "Besplatni plan"}</p>
             </div>
           </div>
           <div>

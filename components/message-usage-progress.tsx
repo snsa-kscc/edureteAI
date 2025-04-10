@@ -87,7 +87,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
 
       <div className="text-xs text-muted-foreground">
         {usage.subscriptionTier === MESSAGE_TIER.FREE ? (
-          <span>Free Tier • {usage.totalLimit - usage.totalMessages} poruka ostalo</span>
+          <span>Besplatni plan • {usage.totalLimit - usage.totalMessages} poruka ostalo</span>
         ) : (
           <span>
             {usage.subscriptionTier === MESSAGE_TIER.PAID ? SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID].name : SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS].name} •
