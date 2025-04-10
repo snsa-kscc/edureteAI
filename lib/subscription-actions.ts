@@ -200,7 +200,9 @@ export async function updateSubscriptionInDatabase(
   stripePriceId: string,
   tier: string,
   status: string,
-  currentPeriodEnd: Date
+  currentPeriodEnd: Date,
+  cancelAtPeriodEnd: boolean = false,
+  pendingTier: string | null = null
 ) {
   const existingSubscription = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
 
@@ -214,6 +216,8 @@ export async function updateSubscriptionInDatabase(
         tier,
         status,
         stripeCurrentPeriodEnd: currentPeriodEnd,
+        cancelAtPeriodEnd,
+        pendingTier,
         updatedAt: new Date(),
       })
       .where(eq(subscriptions.userId, userId));
@@ -226,6 +230,8 @@ export async function updateSubscriptionInDatabase(
       tier,
       status,
       stripeCurrentPeriodEnd: currentPeriodEnd,
+      cancelAtPeriodEnd,
+      pendingTier,
       createdAt: new Date(),
       updatedAt: new Date(),
     });

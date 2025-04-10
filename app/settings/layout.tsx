@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
-import { v4 as uuid4 } from "uuid";
 
 export default function SettingsLayout({
   children,
@@ -15,7 +14,7 @@ export default function SettingsLayout({
   return (
     <div className="container max-w-7xl p-6">
       <div className="flex items-center justify-between mb-4">
-        <Link href={`/c/${uuid4()}`} className="mb-4 flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm">
+        <Link href={"/"} className="mb-4 flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm">
           <MessageSquare className="h-4 w-4" />
           <span>Povratak na razgovor</span>
         </Link>

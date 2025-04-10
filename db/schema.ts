@@ -47,6 +47,8 @@ export const subscriptions = pgTable("subscriptions", {
   stripeCurrentPeriodEnd: timestamp("stripe_current_period_end"),
   tier: text("tier").notNull().default("free"), // "free", "paid", "paid_plus"
   status: text("status").notNull().default("inactive"), // "active", "canceled", "past_due", "inactive"
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false), // Will subscription be canceled at period end
+  pendingTier: text("pending_tier"), // For downgrades: what tier they'll change to at period end
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
