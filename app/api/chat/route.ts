@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { streamText, type Message, appendResponseMessages, createDataStreamResponse } from "ai";
+import { streamText, type Message, appendResponseMessages, createDataStreamResponse, smoothStream } from "ai";
 import { auth } from "@clerk/nextjs/server";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
-import { handleModelProvider } from "@/lib/utils";
+import { modelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import type { Usage, Chat } from "@/types";
-import type { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
 
 export const runtime = "edge";
 
@@ -61,7 +60,7 @@ export async function POST(req: Request) {
     return createDataStreamResponse({
       execute: (dataStream) => {
         const result = streamText({
-          model: handleModelProvider(model),
+          model: modelProvider.languageModel(model),
           system: ["o1-mini", "o1-preview"].includes(model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + system,
           messages: [
             ...initialMessages,
@@ -70,14 +69,11 @@ export async function POST(req: Request) {
               content,
             } as Message,
           ],
-          providerOptions:
-            model === "o3-mini"
-              ? {
-                  openai: {
-                    reasoningEffort: "high",
-                  } satisfies OpenAIResponsesProviderOptions,
-                }
-              : {},
+          experimental_transform: [
+            smoothStream({
+              chunking: "word",
+            }),
+          ],
           onFinish: async (result) => {
             const usageData: Usage = {
               userId,
@@ -118,7 +114,7 @@ export async function POST(req: Request) {
         });
 
         result.consumeStream();
-        result.mergeIntoDataStream(dataStream);
+        result.mergeIntoDataStream(dataStream, { sendReasoning: true });
       },
       onError: () => {
         return "Greška prilikom obrade zahtjeva!";

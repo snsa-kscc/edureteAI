@@ -143,3 +143,76 @@ export async function getUserMessageLimits(userId: string) {
     premiumModelMessages,
   };
 }
+
+/**
+ * Get a user-friendly subscription status message based on the subscription state
+ * This includes information about pending changes at the end of the billing period
+ * @param userId The user ID
+ * @returns Object with status message and details
+ */
+export async function getSubscriptionStatusMessage(userId: string) {
+  const subscription = await getUserSubscription(userId);
+  
+  if (!subscription) {
+    return {
+      type: "info",
+      title: "Besplatna pretplata",
+      message: "Trenutno koristite besplatnu verziju edureteAI.",
+      actionLabel: "Nadogradite na Pro",
+      actionUrl: "/settings/billing",
+    };
+  }
+  
+  // Handle active subscriptions with pending changes
+  if (
+    subscription.status === "active" &&
+    subscription.stripeCurrentPeriodEnd &&
+    new Date(subscription.stripeCurrentPeriodEnd) > new Date()
+  ) {
+    // Case 1: Subscription is active but will be canceled at period end
+    if (subscription.cancelAtPeriodEnd) {
+      const endDate = new Date(subscription.stripeCurrentPeriodEnd).toLocaleDateString('hr');
+      return {
+        type: "warning",
+        title: "Otkazana pretplata",
+        message: `Vaša pretplata će biti otkazana ${endDate}. Možete nastaviti koristiti premium značajke do tog datuma.`,
+        actionLabel: "Obnovite pretplatu",
+        actionUrl: "/settings/billing",
+      };
+    }
+    
+    // Case 2: Subscription will downgrade at period end
+    if (subscription.pendingTier && subscription.pendingTier !== subscription.tier) {
+      const endDate = new Date(subscription.stripeCurrentPeriodEnd).toLocaleDateString('hr');
+      const tierName = subscription.pendingTier === MESSAGE_TIER.PAID_PLUS ? "Pro Plus" : 
+                      subscription.pendingTier === MESSAGE_TIER.PAID ? "Pro" : "Besplatna";
+      
+      return {
+        type: "info",
+        title: "Promjena pretplate",
+        message: `Vaša pretplata će se promijeniti u ${tierName} ${endDate}. Trenutni plan je aktivan do tog datuma.`,
+        actionLabel: "Upravljanje pretplatom",
+        actionUrl: "/settings/billing",
+      };
+    }
+    
+    // Case 3: Normal active subscription
+    const tierLabel = subscription.tier === MESSAGE_TIER.PAID_PLUS ? "Pro Plus" : "Pro";
+    return {
+      type: "success",
+      title: `Aktivna ${tierLabel} pretplata`,
+      message: `Imate aktivnu ${tierLabel} pretplatu s pristupom svim premium značajkama.`,
+      actionLabel: "Upravljanje pretplatom",
+      actionUrl: "/settings/billing",
+    };
+  }
+  
+  // Handle inactive or expired subscriptions
+  return {
+    type: "error",
+    title: "Istekla pretplata",
+    message: "Vaša pretplata je istekla. Obnovite kako biste pristupili premium značajkama.",
+    actionLabel: "Obnovite pretplatu",
+    actionUrl: "/settings/billing",
+  };
+}

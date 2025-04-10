@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { getChats } from "@/lib/redis-actions";
 import { useMutation } from "@tanstack/react-query";
 import { IconSpinner } from "./ui/icons";
-import { MessageUsageProgress } from "./message-usage-progress";
 
 interface SidebarListProps {
   userId: string | null | undefined;
@@ -27,7 +26,6 @@ export function SidebarList({ userId, userData, role, chats: initialChats }: Sid
 
   return (
     <div className="h-full overflow-auto scrollbar-thin">
-      <MessageUsageProgress userId={userId!} />
       {role && (
         <div className="space-y-2 p-2">
           <Select
@@ -57,7 +55,7 @@ export function SidebarList({ userId, userData, role, chats: initialChats }: Sid
       {isPending ? (
         <div className="flex items-center justify-center p-8 text-center">
           <IconSpinner className="animate-spin mr-2" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
+          <p className="text-sm text-muted-foreground">Učitavam...</p>
         </div>
       ) : chats?.length ? (
         <div className="space-y-2 p-2">
@@ -65,7 +63,7 @@ export function SidebarList({ userId, userData, role, chats: initialChats }: Sid
         </div>
       ) : (
         <div className="p-8 text-center">
-          <p className="text-sm text-muted-foreground">No chat history</p>
+          <p className="text-sm text-muted-foreground">Nema razgovora.</p>
         </div>
       )}
     </div>

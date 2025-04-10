@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { getUserMessageCounts } from "@/lib/message-limits";
 import { getUserMessageLimits } from "@/lib/subscription-utils";
-import { MESSAGE_TIER } from "@/lib/model-config";
+import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
 interface MessageUsageProgressProps {
   userId: string;
@@ -65,7 +65,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
     <div className="p-4 space-y-3">
       <div className="space-y-1.5">
         <div className="flex justify-between text-xs">
-          <span className="text-muted-foreground">Total Messages</span>
+          <span className="text-muted-foreground">Ukupno poruke</span>
           <span className="font-medium">
             {usage.totalMessages}/{usage.totalLimit}
           </span>
@@ -76,7 +76,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
       {isPaid && (
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Premium Messages</span>
+            <span className="text-muted-foreground">Premium poruke</span>
             <span className="font-medium">
               {usage.premiumModelMessages}/{usage.premiumLimit}
             </span>
@@ -87,9 +87,11 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
 
       <div className="text-xs text-muted-foreground">
         {usage.subscriptionTier === MESSAGE_TIER.FREE ? (
-          <span>Free Tier • {usage.totalLimit - usage.totalMessages} messages remaining</span>
+          <span>Besplatni plan • {usage.totalLimit - usage.totalMessages} poruka ostalo</span>
         ) : (
-          <span>{usage.subscriptionTier === MESSAGE_TIER.PAID ? "Premium" : "Premium Plus"} • Renews monthly</span>
+          <span>
+            {usage.subscriptionTier === MESSAGE_TIER.PAID ? SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID].name : SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS].name}
+          </span>
         )}
       </div>
     </div>
