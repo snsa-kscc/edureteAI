@@ -12,6 +12,18 @@ import type Stripe from "stripe";
 
 type CheckoutPlan = keyof typeof SUBSCRIPTION_PLANS;
 
+// Type definition for subscription details with the new fields
+export interface UserSubscriptionDetails {
+  isSubscribed: boolean;
+  tier: string;
+  plan: CheckoutPlan | null;
+  totalMessages: number;
+  premiumModelMessages: number;
+  periodEnd?: Date | null;
+  cancelAtPeriodEnd: boolean;
+  pendingTier: string | null;
+}
+
 /**
  * Create a checkout session for a subscription plan
  * @param plan The subscription plan to checkout
@@ -123,7 +135,7 @@ export async function createPortalSession(returnUrl: string) {
  * Get the current user's subscription status and details
  * @returns Object with subscription details
  */
-export async function getUserSubscriptionDetails() {
+export async function getUserSubscriptionDetails(): Promise<UserSubscriptionDetails> {
   try {
     const { sessionClaims } = await auth();
     const userId = sessionClaims?.userId;
@@ -135,6 +147,8 @@ export async function getUserSubscriptionDetails() {
         plan: null,
         totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
         premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
+        cancelAtPeriodEnd: false,
+        pendingTier: null
       };
     }
 
@@ -155,6 +169,8 @@ export async function getUserSubscriptionDetails() {
         plan: null,
         totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
         premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
+        cancelAtPeriodEnd: false,
+        pendingTier: null
       };
     }
 
@@ -169,6 +185,10 @@ export async function getUserSubscriptionDetails() {
     // Get the limits for this tier
     const limits = MESSAGE_LIMITS[tierName] || MESSAGE_LIMITS[MESSAGE_TIER.FREE];
 
+    // Get information about pending changes (cancellation or tier change)
+    const isPendingCancellation = subscription.cancelAtPeriodEnd || false;
+    const pendingTier = subscription.pendingTier || null;
+    
     return {
       isSubscribed: true,
       tier: subscription.tier,
@@ -176,6 +196,8 @@ export async function getUserSubscriptionDetails() {
       totalMessages: limits.TOTAL_MESSAGES,
       premiumModelMessages: limits.PREMIUM_MODEL_MESSAGES,
       periodEnd: subscription.stripeCurrentPeriodEnd,
+      cancelAtPeriodEnd: isPendingCancellation,
+      pendingTier: pendingTier,
     };
   } catch (error) {
     console.error("Error getting user subscription details:", error);
@@ -185,6 +207,8 @@ export async function getUserSubscriptionDetails() {
       plan: null,
       totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
       premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
+      cancelAtPeriodEnd: false,
+      pendingTier: null,
     };
   }
 }

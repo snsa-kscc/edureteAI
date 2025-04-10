@@ -90,8 +90,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
           <span>Besplatni plan • {usage.totalLimit - usage.totalMessages} poruka ostalo</span>
         ) : (
           <span>
-            {usage.subscriptionTier === MESSAGE_TIER.PAID ? SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID].name : SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS].name} •
-            Mjesečno ponavljanje plaćanja
+            {usage.subscriptionTier === MESSAGE_TIER.PAID ? SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID].name : SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS].name}
           </span>
         )}
       </div>

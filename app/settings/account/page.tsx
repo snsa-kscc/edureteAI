@@ -48,6 +48,8 @@ export default async function AccountPage() {
               {subscriptionDetails.isSubscribed
                 ? `Trenutno koristiš ${SUBSCRIPTION_PLANS[subscriptionDetails.plan!].name} plan.`
                 : "Trenutno koristiš besplatni plan."}
+              <br />
+              {subscriptionDetails.pendingTier && `U sljedećem razdoblju koristit ćeš ${SUBSCRIPTION_PLANS[subscriptionDetails.pendingTier].name} plan.`}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -66,8 +68,17 @@ export default async function AccountPage() {
               </div>
               {subscriptionDetails.isSubscribed && subscriptionDetails.periodEnd && (
                 <div className="flex justify-between">
-                  <span>Obnavljanje</span>
-                  <span className="font-medium">{new Date(subscriptionDetails.periodEnd).toLocaleDateString("hr-HR")}</span>
+                  {subscriptionDetails.cancelAtPeriodEnd ? (
+                    <>
+                      <span>Datum zatvaranja pretplate</span>
+                      <span className="font-medium">{new Date(subscriptionDetails.periodEnd).toLocaleDateString("hr-HR")}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Datum obnavljanja pretplate</span>
+                      <span className="font-medium">{new Date(subscriptionDetails.periodEnd).toLocaleDateString("hr-HR")}</span>
+                    </>
+                  )}
                 </div>
               )}
             </div>
