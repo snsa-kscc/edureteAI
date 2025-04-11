@@ -26,7 +26,6 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
   const userData = await loadUsersData();
   const role = user?.privateMetadata.role as string | null | undefined;
   const { subscriptionTier } = await getUserMessageCounts(userId!);
-  console.log("subscriptionTier", subscriptionTier);
 
   return (
     <Sidebar>

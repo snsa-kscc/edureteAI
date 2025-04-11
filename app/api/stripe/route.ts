@@ -60,6 +60,7 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated": {
         const subscription = session as Stripe.Subscription;
+        console.log("subscription", subscription);
         const userId = await getUserIdFromCustomer(subscription.customer as string);
 
         if (!userId) {
@@ -80,12 +81,11 @@ export async function POST(req: Request) {
         let pendingTier = null;
 
         // Check for pending updates first (downgrade or upgrade at period end)
-        if (subscription.pending_update && subscription.pending_update.subscription_items && 
-            subscription.pending_update.subscription_items.length > 0) {
+        if (subscription.pending_update && subscription.pending_update.subscription_items && subscription.pending_update.subscription_items.length > 0) {
           // Get the pending price from the first item in the array
           const pendingItem = subscription.pending_update.subscription_items[0];
           const pendingPriceId = pendingItem?.price?.id;
-          
+
           // Set pendingTier based on the upcoming price change
           if (pendingPriceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
             pendingTier = MESSAGE_TIER.PAID_PLUS;

@@ -46,10 +46,11 @@ export default async function AccountPage() {
             </CardTitle>
             <CardDescription>
               {subscriptionDetails.isSubscribed
-                ? `Trenutno koristiš ${SUBSCRIPTION_PLANS[subscriptionDetails.plan!].name} plan.`
+                ? `Trenutno koristiš ${SUBSCRIPTION_PLANS[subscriptionDetails.plan!]?.name || "besplatni plan"}.`
                 : "Trenutno koristiš besplatni plan."}
               <br />
-              {subscriptionDetails.pendingTier && `U sljedećem razdoblju koristit ćeš ${SUBSCRIPTION_PLANS[subscriptionDetails.pendingTier].name} plan.`}
+              {subscriptionDetails.pendingTier &&
+                `U sljedećem razdoblju koristit ćeš ${SUBSCRIPTION_PLANS[subscriptionDetails.pendingTier]?.name || "besplatni"} plan.`}
             </CardDescription>
           </CardHeader>
           <CardContent>
