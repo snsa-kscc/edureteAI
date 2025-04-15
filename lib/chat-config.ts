@@ -7,6 +7,9 @@ export const CHAT_MODELS = [
   { value: "o3-mini", label: "OpenAI/o3-mini (high)" },
   { value: "gpt-4o", label: "OpenAI/GPT-4o" },
   { value: "gpt-4o-mini", label: "OpenAI/GPT-4o-mini" },
+  { value: "gpt-4.1", label: "OpenAI/GPT-4.1" },
+  { value: "gpt-4.1-mini", label: "OpenAI/GPT-4.1-mini" },
+  { value: "gpt-4.1-nano", label: "OpenAI/GPT-4.1-nano" },
   { value: "claude-3-7-sonnet-latest", label: "Anthropic/Claude 3.7 Sonnet" },
 ];
 

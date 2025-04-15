@@ -113,6 +113,21 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 0.6,
     family: "openai",
   },
+  "gpt-4.1": {
+    inputPrice: 2,
+    outputPrice: 8,
+    family: "openai",
+  },
+  "gpt-4.1-mini": {
+    inputPrice: 0.4,
+    outputPrice: 1.6,
+    family: "openai",
+  },
+  "gpt-4.1-nano": {
+    inputPrice: 0.1,
+    outputPrice: 0.4,
+    family: "openai",
+  },
   "claude-3-5-sonnet-latest": {
     inputPrice: 3.0,
     outputPrice: 15.0,
