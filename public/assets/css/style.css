@@ -2,7 +2,7 @@
 @File: Default Styles
 @Author: picmaticweb
 @URL: https://themeforest.net/user/picmaticweb/portfolio
-Author E-mail: 
+Author E-mail:
 
 This file contains the styling for the actual template, this
 is the file you need to edit to change the look of the
@@ -24,8 +24,8 @@ Table of Content:
 09/ video
 10/ subscribe
 11/ team
-12/ accordion 
-13/ integration-single 
+12/ accordion
+13/ integration-single
 14/ job
 15/ blog
 16/ contact
@@ -1001,16 +1001,6 @@ a:hover {
   position: relative;
   z-index: 1;
   overflow: hidden;
-}
-.saas_banner_area_two::before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  background: url(../img/home-two/banner_bg_two.png) no-repeat center center/cover;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
 }
 
 .saas_banner_content_two h2 {
@@ -2208,7 +2198,6 @@ h2.wow.fadeInUp.home_5_testi {
 }
 .features_tab_inner:before {
   content: "";
-  background: url(../img/home-two/tab_shap.png) no-repeat center top/cover;
   position: absolute;
   width: 60px;
   height: 74px;
@@ -2379,7 +2368,6 @@ h2.wow.fadeInUp.home_5_testi {
   content: "";
   width: 100%;
   height: 100%;
-  background: url(../img/home-four/shap_2.png) no-repeat center top/cover;
   z-index: -1;
   position: absolute;
   left: 0;
@@ -2850,7 +2838,6 @@ img.about_mission_img {
   position: absolute;
   left: 0;
   top: 0;
-  background: url(../img/home-five/shapes.png) no-repeat top center/cover;
   z-index: -1;
   width: 100%;
   height: 100%;
@@ -3202,7 +3189,6 @@ img.about_mission_img {
 .process_inner:before {
   content: "";
   width: 100%;
-  background: url(../img/home-three/line.png) no-repeat center center/cover;
   position: absolute;
   top: 10px;
   left: 0;
@@ -3513,7 +3499,6 @@ img.about_mission_img {
 .fun_fact_area:before {
   content: "";
   width: 100%;
-  background: url(../img/home-four/shap.png) no-repeat center center/cover;
   height: 100%;
   position: absolute;
   z-index: -1;
@@ -4361,7 +4346,6 @@ img.about_mission_img {
   position: absolute;
   left: 0;
   top: 0;
-  background: url(../img/home-three/f_shap.png) no-repeat left bottom/cover;
   z-index: -1;
 }
 
