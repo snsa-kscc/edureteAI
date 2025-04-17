@@ -38,6 +38,18 @@ export const modelProvider = customProvider({
       }),
       model: openai("o3-mini"),
     }),
+    "o4-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              reasoningEffort: "high",
+            } satisfies OpenAIResponsesProviderOptions,
+          },
+        },
+      }),
+      model: openai("o4-mini"),
+    }),
     "gpt-4o": openai("gpt-4o"),
     "gpt-4o-mini": openai("gpt-4o-mini"),
     "gpt-4.1": openai("gpt-4.1"),

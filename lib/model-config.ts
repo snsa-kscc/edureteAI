@@ -88,6 +88,11 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 4.4,
     family: "openai",
   },
+  "o4-mini": {
+    inputPrice: 1.1,
+    outputPrice: 4.4,
+    family: "openai",
+  },
   "o1-preview": {
     inputPrice: 15.0,
     outputPrice: 60.0,
