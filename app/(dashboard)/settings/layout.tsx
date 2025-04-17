@@ -21,7 +21,7 @@ export default function SettingsLayout({
         <ModeToggle className="text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer border-0 hover:bg-transparent" />
       </div>
       <div className="my-12">
-        <h1 className="text-2xl font-bold tracking-tight">Postsavke</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Postavke</h1>
         <p className="text-muted-foreground">Upravljaj postavkama računa i preferencijama, saznaj novosti i javi nam se.</p>
       </div>
 
