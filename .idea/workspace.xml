@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1b7d361f-1096-403a-b989-d7dbced32a99" name="Changes" comment="Resolving conflict" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="homepage-new" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOLlnoh86S9b0r&quot;,
+        &quot;number&quot;: 1
+      },
+      &quot;lastSeen&quot;: 1744881589901
+    }
+  ]
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/SvenMandic/ai.edurete.com.git&quot;,
+    &quot;accountId&quot;: &quot;c906b40a-dadc-41f5-8c49-87b14703328d&quot;
+  }
+}</component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/opt/homebrew/Cellar/php/8.2.8/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2torCXExcsDF6XvlEcyGJhPYES6" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.laravel-idea.search-composer-json": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/svenmandic/Dev/projects/ai.edurete.com/public/assets/img/home-one",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "ts.external.directory.path": "/Users/svenmandic/Dev/projects/ai.edurete.com/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": []
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets/img/home-one" />
+      <recent name="$PROJECT_DIR$/app/home" />
+      <recent name="$PROJECT_DIR$/public/assets/img" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets" />
+      <recent name="$PROJECT_DIR$/public/assets/img/home-one" />
+      <recent name="$PROJECT_DIR$/components/layouts" />
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/app/home" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PS-241.18034.69" />
+        <option value="bundled-php-predefined-ba97393d7c68-48a1a656d44e-com.jetbrains.php.sharedIndexes-PS-241.18034.69" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1b7d361f-1096-403a-b989-d7dbced32a99" name="Changes" comment="" />
+      <created>1741029140856</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1741029140856</updated>
+      <workItem from="1741029141886" duration="4461000" />
+      <workItem from="1741093948133" duration="4388000" />
+      <workItem from="1741767878242" duration="4556000" />
+      <workItem from="1741779555702" duration="1835000" />
+      <workItem from="1742382187284" duration="506000" />
+      <workItem from="1742544084007" duration="8408000" />
+      <workItem from="1742564001361" duration="328000" />
+      <workItem from="1742635830697" duration="12229000" />
+      <workItem from="1743596967085" duration="3111000" />
+      <workItem from="1743958368913" duration="11967000" />
+      <workItem from="1744114793008" duration="5000" />
+      <workItem from="1744660500427" duration="3817000" />
+      <workItem from="1744881416116" duration="4630000" />
+      <workItem from="1744888336742" duration="1194000" />
+    </task>
+    <task id="LOCAL-00001" summary="Adding homepage theme and dashboard layout">
+      <option name="closed" value="true" />
+      <created>1742648162841</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1742648162841</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixing home design">
+      <option name="closed" value="true" />
+      <created>1744008414414</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744008414414</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Adding small changes to homepage">
+      <option name="closed" value="true" />
+      <created>1744663703860</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1744663703860</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Resolving conflict">
+      <option name="closed" value="true" />
+      <created>1744881680047</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1744881680047</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="homepage-final" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Adding homepage theme and dashboard layout" />
+    <MESSAGE value="Fixing home design" />
+    <MESSAGE value="Adding small changes to homepage" />
+    <MESSAGE value="Resolving conflict" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resolving conflict" />
+  </component>
+</project>
