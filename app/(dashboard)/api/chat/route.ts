@@ -35,10 +35,10 @@ export async function POST(req: Request) {
       return new NextResponse("Došli ste do limita!", { status: 429 });
     }
 
-    const hasQuotaAvailable = await checkQuota(userId, model);
-    if (!hasQuotaAvailable) {
-      return new NextResponse("Došli ste do limita!", { status: 429 });
-    }
+    // const hasQuotaAvailable = await checkQuota(userId, model);
+    // if (!hasQuotaAvailable) {
+    //   return new NextResponse("Došli ste do limita!", { status: 429 });
+    // }
 
     const initialMessages = messages.slice(0, -1);
     const currentMessage = messages[messages.length - 1];

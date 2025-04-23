@@ -7,8 +7,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "edureteAI",
-  description: "edureteAI - Math assistant",
+  title: "edureteAI - matematički asistent",
+  description: "edureteAI - matematički asistent",
 };
 
 export default async function RootLayout({

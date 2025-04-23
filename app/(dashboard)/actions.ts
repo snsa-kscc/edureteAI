@@ -12,13 +12,13 @@ import type { Usage, MessageContent } from "@/types";
 export async function submitUserMessage({ content, model, system }: { content: MessageContent[]; model: string; system: string }) {
   const aiState = getMutableAIState<typeof AI>();
 
-  const hasQuotaAvailable = await checkQuota(aiState.get().userId!, aiState.get().model);
+  // const hasQuotaAvailable = await checkQuota(aiState.get().userId!, aiState.get().model);
 
-  if (!hasQuotaAvailable) {
-    return {
-      error: "You have exceeded your quota. Please contact support.",
-    };
-  }
+  // if (!hasQuotaAvailable) {
+  //   return {
+  //     error: "You have exceeded your quota. Please contact support.",
+  //   };
+  // }
 
   let messageContent: MessageContent[];
 
