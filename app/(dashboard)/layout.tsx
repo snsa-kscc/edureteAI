@@ -19,7 +19,7 @@ export default async function RootLayout({
   // const { sessionClaims } = await auth();
 
   return (
-    <ClerkProvider afterSignOutUrl={"/sign-in"} localization={hrHR}>
+    <ClerkProvider afterSignOutUrl={"/"} localization={hrHR}>
       {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
         <head>
