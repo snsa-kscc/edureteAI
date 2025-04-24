@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { checkQuota, saveUsage } from "@/lib/neon-actions";
 import { handleModelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
-import { AI } from "@/app/(dashboard)/ai";
+import { AI } from "@/app/(app)/ai";
 import type { Usage, MessageContent } from "@/types";
 
 export async function submitUserMessage({ content, model, system }: { content: MessageContent[]; model: string; system: string }) {

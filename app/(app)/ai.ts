@@ -1,5 +1,5 @@
 import { createAI, getAIState } from "ai/rsc";
-import { submitUserMessage } from "@/app/(dashboard)/actions";
+import { submitUserMessage } from "@/app/(app)/actions";
 import { saveChat } from "@/lib/redis-actions";
 import type { Chat, AIState, UIState, MessageContent } from "@/types";
 

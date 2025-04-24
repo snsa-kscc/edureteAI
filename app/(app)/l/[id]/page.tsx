@@ -9,7 +9,7 @@ import { Title } from "@/components/title";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL, DEFAULT_USER_SYSTEM_PROMPT } from "@/lib/chat-config";
 import { getChat } from "@/lib/redis-actions";
-import { AI } from "@/app/(dashboard)/ai";
+import { AI } from "@/app/(app)/ai";
 import { currentUser } from "@clerk/nextjs/server";
 
 type Params = Promise<{ id: string }>;
