@@ -1,6 +1,6 @@
 export const CHAT_MODELS = [
   { value: "accounts/fireworks/models/deepseek-r1", label: "Deepseek/DeepSeek R1" },
-  { value: "gemini-2.5-pro-exp-03-25", label: "Google/Gemini 2.5 Pro Experimental" },
+  { value: "gemini-2.5-pro-preview-03-25", label: "Google/Gemini 2.5 Pro Preview" },
   { value: "gemini-2.0-flash", label: "Google/Gemini 2.0 Flash" },
   { value: "gemini-2.0-flash-thinking-exp-01-21", label: "Google/Gemini 2.0 Flash Thinking Experimental" },
   { value: "o1-mini", label: "OpenAI/o1-mini" },
