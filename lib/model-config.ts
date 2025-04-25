@@ -12,27 +12,29 @@ export const MESSAGE_LIMITS = {
     PREMIUM_MODEL_MESSAGES: 50,
   },
   [MESSAGE_TIER.PAID]: {
-    TOTAL_MESSAGES: 1000,
-    PREMIUM_MODEL_MESSAGES: 1000,
+    TOTAL_MESSAGES: 1500,
+    PREMIUM_MODEL_MESSAGES: 1500,
   },
   [MESSAGE_TIER.PAID_PLUS]: {
-    TOTAL_MESSAGES: 1000,
-    PREMIUM_MODEL_MESSAGES: 1000,
+    TOTAL_MESSAGES: 1500,
+    PREMIUM_MODEL_MESSAGES: 1500,
   },
 };
 
 export const SUBSCRIPTION_PLANS = {
   [MESSAGE_TIER.PAID]: {
-    name: "Samo AI",
-    description: "Premium subscription with 1,000 messages and 1,000 premium model messages",
+    name: "eduAI Solo",
+    price: 9,
+    description: "Premium plan koji sadrži 1500 poruka.",
     priceId: process.env.STRIPE_PRICE_ID_PAID || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].TOTAL_MESSAGES,
     premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID,
   },
   [MESSAGE_TIER.PAID_PLUS]: {
-    name: "Instruktor + AI",
-    description: "Premium Plus subscription with 1,000 messages and 1,000 premium model messages",
+    name: "eduAI Duo",
+    price: 39,
+    description: "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
     priceId: process.env.STRIPE_PRICE_ID_PAID_PLUS || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].TOTAL_MESSAGES,
     premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,

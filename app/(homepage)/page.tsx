@@ -467,7 +467,7 @@ export default function Home() {
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> Odabrani snimci za lakše učenje
                         </li>
                         <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4 X 30 minuta svaki mjesec sa instruktorom
+                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x30 minuta svaki mjesec sa instruktorom
                         </li>
                       </ul>
                       <Link href="/sign-up" className="price_btn">

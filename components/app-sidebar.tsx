@@ -12,7 +12,7 @@ import { Title } from "@/components/title";
 import { SubscriptionButton } from "@/components/subscription-button";
 import { Cog } from "lucide-react";
 import { getUserMessageCounts } from "@/lib/message-limits";
-import { SUBSCRIPTION_PLANS } from "@/lib/model-config";
+import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
 const loadUsersData = cache(async () => {
   return await getUsersData();
@@ -53,9 +53,7 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
         >
           <SidebarList userId={userId} userData={userData} role={role} chats={chats} />
         </Suspense>
-        <div className="px-2 py-2">
-          <SubscriptionButton />
-        </div>
+        <div className="px-2 py-2">{subscriptionTier === MESSAGE_TIER.FREE && <SubscriptionButton />}</div>
         <div className="px-2 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             {userId && <UserButton />}

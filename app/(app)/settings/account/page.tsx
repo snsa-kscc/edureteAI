@@ -6,6 +6,7 @@ import { getUserSubscriptionDetails } from "@/lib/subscription-actions";
 import { SubscriptionManagement } from "@/components/subscription-management";
 import { DeleteAccountSection } from "@/components/delete-account-section";
 import { SUBSCRIPTION_PLANS } from "@/lib/model-config";
+import { PricingCardsSection } from "@/components/pricing-cards-section";
 
 export default async function AccountPage() {
   const { sessionClaims } = await auth();
@@ -63,10 +64,6 @@ export default async function AccountPage() {
                 <span>Ukupno poruka</span>
                 <span className="font-medium">{subscriptionDetails.totalMessages}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Premium poruke</span>
-                <span className="font-medium">{subscriptionDetails.premiumModelMessages}</span>
-              </div>
               {subscriptionDetails.isSubscribed && subscriptionDetails.periodEnd && (
                 <div className="flex justify-between">
                   {subscriptionDetails.cancelAtPeriodEnd ? (
@@ -91,6 +88,13 @@ export default async function AccountPage() {
       </div>
 
       <Separator className="my-8" />
+
+      {!subscriptionDetails.isSubscribed && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Dostupni planovi pretplate</h2>
+          <PricingCardsSection />
+        </div>
+      )}
 
       <div className="w-full md:w-1/2">
         <h2 className="text-xl font-semibold text-destructive mb-4">Opasna zona</h2>

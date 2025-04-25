@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Clock, MapPin, Facebook, Instagram, Linkedin, Github, MessageSquare } from "lucide-react";
+import { Mail, Clock, MapPin, Facebook, Youtube } from "lucide-react";
 import Link from "next/link";
 
 export default function ContactUsPage() {
@@ -65,11 +65,8 @@ export default function ContactUsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <SocialLink icon={<Facebook className="h-4 w-4 text-emerald-400" />} href="https://facebook.com/edureteai" small />
-            <SocialLink icon={<Instagram className="h-4 w-4 text-emerald-400" />} href="https://instagram.com/edureteai" small />
-            <SocialLink icon={<Linkedin className="h-4 w-4 text-emerald-400" />} href="https://linkedin.com/company/edureteai" small />
-            <SocialLink icon={<Github className="h-4 w-4 text-emerald-400" />} href="https://github.com/edureteai" small />
-            <SocialLink icon={<MessageSquare className="h-4 w-4 text-emerald-400" />} href="https://discord.gg/edureteai" small />
+            <SocialLink icon={<Facebook className="h-4 w-4 text-emerald-400" />} href="https://facebook.com/edurete" small />
+            <SocialLink icon={<Youtube className="h-4 w-4 text-emerald-400" />} href="https://www.youtube.com/@eduretemrezaznanja8067" small />
           </div>
         </CardContent>
       </Card>
