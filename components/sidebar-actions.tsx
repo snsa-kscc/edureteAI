@@ -49,11 +49,11 @@ export function SidebarActions({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>This will permanently delete your chat message and remove your data from our servers.</AlertDialogDescription>
+            <AlertDialogTitle>Jeste li sigurni?</AlertDialogTitle>
+            <AlertDialogDescription>Obrisati ćete vašu poruku i podatke sa naših servera.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isRemovePending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isRemovePending}>Odustani</AlertDialogCancel>
             <AlertDialogAction
               disabled={isRemovePending}
               onClick={(event) => {
@@ -73,12 +73,12 @@ export function SidebarActions({
                   setDeleteDialogOpen(false);
                   router.refresh();
                   router.push("/");
-                  toast.success("Chat deleted");
+                  toast.success("Razgovor je obrisan");
                 });
               }}
             >
               {isRemovePending && <IconSpinner className="mr-2 animate-spin" />}
-              Delete
+              Obriši
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

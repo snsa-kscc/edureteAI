@@ -26,7 +26,7 @@ export function ChatForm({ input, onInputChange, onSubmit, onImageUpload, onDele
         value={input}
         onChange={onInputChange}
         onKeyDown={(e) => onKeyDown(e, !!uploadedImage)}
-        placeholder="Ask me anything..."
+        placeholder="Pitaj me nešto..."
         className={`placeholder:italic placeholder:text-zinc-600/75 focus-visible:ring-zinc-500 ${uploadedImage ? "pr-40" : "pr-28"}`}
         disabled={isLoading}
       />

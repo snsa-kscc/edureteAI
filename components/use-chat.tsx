@@ -114,13 +114,13 @@ export function Chat({
         const { success } = await deleteFileFromR2(uploadedImage);
         if (success) {
           setUploadedImage(null);
-          toast.success("Image deleted successfully");
+          toast.success("Slika je obrisana");
         } else {
           throw new Error("Failed to delete image");
         }
       } catch (error) {
         console.error("Error deleting file:", error);
-        toast.error("Failed to delete image");
+        toast.error("Greška pri brisanju slike");
       }
     });
   };
@@ -187,13 +187,13 @@ export function Chat({
       } else if (error.message.includes("Too many requests")) {
         toast.error("Previše zahtjeva. Molimo pričekajte nekoliko trenutaka.");
       } else {
-        toast.error(`Došlo je do greške: ${error.message}`);
+        toast.error(`Opis greške: ${error.message}`);
       }
     }
   }, [error]);
 
   return (
-    <div {...getRootProps()} className={`basis-1/2 p-4 flex flex-col h-[80vh] relative ${isDragActive ? "bg-emerald-50/10" : ""}`}>
+    <div {...getRootProps()} className={`basis-1/2 p-4 relative flex flex-col lg:h-full h-screen ${isDragActive ? "bg-emerald-50/10" : ""}`}>
       {isDragActive && (
         <div className="absolute inset-0 bg-emerald-500/10 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-dashed border-emerald-500">
           <p className="text-emerald-700 font-medium">Ubaci sliku ovdje...</p>
@@ -209,7 +209,7 @@ export function Chat({
         hasImagesInConversation={hasImagesInConversation}
       />
 
-      <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} />
+      <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} status={status} />
       {isOwner && (
         <ChatForm
           input={input}
