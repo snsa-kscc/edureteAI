@@ -96,6 +96,19 @@ export default async function AccountPage() {
         </div>
       )}
 
+      {subscriptionDetails.isSubscribed && (
+        <div className="mt-4 p-4 bg-muted rounded-md">
+          <h2 className="text-xl font-semibold mb-6">Korištenjem ovog plana ostvaruješ pogodnost instrukcija s našim instruktorima 🥰🎉</h2>
+          <p className="text-sm">
+            Ne zaboravi se javiti na{" "}
+            <span className="font-medium">
+              <a href="mailto:podrska@edurete.com">podrska@edurete.com</a>
+            </span>{" "}
+            za dogovor.
+          </p>
+        </div>
+      )}
+
       <div className="w-full md:w-1/2">
         <h2 className="text-xl font-semibold text-destructive mb-4">Opasna zona</h2>
         <Card className="border-destructive/20 hover:bg-red-300/10">

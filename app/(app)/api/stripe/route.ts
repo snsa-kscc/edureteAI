@@ -60,7 +60,6 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated": {
         const subscription = session as Stripe.Subscription;
-        console.log("subscription", subscription);
         const userId = await getUserIdFromCustomer(subscription.customer as string);
 
         if (!userId) {
@@ -77,29 +76,11 @@ export async function POST(req: Request) {
 
         const cancelAtPeriodEnd = subscription.cancel_at_period_end || false;
 
-        // Determine pending tier (if downgrading)
         let pendingTier = null;
 
-        // Check for pending updates first (downgrade or upgrade at period end)
-        if (subscription.pending_update && subscription.pending_update.subscription_items && subscription.pending_update.subscription_items.length > 0) {
-          // Get the pending price from the first item in the array
-          const pendingItem = subscription.pending_update.subscription_items[0];
-          const pendingPriceId = pendingItem?.price?.id;
-
-          // Set pendingTier based on the upcoming price change
-          if (pendingPriceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
-            pendingTier = MESSAGE_TIER.PAID_PLUS;
-          } else if (pendingPriceId === process.env.STRIPE_PRICE_ID_PAID) {
-            pendingTier = MESSAGE_TIER.PAID;
-          } else if (pendingPriceId) {
-            // Only set to FREE if we actually have a pendingPriceId
-            pendingTier = MESSAGE_TIER.FREE;
-          }
-        } else if (cancelAtPeriodEnd) {
-          // If canceling at period end, the pending tier will be FREE
+        if (cancelAtPeriodEnd) {
           pendingTier = MESSAGE_TIER.FREE;
         }
-        // pendingTier remains null if there are no pending changes
 
         await updateSubscriptionInDatabase(
           userId,

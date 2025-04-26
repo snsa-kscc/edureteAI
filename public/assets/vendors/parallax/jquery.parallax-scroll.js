@@ -1,5 +1,4 @@
 $(function () {
-  console.log("initiated");
   ParallaxScroll.init();
 });
 
@@ -33,18 +32,7 @@ var ParallaxScroll = {
 
   /* PRIVATE VARIABLES */
   _inited: false,
-  _properties: [
-    "x",
-    "y",
-    "z",
-    "rotateX",
-    "rotateY",
-    "rotateZ",
-    "scaleX",
-    "scaleY",
-    "scaleZ",
-    "scale",
-  ],
+  _properties: ["x", "y", "z", "rotateX", "rotateY", "rotateZ", "scaleX", "scaleY", "scaleZ", "scale"],
   _requestAnimationFrame: null,
 
   /* PRIVATE FUNCTIONS */
@@ -78,20 +66,16 @@ var ParallaxScroll = {
         for (iData = 0; iData < datasLength; iData++) {
           var data = datas[iData];
           var scrollFrom = data["from-scroll"];
-          if (scrollFrom == undefined)
-            scrollFrom = Math.max(0, $(el).offset().top - windowHeight);
+          if (scrollFrom == undefined) scrollFrom = Math.max(0, $(el).offset().top - windowHeight);
           scrollFrom = scrollFrom | 0;
           var scrollDistance = data["distance"];
           var scrollTo = data["to-scroll"];
-          if (scrollDistance == undefined && scrollTo == undefined)
-            scrollDistance = windowHeight;
+          if (scrollDistance == undefined && scrollTo == undefined) scrollDistance = windowHeight;
           scrollDistance = Math.max(scrollDistance | 0, 1);
           var easing = data["easing"];
           var easingReturn = data["easing-return"];
-          if (easing == undefined || !$.easing || !$.easing[easing])
-            easing = null;
-          if (easingReturn == undefined || !$.easing || !$.easing[easingReturn])
-            easingReturn = easing;
+          if (easing == undefined || !$.easing || !$.easing[easing]) easing = null;
+          if (easingReturn == undefined || !$.easing || !$.easing[easingReturn]) easingReturn = easing;
           if (easing) {
             var totalTime = data["duration"];
             if (totalTime == undefined) totalTime = scrollDistance;
@@ -138,22 +122,14 @@ var ParallaxScroll = {
               var defaultProp = 0;
               var to = data[prop];
               if (to == undefined) return;
-              if (
-                prop == "scale" ||
-                prop == "scaleX" ||
-                prop == "scaleY" ||
-                prop == "scaleZ"
-              ) {
+              if (prop == "scale" || prop == "scaleX" || prop == "scaleY" || prop == "scaleZ") {
                 defaultProp = 1;
               } else {
                 to = to | 0;
               }
               var prev = $el.data("_" + prop);
               if (prev == undefined) prev = defaultProp;
-              var next =
-                (to - defaultProp) *
-                  ((scrollCurrent - scrollFrom) / (scrollTo - scrollFrom)) +
-                defaultProp;
+              var next = (to - defaultProp) * ((scrollCurrent - scrollFrom) / (scrollTo - scrollFrom)) + defaultProp;
               var val = prev + (next - prev) / smoothness;
               if (easing && currentTime > 0 && currentTime <= totalTime) {
                 var from = defaultProp;
@@ -181,17 +157,8 @@ var ParallaxScroll = {
             var perspective = data["perspective"];
             if (perspective == undefined) perspective = 800;
             var $parent = $el.parent();
-            if (!$parent.data("style"))
-              $parent.data("style", $parent.attr("style") || "");
-            $parent.attr(
-              "style",
-              "perspective:" +
-                perspective +
-                "px; -webkit-perspective:" +
-                perspective +
-                "px; " +
-                $parent.data("style")
-            );
+            if (!$parent.data("style")) $parent.data("style", $parent.attr("style") || "");
+            $parent.attr("style", "perspective:" + perspective + "px; -webkit-perspective:" + perspective + "px; " + $parent.data("style"));
           }
           if (properties["scaleX"] == undefined) properties["scaleX"] = 1;
           if (properties["scaleY"] == undefined) properties["scaleY"] = 1;
@@ -217,25 +184,10 @@ var ParallaxScroll = {
             "deg) rotateZ(" +
             (properties["rotateZ"] ? properties["rotateZ"] : 0) +
             "deg)";
-          var scale3d =
-            "scaleX(" +
-            properties["scaleX"] +
-            ") scaleY(" +
-            properties["scaleY"] +
-            ") scaleZ(" +
-            properties["scaleZ"] +
-            ")";
+          var scale3d = "scaleX(" + properties["scaleX"] + ") scaleY(" + properties["scaleY"] + ") scaleZ(" + properties["scaleZ"] + ")";
           var cssTransform = translate3d + " " + rotate3d + " " + scale3d + ";";
           this._log(cssTransform);
-          $el.attr(
-            "style",
-            "transform:" +
-              cssTransform +
-              " -webkit-transform:" +
-              cssTransform +
-              " " +
-              style
-          );
+          $el.attr("style", "transform:" + cssTransform + " -webkit-transform:" + cssTransform + " " + style);
         }
       }, this)
     );

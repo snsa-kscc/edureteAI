@@ -73,7 +73,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
         <Progress value={totalPercentage} className="h-2" />
       </div>
 
-      {isPaid && (
+      {/* {isPaid && (
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs">
             <span className="text-muted-foreground">Premium poruke</span>
@@ -83,7 +83,7 @@ export function MessageUsageProgress({ userId }: MessageUsageProgressProps) {
           </div>
           <Progress value={premiumPercentage} className="h-2" />
         </div>
-      )}
+      )} */}
 
       <div className="text-xs text-muted-foreground">
         {usage.subscriptionTier === MESSAGE_TIER.FREE ? (
