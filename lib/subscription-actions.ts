@@ -148,7 +148,7 @@ export async function getUserSubscriptionDetails(): Promise<UserSubscriptionDeta
         totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
         premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
         cancelAtPeriodEnd: false,
-        pendingTier: null
+        pendingTier: null,
       };
     }
 
@@ -170,7 +170,7 @@ export async function getUserSubscriptionDetails(): Promise<UserSubscriptionDeta
         totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].TOTAL_MESSAGES,
         premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.FREE].PREMIUM_MODEL_MESSAGES,
         cancelAtPeriodEnd: false,
-        pendingTier: null
+        pendingTier: null,
       };
     }
 
@@ -188,7 +188,7 @@ export async function getUserSubscriptionDetails(): Promise<UserSubscriptionDeta
     // Get information about pending changes (cancellation or tier change)
     const isPendingCancellation = subscription.cancelAtPeriodEnd || false;
     const pendingTier = subscription.pendingTier || null;
-    
+
     return {
       isSubscribed: true,
       tier: subscription.tier,

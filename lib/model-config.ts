@@ -90,6 +90,11 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 4.4,
     family: "openai",
   },
+  "o4-mini": {
+    inputPrice: 1.1,
+    outputPrice: 4.4,
+    family: "openai",
+  },
   "o1-preview": {
     inputPrice: 15.0,
     outputPrice: 60.0,
@@ -113,6 +118,21 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "gpt-4o-mini": {
     inputPrice: 0.15,
     outputPrice: 0.6,
+    family: "openai",
+  },
+  "gpt-4.1": {
+    inputPrice: 2,
+    outputPrice: 8,
+    family: "openai",
+  },
+  "gpt-4.1-mini": {
+    inputPrice: 0.4,
+    outputPrice: 1.6,
+    family: "openai",
+  },
+  "gpt-4.1-nano": {
+    inputPrice: 0.1,
+    outputPrice: 0.4,
     family: "openai",
   },
   "claude-3-5-sonnet-latest": {
@@ -202,5 +222,3 @@ Use \displaystyle for all fractions and wrap complex expressions in equation blo
 Under no circumstances output $$ casually outside LaTeX notation. This is very important because we have custom regex matchers to detect LaTeX notation and casual $$ output will break the pattern. You can output single $ sign when dealing with amounts of money in dollars, but never use double $$ outside of LaTeX notation.
 
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.`;
-
-
