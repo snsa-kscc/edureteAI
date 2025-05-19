@@ -421,9 +421,6 @@ export default function Home() {
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" /> 50 poruka
                         </li>
-                        <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Odabrani snimci za lakše učenje
-                        </li>
                       </ul>
                       <Link href="/sign-up" className="price_btn">
                         Isprobaj
