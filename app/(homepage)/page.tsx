@@ -443,10 +443,7 @@ export default function Home() {
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Odabrani snimci za lakše učenje
                         </li>
-                        <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" />
-                          <span style={{ color: "red" }}>Posebna promo akcija za prvih 100 učenika</span> - 2 X 30 minuta sa instruktorom
-                        </li>
+                        
                       </ul>
                       <Link href="/sign-up" className="price_btn">
                         Isprobaj
@@ -467,7 +464,7 @@ export default function Home() {
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> Odabrani snimci za lakše učenje
                         </li>
                         <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x30 minuta svaki mjesec sa instruktorom
+                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x45 minuta svaki mjesec sa instruktorom
                         </li>
                       </ul>
                       <Link href="/sign-up" className="price_btn">
