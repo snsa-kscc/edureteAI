@@ -440,7 +440,7 @@ export default function Home() {
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Odabrani snimci za lakše učenje
                         </li>
-                        
+
                       </ul>
                       <Link href="/sign-up" className="price_btn">
                         Isprobaj
@@ -778,6 +778,41 @@ export default function Home() {
                 </div>
               </div>
             </section>
+            <footer className="footer_area_two footer_area_three footer_shap" data-bg-color="#12141D">
+              <div className="container">
+                  <div className="row">
+                      <div className="col-lg-4 col-sm-6">
+                          <div className="f_widget f_about_widget wow fadeInUp" data-wow-delay="0.2s">
+                              <a href="index.html" className="f_logo"><img src="/assets/img/logo.svg" alt=""/></a>
+                              <p>Portal koji pomaže u učenju kombinacijom tri sastavna dijela bez obzira gdje se nalazite.</p>
+                          </div>
+                      </div>
+                      <div className="col-lg-4">
+                          <div className="f_widget f_link_widget wow fadeInUp" data-wow-delay="0.3s">
+                              <h3 className="f_title">Korisni linkovi</h3>
+                              <ul className="list-unstyled link_widget">
+                                  <li><a href="https://edurete.com/ads">Oglasi instruktora</a></li>
+                                  <li><a href="https://edurete.com/videos">Besplatne video lekcije</a></li>
+                                  <li><a href="https://edurete.com/online-instructions">Online instrukcije</a></li>
+                                  <li><a href="https://edurete.com/privacy-policy">Politika privatnosti</a></li>
+                                  <li><a href="https://edurete.com/docs/opci-uvijeti-koristenja.pdf">Opći uvjeti</a></li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div className="col-lg-4">
+                          <div className="f_widget f_newsletter_widget wow fadeInUp" data-wow-delay="0.5s">
+                              <h3 className="f_title">Kontakt</h3>
+                              <div className="f_widget f_about_widget wow fadeInUp" data-wow-delay="0.3s">
+                                  <p>EDURETE, VL. GORAN KOMLENAC<br/> FERENŠČICA I. 53<br/>10000 Zagreb</p>
+                                  <a href="mailto:podrska@edurete.com">podrska@edurete.com</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="footer_bottom text-center"></div>
+              </div>
+            </footer>
+
           </div>
 
           <script src="/assets/js/jquery-3.6.0.min.js"></script>
