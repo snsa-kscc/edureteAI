@@ -22,6 +22,7 @@ export const modelProvider = customProvider({
       }),
       model: fireworks("accounts/fireworks/models/deepseek-r1"),
     }),
+    "gemini-2.5-flash-preview-04-17": google("gemini-2.5-flash-preview-04-17"),
     "gemini-2.5-pro-preview-03-25": google("gemini-2.5-pro-preview-03-25"),
     "gemini-2.0-flash": google("gemini-2.0-flash"),
     "gemini-2.0-flash-thinking-exp-01-21": google("gemini-2.0-flash-thinking-exp-01-21"),
