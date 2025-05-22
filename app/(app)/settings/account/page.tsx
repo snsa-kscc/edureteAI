@@ -14,8 +14,6 @@ export default async function AccountPage() {
   const user = await currentUser();
   const subscriptionDetails = await getUserSubscriptionDetails();
 
-  console.log("subscriptionDetails", subscriptionDetails);
-
   if (!userId) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
