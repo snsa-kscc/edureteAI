@@ -5,7 +5,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { getUserSubscriptionDetails } from "@/lib/subscription-actions";
 import { SubscriptionManagement } from "@/components/subscription-management";
 import { DeleteAccountSection } from "@/components/delete-account-section";
-import { SUBSCRIPTION_PLANS } from "@/lib/model-config";
+import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 import { PricingCardsSection } from "@/components/pricing-cards-section";
 
 export default async function AccountPage() {
@@ -13,6 +13,8 @@ export default async function AccountPage() {
   const userId = sessionClaims?.userId as string;
   const user = await currentUser();
   const subscriptionDetails = await getUserSubscriptionDetails();
+
+  console.log("subscriptionDetails", subscriptionDetails);
 
   if (!userId) {
     return (
@@ -96,7 +98,7 @@ export default async function AccountPage() {
         </div>
       )}
 
-      {subscriptionDetails.isSubscribed && (
+      {subscriptionDetails.tier === MESSAGE_TIER.PAID_PLUS && (
         <div className="mt-4 p-4 bg-muted rounded-md">
           <h2 className="text-xl font-semibold mb-6">Korištenjem ovog plana ostvaruješ pogodnost instrukcija s našim instruktorima 🥰🎉</h2>
           <p className="text-sm">
