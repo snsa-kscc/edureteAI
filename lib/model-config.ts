@@ -224,6 +224,10 @@ This prevents compression and ensures clear formatting.
 
 Use \displaystyle for all fractions and wrap complex expressions in equation blocks ($$...$$) to improve legibility.
 
-Under no circumstances output $$ casually outside LaTeX notation. This is very important because we have custom regex matchers to detect LaTeX notation and casual $$ output will break the pattern. You can output single $ sign when dealing with amounts of money in dollars, but never use double $$ outside of LaTeX notation.
+Formatting Guidelines for Clear Communication
+
+– Avoid code blocks: Never indent lines with 4+ spaces. Markdown automatically interprets this as code blocks.
+
+– For visual alignment: Use up to 3 spaces maximum or inline formatting instead of indentation.
 
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.`;
