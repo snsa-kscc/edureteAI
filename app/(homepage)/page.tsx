@@ -438,7 +438,7 @@ export default function Home() {
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" /> 1500 poruka
                         </li>
                         <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Odabrani snimci za lakše učenje
+                          <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Uključeni besplatni videozapisi za učenje
                         </li>
 
                       </ul>
@@ -458,7 +458,7 @@ export default function Home() {
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 1500 poruka
                         </li>
                         <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> Odabrani snimci za lakše učenje
+                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> Uključeni besplatni videozapisi za učenje
                         </li>
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x45 minuta svaki mjesec sa instruktorom
