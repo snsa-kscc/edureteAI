@@ -79,8 +79,8 @@ export type ProviderData =
     }
   | undefined;
 
-export type ModelPricing = {
-  inputPrice: number;
-  outputPrice: number;
+export interface ModelPricing {
+  inputPrice: number | ((tokens: number) => number);
+  outputPrice: number | ((tokens: number) => number);
   family: "openai" | "anthropic" | "togetherai" | "google" | "fireworks";
 };

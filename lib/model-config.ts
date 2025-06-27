@@ -50,14 +50,14 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 8,
     family: "fireworks",
   },
-  "gemini-2.5-pro-preview-03-25": {
-    inputPrice: 2.5,
-    outputPrice: 15,
-    family: "google",
-  },
-  "gemini-2.5-flash-preview-04-17": {
-    inputPrice: 0.15,
-    outputPrice: 0.60,
+  "gemini-2.5-pro": {
+  inputPrice: (tokens: number) => tokens <= 200_000 ? 1.25 : 2.5,
+  outputPrice: (tokens: number) => tokens <= 200_000 ? 10.0 : 15.0,
+  family: "google",
+},
+  "gemini-2.5-flash": {
+    inputPrice: 0.30,
+    outputPrice: 2.5,
     family: "google",
   },
   "gemini-1.5-pro": {
