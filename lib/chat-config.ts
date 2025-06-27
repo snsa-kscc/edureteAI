@@ -11,5 +11,5 @@ export const CHAT_MODELS = [
 export const MODELS_WITHOUT_IMAGE_SUPPORT = ["o1-preview", "o1-mini", "o3-mini", "accounts/fireworks/models/deepseek-r1", "deepseek-ai/DeepSeek-R1"];
 
 export const DEFAULT_LEFT_MODEL = "gemini-2.5-pro";
-export const DEFAULT_RIGHT_MODEL = "o4-mini";
+export const DEFAULT_RIGHT_MODEL = "claude-sonnet-4-20250514";
 export const DEFAULT_USER_SYSTEM_PROMPT = "";
