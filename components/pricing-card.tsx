@@ -35,17 +35,13 @@ export const PricingCard = ({ tier, isLoading, onSelectPlan }: PricingCardProps)
             </li>
             <li className="flex items-center gap-2">
               <Check className="h-4 w-4 text-primary" />
-              <span>Odabrani snimci za lakše učenje</span>
+              <span>Uključeni besplatni videozapisi za učenje</span>
             </li>
             {tier === MESSAGE_TIER.PAID_PLUS && (
               <>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-primary" />
-                  <span>Prioritetna podrška naših instruktora</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>4x30 minuta svaki mjesec sa instruktorom</span>
+                  <span>4x45 minuta svaki mjesec sa instruktorom</span>
                 </li>
               </>
             )}

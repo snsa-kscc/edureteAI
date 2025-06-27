@@ -13,8 +13,16 @@ export async function saveUsage(usageData: Usage) {
     throw new Error(`Unknown model: ${usageData.model}`);
   }
 
-  const inputCost = (usageData.promptTokens / 1_000_000) * modelConfig.inputPrice;
-  const outputCost = (usageData.completionTokens / 1_000_000) * modelConfig.outputPrice;
+const inputPrice = typeof modelConfig.inputPrice === "function"
+  ? modelConfig.inputPrice(usageData.promptTokens)
+  : modelConfig.inputPrice;
+
+const outputPrice = typeof modelConfig.outputPrice === "function"
+  ? modelConfig.outputPrice(usageData.completionTokens)
+  : modelConfig.outputPrice;
+
+const inputCost = (usageData.promptTokens / 1_000_000) * inputPrice;
+const outputCost = (usageData.completionTokens / 1_000_000) * outputPrice;
   const totalCost = inputCost + outputCost;
 
   const currentDate = new Date(usageData.timestamp).toISOString().split("T")[0];
