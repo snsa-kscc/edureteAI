@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { openai, OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
+import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { fireworks } from "@ai-sdk/fireworks";
 import { togetherai } from "@ai-sdk/togetherai";
@@ -30,10 +30,11 @@ export const modelProvider = customProvider({
     "o3-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
+          temperature: 1,
           providerMetadata: {
             openai: {
               reasoningEffort: "high",
-            } satisfies OpenAIResponsesProviderOptions,
+            }
           },
         },
       }),
@@ -42,10 +43,11 @@ export const modelProvider = customProvider({
     "o4-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
+          temperature: 1,
           providerMetadata: {
             openai: {
-              reasoningEffort: "high",
-            } satisfies OpenAIResponsesProviderOptions,
+              reasoningEffort: "high",          
+            } 
           },
         },
       }),
