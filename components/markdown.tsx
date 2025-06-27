@@ -16,7 +16,7 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
   // );
 
-  const processedContent = children.replace(/\\\[/g, "$$$").replace(/\\\]/g, "$$$").replace(/\\\(/g, "$$$").replace(/\\\)/g, "$$$");
+  const processedContent = children;
 
   const remarkMathOptions = {
     singleDollarTextMath: true,
