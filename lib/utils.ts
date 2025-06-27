@@ -58,8 +58,8 @@ export const modelProvider = customProvider({
     "gpt-4.1": openai("gpt-4.1"),
     "gpt-4.1-mini": openai("gpt-4.1-mini"),
     "gpt-4.1-nano": openai("gpt-4.1-nano"),
-    "claude-3-7-sonnet-latest": anthropic("claude-3-7-sonnet-latest"),
-    "claude-3.7-sonnet": wrapLanguageModel({
+    "claude-sonnet-4-20250514": anthropic("claude-sonnet-4-20250514"),
+    "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
           providerMetadata: {
@@ -69,9 +69,9 @@ export const modelProvider = customProvider({
           },
         },
       }),
-      model: anthropic("claude-3-7-sonnet-latest"),
+      model: anthropic("claude-sonnet-4-20250514"),
     }),
-    "claude-3.7-sonnet-thinking": wrapLanguageModel({
+    "claude-sonnet-4-thinking": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
           providerMetadata: {
@@ -81,7 +81,7 @@ export const modelProvider = customProvider({
           },
         },
       }),
-      model: anthropic("claude-3-7-sonnet-latest"),
+      model: anthropic("claude-sonnet-4-20250514"),
     }),
   },
 });

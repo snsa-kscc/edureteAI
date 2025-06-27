@@ -5,7 +5,7 @@ export const CHAT_MODELS = [
   { value: "gemini-2.0-flash", label: "Google/Gemini 2.0 Flash" },
   { value: "gpt-4o", label: "OpenAI/GPT-4o" },
   { value: "o4-mini", label: "OpenAI/o4-mini (high)" },
-  { value: "claude-3-7-sonnet-latest", label: "Anthropic/Claude 3.7 Sonnet" },
+  { value: "claude-sonnet-4-20250514", label: "Anthropic/Claude Sonnet 4" },
   { value: "gpt-4.1", label: "OpenAI/GPT-4.1" },
   { value: "gpt-4.1-mini", label: "OpenAI/GPT-4.1-mini" },
   { value: "gpt-4.1-nano", label: "OpenAI/GPT-4.1-nano" },

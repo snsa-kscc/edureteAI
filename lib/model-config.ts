@@ -42,7 +42,7 @@ export const SUBSCRIPTION_PLANS = {
   },
 };
 
-export const PREMIUM_MODELS = ["claude-3-5-sonnet-latest", "claude-3-7-sonnet-latest", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
+export const PREMIUM_MODELS = ["claude-sonnet-4-20250514", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "accounts/fireworks/models/deepseek-r1": {
@@ -140,12 +140,7 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 0.4,
     family: "openai",
   },
-  "claude-3-5-sonnet-latest": {
-    inputPrice: 3.0,
-    outputPrice: 15.0,
-    family: "anthropic",
-  },
-  "claude-3-7-sonnet-latest": {
+  "claude-sonnet-4-20250514": {
     inputPrice: 3.0,
     outputPrice: 15.0,
     family: "anthropic",
