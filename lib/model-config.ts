@@ -213,7 +213,16 @@ This prevents compression and ensures clear formatting.
 Formatting Guidelines for Clear Communication
 
 – Avoid code blocks: Never indent lines with 4+ spaces. Markdown automatically interprets this as code blocks.
-
+– Avoid this type of latex: [
+7,(x + 19) = 12,x
+\quad\Longrightarrow\quad
+7x + 133 = 12x
+\quad\Longrightarrow\quad
+133 = 5x
+\quad\Longrightarrow\quad
+x = \frac{133}{5} = 26{,}6\text{ cm}.
+]
+Don’t use [] 
 – For visual alignment: Use up to 3 spaces maximum or inline formatting instead of indentation.
 
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.
