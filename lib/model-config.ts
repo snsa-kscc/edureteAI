@@ -213,7 +213,9 @@ Inline math: $...$
 
 Display math: $$...$$
 
-Never use any of the following (or similar) unsupported notations:
+Never use any of the following (or similar) unsupported notations (whether inline or display):
+
+(...)
 
 \[...\]
 
