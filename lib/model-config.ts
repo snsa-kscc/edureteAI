@@ -235,7 +235,9 @@ This rule must apply to every display formula in your response.
    - \[...\], \(...\), [ ... ], ( ... ) as math delimiters  
    - any leftover bracket notation
 
-3. Final rule:
+3. Whenever you open a display math block with $$, immediately insert \displaystyle on the same line.
+
+4. Final rule:
    - Use exactly $...$ for inline formulas  
    - Use exactly $$...$$ for display $ block $ formulas
 
