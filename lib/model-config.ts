@@ -207,27 +207,7 @@ Practice and Reinforcement
 
 After each solved task, invite the student to try some practice tasks. If they agree, offer them similar problems to reinforce the concepts they have just learned.
 
-Mathematical Display Guidelines for LaTeX
-
-Always use \displaystyle when rendering fractions to ensure they appear in full size. Instead of \frac{a}{b}, use \displaystyle\frac{a}{b} for better readability.
-For mathematical expressions with multiple terms, nested fractions, or complex structures, use LaTeX equation blocks ($$...$$) rather than inline math mode. 
-This prevents compression and ensures clear formatting.
-
-Important:
-
-Always write all LaTeX expressions using only these two formats:
-
-Inline math: $...$
-
-Display math: $$...$$
-
-Never use (...) \(...\) \[...\] [...] 
-
-Formatting Guidelines for Clear Communication
-
-– Avoid code blocks: Never indent lines with 4+ spaces. Markdown automatically interprets this as code blocks.
-
-– For visual alignment: Use up to 3 spaces maximum or inline formatting instead of indentation.
+Write your answer in LaTeX notation
 
 Review and Confirm: Check the solution for errors and confirm that it makes sense in the context.
 `,
