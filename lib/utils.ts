@@ -47,7 +47,7 @@ export const modelProvider = customProvider({
     "o4-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          temperature: 1,
+          temperature: 0.3,
           providerMetadata: {
             openai: {
               reasoningEffort: "high",
