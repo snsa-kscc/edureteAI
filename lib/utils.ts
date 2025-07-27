@@ -8,7 +8,12 @@ import { google } from "@ai-sdk/google";
 import { getYesterdayUsage, getUserQuota } from "./neon-actions";
 import { MODEL_CONFIGS } from "./model-config";
 import { type UserData } from "@/types";
-import { customProvider, wrapLanguageModel, defaultSettingsMiddleware, extractReasoningMiddleware } from "ai";
+import {
+  customProvider,
+  wrapLanguageModel,
+  defaultSettingsMiddleware,
+  extractReasoningMiddleware,
+} from "ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,7 +38,7 @@ export const modelProvider = customProvider({
           providerMetadata: {
             openai: {
               reasoningEffort: "high",
-            }
+            },
           },
         },
       }),
@@ -45,8 +50,8 @@ export const modelProvider = customProvider({
           temperature: 1,
           providerMetadata: {
             openai: {
-              reasoningEffort: "high",          
-            } 
+              reasoningEffort: "high",
+            },
           },
         },
       }),
@@ -99,10 +104,16 @@ export function handleModelProvider(model: string) {
   }
 }
 
-export async function getUsersUsage(usersData: UserData[], modelFamily: string) {
+export async function getUsersUsage(
+  usersData: UserData[],
+  modelFamily: string
+) {
   const res = await Promise.all(
     usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
-      const { totalTokensUsed, totalCost, quotaLimit } = await getUserQuota(userId, modelFamily);
+      const { totalTokensUsed, totalCost, quotaLimit } = await getUserQuota(
+        userId,
+        modelFamily
+      );
       return {
         userId,
         firstName,
@@ -117,10 +128,16 @@ export async function getUsersUsage(usersData: UserData[], modelFamily: string) 
   return res;
 }
 
-export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily: string) {
+export async function getUsersYesterdayUsage(
+  usersData: UserData[],
+  modelFamily: string
+) {
   const res = await Promise.all(
     usersData.map(async ({ userId }) => {
-      const { totalTokens, totalCost } = await getYesterdayUsage(userId, modelFamily);
+      const { totalTokens, totalCost } = await getYesterdayUsage(
+        userId,
+        modelFamily
+      );
       return {
         userId,
         tokens: +totalTokens,
@@ -132,9 +149,16 @@ export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily:
 }
 
 export function getUniqueFamilies(): string[] {
-  return [...new Set(Object.values(MODEL_CONFIGS).map((model) => model.family))].sort();
+  return [
+    ...new Set(Object.values(MODEL_CONFIGS).map((model) => model.family)),
+  ].sort();
 }
-
+export function getKaTeXLogitBias(): Record<string, number> {
+  return {
+    "29992": -100, // token for ']'
+    "29993": -100, // token for '['
+  };
+}
 // deprecated
 
 export function tokensToDollars(tokens: number): number {
