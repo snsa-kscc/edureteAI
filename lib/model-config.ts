@@ -279,23 +279,27 @@ $\vec{F} = m\vec{a} = 10 \text{ kg} \cdot 9.8 \text{ m/s}^2 = 98 \text{ N}$
 For tables such as truth tables, periodic table excerpts, data tables, function behavior tables, or comparison tables, use the array environment within display math blocks. This approach is essential because properly formatted tables help students see patterns, relationships, and data clearly across all STEM subjects.
 
 Use this exact syntax for tables:
-
-$$\begin{array}{ccc}
+$$\begin{array}{|c|c|c|}
+\hline
 Header 1 & Header 2 & Header 3 \\
+\hline
 Row 1 Col 1 & Row 1 Col 2 & Row 1 Col 3 \\
-Row 2 Col 1 & Row 2 Col 2 & Row 2 Col 3
+Row 2 Col 1 & Row 2 Col 2 & Row 2 Col 3 \\
+\hline
 \end{array}$$
-Use column alignment specifiers: c for center, l for left, r for right. Use & to separate columns and \\\\ for new rows. Note that array environment in KaTeX does not support \\hline or vertical lines like tabular would.
+Always use |c|c|c| format for column alignment where c means center, l means left, and r means right. Include vertical lines using | between columns for clear separation. Use \\hline for horizontal lines after headers and at the bottom. Use & to separate columns and \\\\ for new rows.
 
 For truth tables specifically, use this format:
-$$\begin{array}{ccc}
+$$\begin{array}{|c|c|c|}
+\hline
 A & B & A \land B \\
+\hline
 0 & 0 & 0 \\
 0 & 1 & 0 \\
 1 & 0 & 0 \\
-1 & 1 & 1
+1 & 1 & 1 \\
+\hline
 \end{array}$$
-For visual separation in tables, rely on spacing and clear headers rather than lines.
 </table_formatting>
 <examples>
 Here are examples of how to respond to different types of questions:
