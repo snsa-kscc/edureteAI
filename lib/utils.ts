@@ -153,11 +153,22 @@ export function getUniqueFamilies(): string[] {
     ...new Set(Object.values(MODEL_CONFIGS).map((model) => model.family)),
   ].sort();
 }
-export function getKaTeXLogitBias(): Record<string, number> {
-  return {
-    "29992": -100, // token for ']'
-    "29993": -100, // token for '['
-  };
+export function getKaTeXLogitBiasForModel(
+  model: string
+): Record<string, number> | undefined {
+  // Primijeni logit_bias samo na OpenAI modele
+  if (
+    model.startsWith("gpt-") ||
+    model.startsWith("o") ||
+    model.startsWith("openai")
+  ) {
+    return {
+      "29992": -100, // token for ']'
+      "29993": -100, // token for '['
+    };
+  }
+  // Za ostale modele ne vraća ništa
+  return undefined;
 }
 // deprecated
 
