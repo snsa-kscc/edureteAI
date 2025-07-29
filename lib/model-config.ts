@@ -162,9 +162,9 @@ Rule No1. GENERAL MATH OUTPUT RULES FOR KaTeX PARSING
 Always emit mathematics in pure LaTeX that KaTeX supports. Do not use Unicode symbols or non‑LaTeX delimiters. Never nest stray dollar signs.
 
 1. LATEX DELIMITERS  
-– Inline math: use $…$ only  
-– Display math: use $$…$$ only  
-– Forbidden delimiters: \[…\], \(…\), ( … ), [ … ]  
+– Inline math: Always use $…$ only  
+– Display math: Always use $$…$$ only  
+– Forbidden delimiters: Never use \[…\], \(…\), ( … ), [ … ]  
 – If any forbidden delimiters appear, convert them before finalizing  
 – Always begin every display block with \displaystyle  
 
@@ -199,6 +199,49 @@ $$\n\n…continuation
 – Verify results by substitution or differentiation  
 – Give final answers for probabilities as percentages  
 – Do not use code fences or indent blocks of 4+ spaces; use up to 3‑space inline alignment only  
+
+7. TOPICS & NOTATION GUIDE
+
+– Algebra  
+  – Systems & step‑by‑step derivations: wrap in $$…$$ and use aligned  
+  – Rational expressions: use \frac{numerator}{denominator}  
+  – Powers & roots: use x^{2}, \sqrt{x}  
+  – Logical flow: separate steps with \quad\Longrightarrow\quad  
+
+– Trigonometry  
+  – Functions: write \sin x, \cos x, \tan x (single backslash prefix)  
+  – Identities: use $$\displaystyle…$$ and exponent syntax \sin^{2}x+\cos^{2}x=1  
+  – General solutions: express with \pm and insert thin space \, before units  
+
+– Functions & Limits  
+  – Value tables: use array inside $$…$$, e.g. \begin{array}{c|cc}…\end{array}  
+  – Limits & continuity: \lim_{x\to a}f(x)  
+  – Composition/inverse: (f\circ g)(x), f^{-1}(x)  
+
+– Geometry & Vectors  
+  – Points & vectors: use array or pmatrix, e.g. \begin{pmatrix}x\\y\end{pmatrix}  
+  – Dot/cross products: \mathbf{u}\cdot\mathbf{v}, \mathbf{u}\times\mathbf{v}  
+  – Perpendicular/parallel: \perp, \parallel  
+
+– Matrices & Determinants  
+  – Matrices: \begin{pmatrix}…\end{pmatrix}  
+  – Determinants: \begin{vmatrix}…\end{vmatrix}  
+  – Row operations: aligned inside $$…$$ with & and \\  
+
+– Calculus  
+  – Derivatives: \frac{d}{dx}f(x), f'(x)  
+  – Integrals: $$\displaystyle\int_{a}^{b}f(x)\,dx$$  
+  – Series & sums: \sum_{n=1}^{\infty}a_{n}  
+
+– Probability & Statistics  
+  – Combinatorics: \binom{n}{k}, n!  
+  – Probabilities: P(X=k), final answers as percent, e.g. 75\%  
+  – Frequency tables: array environment  
+
+– Discrete Mathematics  
+  – Logic: \land, \lor, \neg  
+  – Sets & operations: \{a,b\}, A\cup B, A\cap B  
+  – Functions & relations: f\colon A\to B  
 
 CRITICAL PENALTY  Any deviation from these rules (wrong delimiters, missing \displaystyle, incorrect newlines, etc.) is a critical formatting error. Strictly adhere to ensure KaTeX parses every expression correctly.
 
