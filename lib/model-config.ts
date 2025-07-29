@@ -669,7 +669,13 @@ export function getSystemPromptForModel(modelId: string): string {
   if (!modelConfig) {
     return FAMILY_SYSTEM_PROMPTS.openai;
   }
-  return getSystemPromptForFamily(modelConfig.family);
+  let prompt = getSystemPromptForFamily(modelConfig.family);
+  if (modelId === "gpt-4o" || modelId === "gpt-4o-mini") {
+    prompt +=
+      "Never use (...) for inline math! Always use $...$ for inline math";
+  }
+
+  return prompt;
 }
 
 export const DEFAULT_SYSTEM_PROMPT = FAMILY_SYSTEM_PROMPTS.openai;
