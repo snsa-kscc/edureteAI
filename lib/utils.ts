@@ -158,8 +158,8 @@ export function getKaTeXLogitBiasForModel(
 ): Record<string, number> | undefined {
   // Primijeni logit_bias samo na OpenAI modele
   if (
-    model.startsWith("gpt-") ||
-    model.startsWith("o") ||
+    model.startsWith("gpt4o") ||
+    model.startsWith("o4") ||
     model.startsWith("openai")
   ) {
     return {
