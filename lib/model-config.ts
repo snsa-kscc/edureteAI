@@ -171,6 +171,9 @@ Always emit mathematics in pure LaTeX that KaTeX supports. Do not use Unicode 
 2. NEWLINE RULE FOR DISPLAY MATH  
 – Insert exactly two newline characters (\n\n) before the opening $$ and two newline characters after the closing $$  
 – Do not add extra blank lines or spaces  
+– Immediately after the opening $$ (following the two required newlines), the very first line inside the math block must be  
+  \displaystyle  
+– Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
 
 Example:  
 …explanation\n\n$$  
@@ -672,7 +675,7 @@ export function getSystemPromptForModel(modelId: string): string {
   let prompt = getSystemPromptForFamily(modelConfig.family);
   if (modelId === "gpt-4o" || modelId === "gpt-4o-mini") {
     prompt +=
-      "Never use (...) for inline math! Always use $...$ for inline math";
+      "Never use (...) for inline math and never use [...] for display math! Always use $...$ for inline math and $$...$$ for display math.";
   }
 
   return prompt;
