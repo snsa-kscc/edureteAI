@@ -16,8 +16,6 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
   // );
 
-const processedContent = children;
-
   const remarkMathOptions = {
     singleDollarTextMath: true,
   };
@@ -80,7 +78,7 @@ const processedContent = children;
       remarkPlugins={[[remarkMath, remarkMathOptions], remarkGfm]}
       rehypePlugins={[rehypeRaw, [rehypeKatex, { output: "htmlAndMathml" }]]}
     >
-      {processedContent}
+      {children}
     </ReactMarkdown>
   );
 };
