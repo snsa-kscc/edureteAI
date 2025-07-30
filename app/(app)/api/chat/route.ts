@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { streamText, type Message, appendResponseMessages, createDataStreamResponse, smoothStream } from "ai";
 import { auth } from "@clerk/nextjs/server";
-import { checkQuota, saveUsage } from "@/lib/neon-actions";
+import { saveUsage } from "@/lib/neon-actions";
 import { modelProvider } from "@/lib/utils";
-import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
+import { getSystemPromptForModel } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import type { Usage, Chat } from "@/types";
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       execute: (dataStream) => {
         const result = streamText({
           model: modelProvider.languageModel(model),
-          system: ["o1-mini", "o1-preview"].includes(model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + system,
+          system: getSystemPromptForModel(model) + "\n" + system,
           messages: [
             ...initialMessages,
             {

@@ -28,28 +28,21 @@ export const SUBSCRIPTION_PLANS = {
     description: "Premium plan koji sadrži 1500 poruka.",
     priceId: process.env.STRIPE_PRICE_ID_PAID || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].TOTAL_MESSAGES,
-    premiumModelMessages:
-      MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID,
   },
   [MESSAGE_TIER.PAID_PLUS]: {
     name: "eduAI Duo",
     price: 39,
-    description:
-      "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
+    description: "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
     priceId: process.env.STRIPE_PRICE_ID_PAID_PLUS || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].TOTAL_MESSAGES,
-    premiumModelMessages:
-      MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID_PLUS,
   },
 };
 
-export const PREMIUM_MODELS = [
-  "claude-sonnet-4-20250514",
-  "gpt-4.5-preview",
-  "gemini-2.0-flash-thinking-exp-01-21",
-];
+export const PREMIUM_MODELS = ["claude-sonnet-4-20250514", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "accounts/fireworks/models/deepseek-r1": {
@@ -663,7 +656,7 @@ After each solution:
 3. Difficulty adjustment: Based on student's level
 `,
 };
-export function getSystemPromptForFamily(family: string): string {
+function getSystemPromptForFamily(family: string): string {
   return FAMILY_SYSTEM_PROMPTS[family] || FAMILY_SYSTEM_PROMPTS.openai;
 }
 
@@ -673,9 +666,8 @@ export function getSystemPromptForModel(modelId: string): string {
     return FAMILY_SYSTEM_PROMPTS.openai;
   }
   let prompt = getSystemPromptForFamily(modelConfig.family);
-  if (modelId === "gpt-4o" || modelId === "gpt-4o-mini") {
-    prompt +=
-      "Never use (...) for inline math and never use [...] for display math! Always use $...$ for inline math and $$...$$ for display math.";
+  if (modelId === "gpt-4o") {
+    prompt += "Never use (...) for inline math and never use [...] for display math! Always use $...$ for inline math and $$...$$ for display math.";
   }
 
   return prompt;
