@@ -28,21 +28,28 @@ export const SUBSCRIPTION_PLANS = {
     description: "Premium plan koji sadrži 1500 poruka.",
     priceId: process.env.STRIPE_PRICE_ID_PAID || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].TOTAL_MESSAGES,
-    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages:
+      MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID,
   },
   [MESSAGE_TIER.PAID_PLUS]: {
     name: "eduAI Duo",
     price: 39,
-    description: "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
+    description:
+      "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
     priceId: process.env.STRIPE_PRICE_ID_PAID_PLUS || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].TOTAL_MESSAGES,
-    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages:
+      MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID_PLUS,
   },
 };
 
-export const PREMIUM_MODELS = ["claude-sonnet-4-20250514", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
+export const PREMIUM_MODELS = [
+  "claude-sonnet-4-20250514",
+  "gpt-4.5-preview",
+  "gemini-2.0-flash-thinking-exp-01-21",
+];
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "accounts/fireworks/models/deepseek-r1": {
@@ -195,49 +202,6 @@ $$\n\n…continuation
 – Verify results by substitution or differentiation  
 – Give final answers for probabilities as percentages  
 – Do not use code fences or indent blocks of 4+ spaces; use up to 3‑space inline alignment only  
-
-7. TOPICS & NOTATION GUIDE
-
-– Algebra  
-  – Systems & step‑by‑step derivations: wrap in $$…$$ and use aligned  
-  – Rational expressions: use \frac{numerator}{denominator}  
-  – Powers & roots: use x^{2}, \sqrt{x}  
-  – Logical flow: separate steps with \quad\Longrightarrow\quad  
-
-– Trigonometry  
-  – Functions: write \sin x, \cos x, \tan x (single backslash prefix)  
-  – Identities: use $$\displaystyle…$$ and exponent syntax \sin^{2}x+\cos^{2}x=1  
-  – General solutions: express with \pm and insert thin space \, before units  
-
-– Functions & Limits  
-  – Value tables: use array inside $$…$$, e.g. \begin{array}{c|cc}…\end{array}  
-  – Limits & continuity: \lim_{x\to a}f(x)  
-  – Composition/inverse: (f\circ g)(x), f^{-1}(x)  
-
-– Geometry & Vectors  
-  – Points & vectors: use array or pmatrix, e.g. \begin{pmatrix}x\\y\end{pmatrix}  
-  – Dot/cross products: \mathbf{u}\cdot\mathbf{v}, \mathbf{u}\times\mathbf{v}  
-  – Perpendicular/parallel: \perp, \parallel  
-
-– Matrices & Determinants  
-  – Matrices: \begin{pmatrix}…\end{pmatrix}  
-  – Determinants: \begin{vmatrix}…\end{vmatrix}  
-  – Row operations: aligned inside $$…$$ with & and \\  
-
-– Calculus  
-  – Derivatives: \frac{d}{dx}f(x), f'(x)  
-  – Integrals: $$\displaystyle\int_{a}^{b}f(x)\,dx$$  
-  – Series & sums: \sum_{n=1}^{\infty}a_{n}  
-
-– Probability & Statistics  
-  – Combinatorics: \binom{n}{k}, n!  
-  – Probabilities: P(X=k), final answers as percent, e.g. 75\%  
-  – Frequency tables: array environment  
-
-– Discrete Mathematics  
-  – Logic: \land, \lor, \neg  
-  – Sets & operations: \{a,b\}, A\cup B, A\cap B  
-  – Functions & relations: f\colon A\to B  
 
 CRITICAL PENALTY  Any deviation from these rules (wrong delimiters, missing \displaystyle, incorrect newlines, etc.) is a critical formatting error. Strictly adhere to ensure KaTeX parses every expression correctly.
 
@@ -667,7 +631,10 @@ export function getSystemPromptForModel(modelId: string): string {
   }
   let prompt = getSystemPromptForFamily(modelConfig.family);
   if (modelId === "gpt-4o") {
-    prompt += "Never use (...) for inline math and never use [...] for display math! Always use $...$ for inline math and $$...$$ for display math.";
+    // Zabrani bilo kakav znak između '\' i 'displaystyle'
+    prompt += String.raw` In all display math inside $$…$$, never include any newline characters (\n) or other characters between the backslash "\" and "displaystyle"; always use "\displaystyle" exactly with no intervening characters.`;
+    // Postojeća pravila o delimiterima + eksplicitna zabrana \(…\) i \[…\]
+    prompt += String.raw` Never use (...) for inline math, never use [...] for display math, and never use \(...\) or \[...\]; always use $...$ for inline math and $$...$$ for display math.`;
   }
 
   return prompt;
