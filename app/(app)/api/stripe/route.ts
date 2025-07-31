@@ -82,6 +82,18 @@ export async function POST(req: Request) {
           pendingTier = MESSAGE_TIER.FREE;
         }
 
+        // Access the full event data to get previous_attributes
+        const previousAttributes = (event.data as any).previous_attributes;
+        if (previousAttributes && previousAttributes.items && previousAttributes.items.data) {
+          const previousPriceId = previousAttributes.items.data[0].price.id;
+          // Detect upgrade from PAID to PAID_PLUS
+          if (previousPriceId === process.env.STRIPE_PRICE_ID_PAID && priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
+            console.log("🎉 User upgraded from PAID to PAID_PLUS!", userId);
+            // TODO: Send upgrade email here
+            // await sendUpgradeEmail(userId, 'PAID', 'PAID_PLUS');
+          }
+        }
+
         await updateSubscriptionInDatabase(
           userId,
           subscription.customer as string,
@@ -93,6 +105,31 @@ export async function POST(req: Request) {
           cancelAtPeriodEnd,
           pendingTier
         );
+        break;
+      }
+
+      case "customer.subscription.created": {
+        const subscription = session as Stripe.Subscription;
+        const userId = await getUserIdFromCustomer(subscription.customer as string);
+
+        if (!userId) {
+          console.error("No userId found for customer", subscription.customer);
+          return new NextResponse("No userId found for customer", { status: 400 });
+        }
+
+        const priceId = subscription.items.data[0].price.id;
+        let tier = MESSAGE_TIER.PAID;
+
+        if (priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
+          tier = MESSAGE_TIER.PAID_PLUS;
+        }
+
+        console.log("New subscription created for user", userId);
+        console.log("Subscription details:", subscription.id, tier);
+
+        // TODO: Send welcome email here
+        // await sendWelcomeEmail(userId, tier);
+
         break;
       }
 
