@@ -14,16 +14,16 @@ import { Cog } from "lucide-react";
 import { getUserMessageCounts } from "@/lib/message-limits";
 import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
-const loadUsersData = cache(async () => {
-  return await getUsersData();
-});
-const loadChats = cache(async (userId: string) => {
-  return await getChats(userId);
-});
+// const loadUsersData = cache(async () => {
+//   return await getUsersData();
+// });
+// const loadChats = cache(async (userId: string) => {
+//   return await getChats(userId);
+// });
 
 export async function AppSidebar({ userId, user }: { userId: string | null | undefined; user: User | null | undefined }) {
-  const chats = await loadChats(userId!);
-  const userData = await loadUsersData();
+  // const chats = await loadChats(userId!);
+  // const userData = await loadUsersData();
   const role = user?.privateMetadata.role as string | null | undefined;
   const { subscriptionTier } = await getUserMessageCounts(userId!);
 
@@ -51,7 +51,7 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
             </div>
           }
         >
-          <SidebarList userId={userId} userData={userData} role={role} chats={chats} />
+          {/* <SidebarList userId={userId} userData={userData} role={role} chats={chats} /> */}
         </Suspense>
         <div className="px-2 py-2">{subscriptionTier === MESSAGE_TIER.FREE && <SubscriptionButton />}</div>
         <div className="px-2 py-4 flex items-center justify-between gap-4">
