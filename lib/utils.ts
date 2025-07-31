@@ -10,6 +10,11 @@ import { MODEL_CONFIGS } from "./model-config";
 import { type UserData } from "@/types";
 import { customProvider, wrapLanguageModel, defaultSettingsMiddleware, extractReasoningMiddleware } from "ai";
 
+// Logit bias configuration types
+export interface LogitBiasConfig {
+  [tokenId: string]: number; // Token ID to bias value (-100 to 100)
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -33,7 +38,7 @@ export const modelProvider = customProvider({
           providerMetadata: {
             openai: {
               reasoningEffort: "high",
-            }
+            },
           },
         },
       }),
@@ -42,21 +47,78 @@ export const modelProvider = customProvider({
     "o4-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          temperature: 1,
+          temperature: 0.8,
           providerMetadata: {
             openai: {
-              reasoningEffort: "high",          
-            } 
+              reasoningEffort: "high",
+            },
           },
         },
       }),
       model: openai("o4-mini"),
     }),
-    "gpt-4o": openai("gpt-4o"),
-    "gpt-4o-mini": openai("gpt-4o-mini"),
-    "gpt-4.1": openai("gpt-4.1"),
-    "gpt-4.1-mini": openai("gpt-4.1-mini"),
-    "gpt-4.1-nano": openai("gpt-4.1-nano"),
+    "gpt-4o": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 0.3,
+          providerMetadata: {
+            openai: {
+              logitBias: { "29992": -100, "29993": -100 },
+            },
+          },
+        },
+      }),
+      model: openai("gpt-4o"),
+    }),
+    "gpt-4o-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 0.3,
+          providerMetadata: {
+            openai: {
+              logitBias: { "29992": -100, "29993": -100 },
+            },
+          },
+        },
+      }),
+      model: openai("gpt-4o-mini"),
+    }),
+    "gpt-4.1": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              logitBias: { "29992": -100, "29993": -100 },
+            },
+          },
+        },
+      }),
+      model: openai("gpt-4.1"),
+    }),
+    "gpt-4.1-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              logitBias: { "29992": -100, "29993": -100 },
+            },
+          },
+        },
+      }),
+      model: openai("gpt-4.1-mini"),
+    }),
+    "gpt-4.1-nano": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          providerMetadata: {
+            openai: {
+              logitBias: { "29992": -100, "29993": -100 },
+            },
+          },
+        },
+      }),
+      model: openai("gpt-4.1-nano"),
+    }),
     "claude-sonnet-4-20250514": anthropic("claude-sonnet-4-20250514"),
     "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
@@ -85,7 +147,9 @@ export const modelProvider = customProvider({
   },
 });
 
-export function handleModelProvider(model: string) {
+// deperacted function - DEAD INSIDE LIKE MY SOUL
+
+export function handleModelProvider(model: string, logitBias?: LogitBiasConfig) {
   if (model.startsWith("claude")) {
     return anthropic(model);
   } else if (model.startsWith("accounts")) {
@@ -95,6 +159,21 @@ export function handleModelProvider(model: string) {
   } else if (model.startsWith("deepseek")) {
     return togetherai(model);
   } else {
+    // For OpenAI models, apply logit bias if provided
+    if (logitBias) {
+      return wrapLanguageModel({
+        middleware: defaultSettingsMiddleware({
+          settings: {
+            providerMetadata: {
+              openai: {
+                logitBias,
+              },
+            },
+          },
+        }),
+        model: openai(model),
+      });
+    }
     return openai(model);
   }
 }
