@@ -65,7 +65,7 @@ const sendWelcomeEmail = async (user: any) => {
 
     // Email content in Croatian
     const mailOptions = {
-      from: process.env.FROM_EMAIL || "noreply@edurete.com",
+      from: process.env.FROM_EMAIL || "app@edurete.com",
       to: email,
       subject: "Dobrodošli u EdureteAI! 🎉", // Welcome to EdureteAI in Croatian
       html: `
