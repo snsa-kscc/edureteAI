@@ -93,7 +93,7 @@ const sendWelcomeEmail = async (user: any) => {
           </p>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://edurete.com"}" 
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://ai.edurete.com"}" 
                style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
               Počnite s učenjem
             </a>
