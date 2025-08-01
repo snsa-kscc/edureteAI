@@ -9,7 +9,7 @@ import { ChatMessages } from "@/components/chat/chat-messages";
 import { ChatForm } from "@/components/chat/chat-form";
 import { ChatSettings } from "@/components/chat/chat-settings";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
-import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT } from "@/lib/chat-config";
+import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT, DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL } from "@/lib/chat-config";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import type { Message as LocalMessage } from "@/types";
@@ -36,7 +36,8 @@ export function Chat({
   const router = useRouter();
   const [model, setModel] = useState(() => {
     const isValidModel = CHAT_MODELS.some((m) => m.value === initialModel);
-    return isValidModel ? initialModel : "gemini-2.0-flash";
+    const defaultModel = chatAreaId === "left" ? DEFAULT_LEFT_MODEL : DEFAULT_RIGHT_MODEL;
+    return isValidModel ? initialModel : defaultModel;
   });
   const [system, setSystem] = useState<string | undefined>(initialSystem);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
