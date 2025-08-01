@@ -1,6 +1,4 @@
 import nodemailer from "nodemailer";
-import { currentUser } from "@clerk/nextjs/server";
-import { stripe } from "@/lib/stripe";
 import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
 // Email configuration
@@ -235,17 +233,12 @@ export const EMAIL_TEMPLATES = {
   },
 };
 
-async function getUserFirstNameAndEmail(): Promise<{ firstName: string | null; email: string }> {
-  try {
-    const user = await currentUser();
-    if (user) {
-      return { firstName: user.firstName || "korisnik", email: user.emailAddresses[0].emailAddress };
-    }
-    return { firstName: null, email: "" };
-  } catch (error) {
-    console.error("Error getting user:", error);
-    return { firstName: null, email: "" };
-  }
+// Helper function to extract first name from full name
+function getFirstName(fullName: string | null | undefined): string {
+  if (!fullName) return "korisnik";
+  
+  const nameParts = fullName.trim().split(" ");
+  return nameParts[0] || "korisnik";
 }
 
 // Create email transporter
@@ -281,10 +274,9 @@ export async function sendWelcomeEmail(user: any) {
 }
 
 // Send subscription welcome email (for new subscription)
-export async function sendSubscriptionWelcomeEmail(userId: string, tier: string) {
+export async function sendSubscriptionWelcomeEmail(userId: string, email: string | null, fullName: string | null | undefined, tier: string) {
   try {
     const transporter = createTransporter();
-    const { firstName, email } = await getUserFirstNameAndEmail();
 
     if (!email) {
       console.error("No email address found for userId:", userId);
@@ -296,8 +288,8 @@ export async function sendSubscriptionWelcomeEmail(userId: string, tier: string)
       from: FROM_EMAIL,
       to: email,
       subject: template.subject(tier),
-      html: template.getHtml(firstName || "korisnik", tier),
-      text: template.getText(firstName || "korisnik", tier),
+      html: template.getHtml(getFirstName(fullName), tier),
+      text: template.getText(getFirstName(fullName), tier),
     };
 
     await transporter.sendMail(mailOptions);
@@ -307,10 +299,9 @@ export async function sendSubscriptionWelcomeEmail(userId: string, tier: string)
 }
 
 // Send upgrade email (for subscription tier upgrades from PAID to PAID_PLUS)
-export async function sendUpgradeEmail(userId: string) {
+export async function sendUpgradeEmail(userId: string, email: string | null, fullName: string | null | undefined) {
   try {
     const transporter = createTransporter();
-    const { firstName, email } = await getUserFirstNameAndEmail();
 
     if (!email) {
       console.error("No email address found for userId:", userId);
@@ -322,8 +313,8 @@ export async function sendUpgradeEmail(userId: string) {
       from: FROM_EMAIL,
       to: email,
       subject: template.subject(),
-      html: template.getHtml(firstName || "korisnik"),
-      text: template.getText(firstName || "korisnik"),
+      html: template.getHtml(getFirstName(fullName)),
+      text: template.getText(getFirstName(fullName)),
     };
 
     await transporter.sendMail(mailOptions);

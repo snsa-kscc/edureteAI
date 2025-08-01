@@ -265,20 +265,20 @@ export async function updateSubscriptionInDatabase(
 }
 
 /**
- * Gets userId from Stripe customer.
+ * Gets user data from Stripe customer.
  * This function is used by the webhook handler
  */
-export async function getUserIdFromCustomer(customerId: string): Promise<string | null> {
+export async function getUserFromCustomer(customerId: string): Promise<{ userId: string | null; email: string | null; fullName: string | null | undefined }> {
   try {
     const customer = await stripe.customers.retrieve(customerId);
 
     if (customer.deleted) {
-      return null;
+      return { userId: null, email: null, fullName: null };
     }
 
-    return (customer as Stripe.Customer).metadata?.userId || null;
+    return { userId: (customer as Stripe.Customer).metadata?.userId || null, email: customer.email, fullName: customer.name };
   } catch (error) {
     console.error("Error retrieving customer:", error);
-    return null;
+    return { userId: null, email: null, fullName: null };
   }
 }

@@ -1,7 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { updateSubscriptionInDatabase, getUserIdFromCustomer } from "@/lib/subscription-actions";
+import { updateSubscriptionInDatabase, getUserFromCustomer } from "@/lib/subscription-actions";
 import { updateUserSubscriptionTier, resetUserMessageCounts } from "@/lib/message-limits";
 import { MESSAGE_TIER } from "@/lib/model-config";
 import { sendSubscriptionWelcomeEmail, sendUpgradeEmail } from "@/lib/mail-config";
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated": {
         const subscription = session as Stripe.Subscription;
-        const userId = await getUserIdFromCustomer(subscription.customer as string);
+        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
           const previousPriceId = previousAttributes.items.data[0].price.id;
           // Detect upgrade from PAID to PAID_PLUS
           if (previousPriceId === process.env.STRIPE_PRICE_ID_PAID && priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
-            await sendUpgradeEmail(userId);
+            await sendUpgradeEmail(userId, email, fullName);
           }
         }
 
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
 
       case "customer.subscription.created": {
         const subscription = session as Stripe.Subscription;
-        const userId = await getUserIdFromCustomer(subscription.customer as string);
+        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
@@ -122,13 +122,13 @@ export async function POST(req: Request) {
         if (priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
           tier = MESSAGE_TIER.PAID_PLUS;
         }
-        await sendSubscriptionWelcomeEmail(userId, tier);
+        await sendSubscriptionWelcomeEmail(userId, email, fullName, tier);
         break;
       }
 
       case "customer.subscription.deleted": {
         const subscription = session as Stripe.Subscription;
-        const userId = await getUserIdFromCustomer(subscription.customer as string);
+        const { userId } = await getUserFromCustomer(subscription.customer as string);
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
