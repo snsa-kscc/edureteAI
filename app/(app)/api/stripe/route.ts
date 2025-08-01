@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { updateSubscriptionInDatabase, getUserIdFromCustomer } from "@/lib/subscription-actions";
 import { updateUserSubscriptionTier, resetUserMessageCounts } from "@/lib/message-limits";
 import { MESSAGE_TIER } from "@/lib/model-config";
+import { sendSubscriptionWelcomeEmail, sendUpgradeEmail } from "@/lib/mail-config";
 import type Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -88,9 +89,7 @@ export async function POST(req: Request) {
           const previousPriceId = previousAttributes.items.data[0].price.id;
           // Detect upgrade from PAID to PAID_PLUS
           if (previousPriceId === process.env.STRIPE_PRICE_ID_PAID && priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
-            console.log("🎉 User upgraded from PAID to PAID_PLUS!", userId);
-            // TODO: Send upgrade email here
-            // await sendUpgradeEmail(userId, 'PAID', 'PAID_PLUS');
+            await sendUpgradeEmail(userId);
           }
         }
 
@@ -123,13 +122,7 @@ export async function POST(req: Request) {
         if (priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
           tier = MESSAGE_TIER.PAID_PLUS;
         }
-
-        console.log("New subscription created for user", userId);
-        console.log("Subscription details:", subscription.id, tier);
-
-        // TODO: Send welcome email here
-        // await sendWelcomeEmail(userId, tier);
-
+        await sendSubscriptionWelcomeEmail(userId, tier);
         break;
       }
 
