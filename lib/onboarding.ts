@@ -13,7 +13,16 @@ export async function shouldShowOnboarding(userId: string): Promise<boolean> {
     return false;
   }
 
-  // Check if user is a subscriber
+  // Check if user has completed onboarding first (faster Clerk API call)
+  const client = await clerkClient();
+  const user = await client.users.getUser(userId);
+  const hasCompletedOnboarding = user.publicMetadata?.onboardingCompleted === true;
+
+  if (hasCompletedOnboarding) {
+    return false; // User already completed onboarding
+  }
+
+  // Only check subscription status if onboarding not completed (database call)
   const messageCounts = await getUserMessageCounts(userId);
   const isSubscriber = messageCounts.subscriptionTier !== MESSAGE_TIER.FREE;
 
@@ -21,12 +30,8 @@ export async function shouldShowOnboarding(userId: string): Promise<boolean> {
     return false; // Subscribers don't see onboarding
   }
 
-  // Check if user has completed onboarding
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  const hasCompletedOnboarding = user.publicMetadata?.onboardingCompleted === true;
-
-  return !hasCompletedOnboarding;
+  // User is free tier and hasn't completed onboarding
+  return true;
 }
 
 /**
