@@ -12,8 +12,8 @@ const EMAIL_CONFIG = {
   },
 };
 
-const FROM_EMAIL = process.env.FROM_EMAIL || "app@edurete.com";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://ai.edurete.com";
+const FROM_EMAIL = "edureteAI <app@edurete.com>";
+const APP_URL = "https://ai.edurete.com";
 
 // Email templates configuration
 export const EMAIL_TEMPLATES = {
@@ -236,7 +236,7 @@ export const EMAIL_TEMPLATES = {
 // Helper function to extract first name from full name
 function getFirstName(fullName: string | null | undefined): string {
   if (!fullName) return "korisnik";
-  
+
   const nameParts = fullName.trim().split(" ");
   return nameParts[0] || "korisnik";
 }
