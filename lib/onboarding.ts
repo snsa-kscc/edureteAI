@@ -23,12 +23,12 @@ export async function shouldShowOnboarding(userId: string): Promise<boolean> {
   }
 
   // Only check subscription status if onboarding not completed (database call)
-  const messageCounts = await getUserMessageCounts(userId);
-  const isSubscriber = messageCounts.subscriptionTier !== MESSAGE_TIER.FREE;
+  // const messageCounts = await getUserMessageCounts(userId);
+  // const isSubscriber = messageCounts.subscriptionTier !== MESSAGE_TIER.FREE;
 
-  if (isSubscriber) {
-    return false; // Subscribers don't see onboarding
-  }
+  // if (isSubscriber) {
+  //   return false;
+  // }
 
   // User is free tier and hasn't completed onboarding
   return true;

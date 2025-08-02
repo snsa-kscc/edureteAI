@@ -13,7 +13,7 @@ export default function OnboardingPage() {
         <ModeToggle className="text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer border-0 hover:bg-transparent" />
       </div>
       <h2 className="text-xl font-semibold my-16 text-center">Dostupni planovi pretplate</h2>
-      <PricingCardsSection />
+      <PricingCardsSection onboarding={true} />
       <div className="flex flex-col items-center justify-center my-16 gap-4">
         <OnboardingCompleteButton />
       </div>
