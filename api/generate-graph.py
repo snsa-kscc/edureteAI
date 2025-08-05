@@ -5,7 +5,6 @@ import sys
 import traceback
 import warnings
 from typing import Dict, Any
-from pydantic import BaseModel
 
 # Suppress warnings
 warnings.filterwarnings('ignore')
@@ -23,15 +22,12 @@ from http.server import BaseHTTPRequestHandler
 
 # FastAPI imports (for local testing)
 try:
+    from pydantic import BaseModel
     from fastapi import FastAPI, HTTPException
     from fastapi.middleware.cors import CORSMiddleware
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
-
-# Pydantic model for request
-class GraphRequest(BaseModel):
-    code: str
 
 # Core graph generation function
 def generate_graph(code: str) -> Dict[str, Any]:
@@ -112,6 +108,11 @@ def generate_graph(code: str) -> Dict[str, Any]:
 
 # FastAPI app (for local testing)
 if FASTAPI_AVAILABLE:
+    
+    # Pydantic model for request
+    class GraphRequest(BaseModel):
+        code: str
+    
     app = FastAPI(title="Graph Generator API", version="1.0.0")
     
     # Add CORS middleware
