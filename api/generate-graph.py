@@ -2,16 +2,23 @@ import json
 import base64
 import io
 import sys
+import os
 import traceback
 import warnings
 from typing import Dict, Any
+
+# Set matplotlib config directory to /tmp for serverless environments
+os.environ['MPLCONFIGDIR'] = '/tmp/matplotlib'
 
 # Suppress warnings
 warnings.filterwarnings('ignore')
 
 import matplotlib
 matplotlib.use('Agg')  # Use non-GUI backend
+
+# Ensure matplotlib uses /tmp for cache
 import matplotlib.pyplot as plt
+plt.rcParams['savefig.directory'] = '/tmp'
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -141,6 +148,11 @@ if FASTAPI_AVAILABLE:
 
 # Vercel handler class (for deployment)
 class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps({"status": "healthy", "message": "Graph generator is running"}).encode('utf-8'))
     def do_POST(self):
         try:
             # Read request body
