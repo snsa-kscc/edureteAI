@@ -123,7 +123,7 @@ if FASTAPI_AVAILABLE:
         allow_headers=["*"],
     )
     
-    @app.post("/generate-graph")
+    @app.post("/")
     async def generate_graph_endpoint(request: GraphRequest):
         """Generate a matplotlib graph from Python code."""
         result = generate_graph(request.code)
@@ -133,7 +133,7 @@ if FASTAPI_AVAILABLE:
         
         return result
     
-    @app.get("/health")
+    @app.get("/")
     async def health_check():
         """Health check endpoint."""
         return {"status": "healthy", "message": "Graph generator is running"}
