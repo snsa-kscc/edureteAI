@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { streamText, type Message, appendResponseMessages, createDataStreamResponse, smoothStream } from "ai";
 import { auth } from "@clerk/nextjs/server";
-import { checkQuota, saveUsage } from "@/lib/neon-actions";
+import { saveUsage } from "@/lib/neon-actions";
 import { modelProvider } from "@/lib/utils";
 import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
+import { tools } from "@/lib/tools";
 import type { Usage, Chat } from "@/types";
 
 export const runtime = "edge";
@@ -61,7 +62,17 @@ export async function POST(req: Request) {
       execute: (dataStream) => {
         const result = streamText({
           model: modelProvider.languageModel(model),
-          system: ["o1-mini", "o1-preview"].includes(model) ? undefined : DEFAULT_SYSTEM_PROMPT + "\n" + system,
+          system: ["o1-mini", "o1-preview"].includes(model)
+            ? undefined
+            : DEFAULT_SYSTEM_PROMPT +
+              "\n" +
+              system +
+              "\n\n" +
+              "MATPLOTLIB GUIDANCE:\n" +
+              "When generating graphs, use the generateGraph tool. Include proper imports (matplotlib.pyplot as plt, numpy as np, etc.).\n" +
+              "Create clear, well-labeled plots with titles, axis labels, and legends when appropriate.\n" +
+              "Use plt.figure(figsize=(10, 6)) for good proportions. Always call plt.show() at the end.\n" +
+              "Examples: plt.plot(x, y), plt.scatter(x, y), plt.bar(categories, values), plt.hist(data), etc.",
           messages: [
             ...initialMessages,
             {
@@ -69,6 +80,7 @@ export async function POST(req: Request) {
               content,
             } as Message,
           ],
+          tools,
           experimental_transform: [
             smoothStream({
               chunking: "word",

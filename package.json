@@ -60,7 +60,8 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
     "vaul": "^1.1.2",
-    "xlsx-js-style": "^1.2.0"
+    "xlsx-js-style": "^1.2.0",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",

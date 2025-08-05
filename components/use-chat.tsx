@@ -8,6 +8,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { ChatMessages } from "@/components/chat/chat-messages";
 import { ChatForm } from "@/components/chat/chat-form";
 import { ChatSettings } from "@/components/chat/chat-settings";
+import { GraphExamples } from "@/components/chat/graph-examples";
 import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT, DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL } from "@/lib/chat-config";
 import { toast } from "sonner";
@@ -146,6 +147,10 @@ export function Chat({
     }
   };
 
+  const handleExampleClick = (prompt: string) => {
+    handleInputChange({ target: { value: prompt } } as React.ChangeEvent<HTMLInputElement>);
+  };
+
   const hasLegacyImagesInConversation = messages.some((m) => Array.isArray(m.content) && m.content.some((c) => c.type === "image"));
   const hasImagesInConversation =
     hasLegacyImagesInConversation || messages.some((m) => m.experimental_attachments?.some((a) => a.contentType?.startsWith("image/*")));
@@ -211,6 +216,9 @@ export function Chat({
       />
 
       <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} status={status} />
+      {isOwner && messages.length === 0 && (
+        <GraphExamples onExampleClick={handleExampleClick} />
+      )}
       {isOwner && (
         <ChatForm
           input={input}

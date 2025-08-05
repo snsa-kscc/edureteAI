@@ -4,12 +4,15 @@ import { forwardRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/markdown";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { ToolResult } from "@/components/chat/tool-result";
 import type { UIMessage } from "ai";
-import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Loader2, Download, AlertCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface ReasoningPart {
   type: "reasoning";
@@ -161,6 +164,36 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                       />
                     );
                   }
+                  
+                  // Handle tool invocations - check for tool-invocation type with result
+                  if (part.type === "tool-invocation") {
+                    const toolInvocation = (part as any).toolInvocation;
+                    if (toolInvocation && 'result' in toolInvocation && toolInvocation.result !== undefined) {
+                      return (
+                        <ToolResult
+                          key={partIndex}
+                          toolName={toolInvocation.toolName}
+                          result={toolInvocation.result}
+                          args={toolInvocation.args}
+                        />
+                      );
+                    }
+                  }
+                  
+                  // Handle any other tool-related parts using flexible type checking
+                  const partType = part.type as string;
+                  if (partType.startsWith("tool-") && (part as any).result !== undefined) {
+                    const toolName = partType.replace("tool-", "");
+                    return (
+                      <ToolResult
+                        key={partIndex}
+                        toolName={toolName}
+                        result={(part as any).result}
+                        args={(part as any).args}
+                      />
+                    );
+                  }
+                  
                   return null;
                 })}
                 <div className="mt-2 text-sm leading-relaxed">
