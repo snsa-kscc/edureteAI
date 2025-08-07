@@ -10,7 +10,8 @@ export const generateGraphTool = tool({
   }),
   execute: async ({ code, description }) => {
     try {
-      const response = await fetch(`/api/generate-graph`, {
+      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const response = await fetch(`${baseUrl}/api/generate-graph`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,16 +31,16 @@ export const generateGraphTool = tool({
 
       // Upload the generated image to R2 storage
       let r2Url = null;
-      try {
-        const uploadResult = await uploadGraphToR2(result.image, description);
-        if (uploadResult.success) {
-          r2Url = uploadResult.url;
-        } else {
-          console.warn("Failed to upload graph to R2:", uploadResult.error);
-        }
-      } catch (uploadError) {
-        console.warn("Error uploading to R2:", uploadError);
-      }
+      // try {
+      //   const uploadResult = await uploadGraphToR2(result.image, description);
+      //   if (uploadResult.success) {
+      //     r2Url = uploadResult.url;
+      //   } else {
+      //     console.warn("Failed to upload graph to R2:", uploadResult.error);
+      //   }
+      // } catch (uploadError) {
+      //   console.warn("Error uploading to R2:", uploadError);
+      // }
 
       return {
         success: true,
@@ -76,11 +77,11 @@ export const testTool = tool({
           input,
         };
       }
-      
+
       const num1 = parseInt(numbers[0]);
       const num2 = parseInt(numbers[1]);
       const result = num1 + num2;
-      
+
       return {
         success: true,
         operation: "addition",

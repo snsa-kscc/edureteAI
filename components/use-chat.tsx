@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useTransition, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { ChatMessages } from "@/components/chat/chat-messages";
@@ -19,19 +20,19 @@ export function Chat({
   isOwner,
   userId,
   userName,
-  id,
+  chatId,
   chatAreaId,
   initialModel,
-  initialSystem,
+  initialSystemMessage,
   initialMessages,
 }: {
   isOwner: boolean;
   userId: string | undefined;
   userName: string | null | undefined;
-  id: string;
+  chatId: string;
   chatAreaId: "left" | "right";
   initialModel: string;
-  initialSystem?: string;
+  initialSystemMessage?: string;
   initialMessages?: LocalMessage[];
 }) {
   const router = useRouter();
@@ -40,30 +41,50 @@ export function Chat({
     const defaultModel = chatAreaId === "left" ? DEFAULT_LEFT_MODEL : DEFAULT_RIGHT_MODEL;
     return isValidModel ? initialModel : defaultModel;
   });
-  const [system, setSystem] = useState<string | undefined>(initialSystem);
+  const [systemMessage, setSystemMessage] = useState<string | undefined>(initialSystemMessage);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
-  const [_, setNewChatId] = useLocalStorage("newChatId", id);
+  const [_, setNewChatId] = useLocalStorage("newChatId", chatId);
   const [userScrolled, setUserScrolled] = useState(false);
   const [initialMessagesCount, setInitialMessagesCount] = useState<number | null>(null);
+  const [input, setInput] = useState("");
 
-  const { messages, input, handleInputChange, handleSubmit, status, error } = useChat({
-    // @ts-ignore - required because of legacy code how handling pictures was implemented
-    initialMessages,
-    sendExtraMessageFields: true,
-    body: {
-      id,
-      userId,
-      model,
-      system,
-      chatAreaId,
-    },
+  // Use refs to store current values for transport
+  const modelRef = useRef(model);
+  const systemMessageRef = useRef(systemMessage);
+
+  // Update refs when values change
+  useEffect(() => {
+    modelRef.current = model;
+  }, [model]);
+
+  useEffect(() => {
+    systemMessageRef.current = systemMessage;
+  }, [systemMessage]);
+
+  const { messages, sendMessage, status, error } = useChat({
+    messages: initialMessages as UIMessage[],
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      prepareSendMessagesRequest: ({ messages }) => {
+        return {
+          body: {
+            messages,
+            chatId,
+            userId,
+            model: modelRef.current,
+            systemMessage: systemMessageRef.current,
+            chatAreaId,
+          },
+        };
+      },
+    }),
   });
 
   useEffect(() => {
-    setNewChatId(id);
+    setNewChatId(chatId);
   }, []);
 
   useEffect(() => {
@@ -128,19 +149,31 @@ export function Chat({
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    handleSubmit(e, {
-      allowEmptySubmit: true,
-      experimental_attachments: uploadedImage
-        ? [
-            {
-              name: uploadedImage,
-              contentType: "image/*",
-              url: uploadedImage,
-            },
-          ]
-        : undefined,
+    e.preventDefault();
+
+    if (!input.trim() && !uploadedImage) return;
+
+    // Create message parts array for AI SDK v5
+    const parts: any[] = [];
+
+    if (input.trim()) {
+      parts.push({ type: "text", text: input.trim() });
+    }
+
+    if (uploadedImage) {
+      parts.push({
+        type: "file",
+        url: uploadedImage,
+        mediaType: "image/jpeg", // or detect actual type
+      });
+    }
+
+    sendMessage({
+      role: "user",
+      parts,
     });
 
+    setInput(""); // Clear input
     setUploadedImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -148,12 +181,29 @@ export function Chat({
   };
 
   const handleExampleClick = (prompt: string) => {
-    handleInputChange({ target: { value: prompt } } as React.ChangeEvent<HTMLInputElement>);
+    setInput(prompt);
   };
 
-  const hasLegacyImagesInConversation = messages.some((m) => Array.isArray(m.content) && m.content.some((c) => c.type === "image"));
-  const hasImagesInConversation =
-    hasLegacyImagesInConversation || messages.some((m) => m.experimental_attachments?.some((a) => a.contentType?.startsWith("image/*")));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+  };
+
+  // Check for images in both AI SDK v5 parts format and legacy formats
+  const hasImagesInConversation = messages.some((m) => {
+    // AI SDK v5 format: check parts array
+    if (m.parts?.some((part) => part.type === "file" && part.mediaType?.startsWith("image/"))) {
+      return true;
+    }
+    // Legacy v4 format: check content array
+    if (Array.isArray((m as any).content) && (m as any).content.some((c: any) => c.type === "image")) {
+      return true;
+    }
+    // Legacy experimental_attachments format
+    if ((m as any).experimental_attachments?.some((a: any) => a.contentType?.startsWith("image/*"))) {
+      return true;
+    }
+    return false;
+  });
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -209,16 +259,14 @@ export function Chat({
 
       <ChatSettings
         model={model}
-        system={system}
+        systemMessage={systemMessage}
         onModelChange={setModel}
-        onSystemChange={(value) => setSystem(value)}
+        onSystemMessageChange={(value) => setSystemMessage(value)}
         hasImagesInConversation={hasImagesInConversation}
       />
 
       <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} status={status} />
-      {isOwner && messages.length === 0 && (
-        <GraphExamples onExampleClick={handleExampleClick} />
-      )}
+      {isOwner && messages.length === 0 && <GraphExamples onExampleClick={handleExampleClick} />}
       {isOwner && (
         <ChatForm
           input={input}
