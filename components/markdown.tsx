@@ -21,21 +21,19 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
   // );
 
+  // Preprocess content to fix LaTeX environment syntax issues
+  let processedContent = children;
+  
+  // Fix the issue with $$\begin{...} syntax for ALL environments (array, cases, aligned, etc.)
+  // Ensure there's no line break immediately after $$
+  processedContent = processedContent.replace(/\$\$\s*\n\s*\\begin{([^}]+)}/g, '$$\\begin{$1}');
+  
+  // Also handle cases where there might be spacing issues (without newline)
+  processedContent = processedContent.replace(/\$\$\s*\\begin{([^}]+)}/g, '$$\\begin{$1}');
+  
   const remarkMathOptions = {
     singleDollarTextMath: true,
   };
-
-  // let processedContent = children;
-
-  // processedContent = processedContent.replace(/\\\[([\s\S]+?)\\\]/g, (_, math) => `<div class="math-display">${math}</div>`);
-  // processedContent = processedContent.replace(/\\\(([\\s\\S]+?)\\\)/g, (_, math) => `<span class="math-inline">${math}</span>`);
-  // processedContent = processedContent.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => `<div class="math-display">${math}</div>`);
-  // processedContent = processedContent.replace(/\$([^$]+?)\$/g, (match, math) => {
-  //   if (/^\s*\d+(\.\d+)?\s*$/.test(math)) {
-  //     return match;
-  //   }
-  //   return `<span class="math-inline">${math}</span>`;
-  // });
 
   const components = {
     code: ({ node, inline, className, children, ...props }: any) => {
@@ -104,7 +102,7 @@ return (
     ]}
     skipHtml={false}
   >
-    {children}
+    {processedContent}
   </ReactMarkdown>
 );
 };
