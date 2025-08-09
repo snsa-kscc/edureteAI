@@ -11,6 +11,11 @@ interface MarkdownProps {
 }
 
 const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
+  // Safety check for empty or null content
+  if (!children || typeof children !== 'string') {
+    return <div className="text-sm text-gray-500">No content to display</div>;
+  }
+  
   // const processedThinkTags = children.replace(
   //   /<think>(.*?)<\/think>/gs,
   //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
@@ -72,15 +77,36 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
     ),
   };
 
-  return (
-    <ReactMarkdown
-      components={components}
-      remarkPlugins={[[remarkMath, remarkMathOptions], remarkGfm]}
-      rehypePlugins={[rehypeRaw, [rehypeKatex, { output: "htmlAndMathml" }]]}
-    >
-      {children}
-    </ReactMarkdown>
-  );
+return (
+  <ReactMarkdown
+    components={components}
+    remarkPlugins={[
+      // Staviti remarkMath PRIJE remarkGfm
+      [remarkMath, { 
+        singleDollarTextMath: true,
+        inlineMathDouble: false // Prevents double processing
+      }],
+      remarkGfm
+    ]}
+    rehypePlugins={[
+      rehypeRaw,
+      [rehypeKatex, { 
+        output: "htmlAndMathml",
+        strict: false,    // Dopusti više LaTeX komandi
+        trust: true,      // Vjeruj komandama poput \hline, \begin
+        throwOnError: false, // Prikaži greške umjesto rušenja
+        errorColor: '#cc0000',
+        macros: {}, // Empty macros to prevent conflicts
+        fleqn: false,
+        leqno: false,
+        minRuleThickness: 0.04
+      }]
+    ]}
+    skipHtml={false}
+  >
+    {children}
+  </ReactMarkdown>
+);
 };
 
 export const Markdown = memo(NonMemoizedMarkdown, (prevProps, nextProps) => prevProps.children === nextProps.children);
