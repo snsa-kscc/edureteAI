@@ -271,20 +271,28 @@ For physics, include proper vector notation and units:
 
 $\vec{F} = m\vec{a} = 10 \text{ kg} \cdot 9.8 \text{ m/s}^2 = 98 \text{ N}$
 
+Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
+
+Example:  
+…explanation\n\n$$  
+\displaystyle  
+E = mc^2  
+$$\n\n…continuation 
+
 </latex_formatting>
 
 <table_formatting>
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-$$\displaystyle
+\n\n$$\displaystyle
 \begin{array}{|c|c|c|c|}
 \hline
 \text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \text{Bit} & P_1 & P_2 & 1 & P_4 \\
 \hline
-\end{array}$$
+\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\begin{array}{|c|c|c|c|}
@@ -295,6 +303,26 @@ $$\begin{array}{|c|c|c|c|}
 
 The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 </table_formatting>
+<begin_environment>
+**Crucial Rule for All LaTeX Begin Environments in Math Mode: When creating any mathematical environment using \begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, 
+ALWAYS start with \displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. 
+This applies to all begin environments including \begin{cases}, \begin{matrix}, \begin{pmatrix}, \begin{bmatrix}, \begin{array}, \begin{align}, and any other mathematical structures.
+
+CORRECT FORMAT:
+\n\n$$\displaystyle 
+\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$\n\n
+
+INCORRECT FORMAT:
+$$\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$
+
+</begin_environment>
+
 <examples>
 Here are examples of how to respond to different types of questions:
 Student asks: "Možeš li mi objasniti kako riješiti jednadžbu x² - 5x + 6 = 0?"
@@ -398,18 +426,24 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Display math: $$\\displaystyle\\frac{x-1}{2x+3}$$
 • Tables: ONLY array environment (KaTeX compatible)
 
+Example:  
+…explanation\n\n$$  
+\displaystyle  
+E = mc^2  
+$$\n\n…continuation  
+
 ### Table Templates (Simplified for Stability)
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-$$\displaystyle
+\n\n$$\displaystyle
 \begin{array}{|c|c|c|c|}
 \hline
 \text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \text{Bit} & P_1 & P_2 & 1 & P_4 \\
 \hline
-\end{array}$$
+\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\begin{array}{|c|c|c|c|}
@@ -419,6 +453,24 @@ $$\begin{array}{|c|c|c|c|}
 \end{array}$$
 
 The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
+
+##Crucial Rule for All LaTeX Begin Environments in Math Mode: When creating any mathematical environment using \begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, 
+ALWAYS start with \displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. 
+This applies to all begin environments including \begin{cases}, \begin{matrix}, \begin{pmatrix}, \begin{bmatrix}, \begin{array}, \begin{align}, and any other mathematical structures.
+
+CORRECT FORMAT:
+\n\n$$\displaystyle 
+\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$\n\n
+
+INCORRECT FORMAT:
+$$\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$
+
 ## Formatting & Clarity
 - VISUAL SEPARATION: Use --- between steps
 - ALIGNMENT: Max 3 spaces for indentation
@@ -469,19 +521,26 @@ All of your mathematical responses must be written in LaTeX notation that is ful
 *   Use \`$...\` for inline mathematics.
 *   Use \`$$...$$\` for display math blocks.
 *   Always begin display math blocks with \`\\displaystyle\` to ensure fractions and other expressions are rendered in their full, readable size.
+*   Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
+
+Example:  
+…explanation\n\n$$  
+\displaystyle  
+E = mc^2  
+$$\n\n…continuation 
 
 **Crucial Rule for All Tables (KaTeX environments):**
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-$$\displaystyle
+\n\n$$\displaystyle
 \begin{array}{|c|c|c|c|}
 \hline
 \text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \text{Bit} & P_1 & P_2 & 1 & P_4 \\
 \hline
-\end{array}$$
+\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\begin{array}{|c|c|c|c|}
@@ -489,6 +548,23 @@ $$\begin{array}{|c|c|c|c|}
 \text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \end{array}$$
+
+**Crucial Rule for All LaTeX Begin Environments in Math Mode: When creating any mathematical environment using \begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, 
+ALWAYS start with \displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. 
+This applies to all begin environments including \begin{cases}, \begin{matrix}, \begin{pmatrix}, \begin{bmatrix}, \begin{array}, \begin{align}, and any other mathematical structures.
+
+CORRECT FORMAT:
+\n\n$$\displaystyle 
+\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$\n\n
+
+INCORRECT FORMAT:
+$$\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$
 
 The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 **Problem-Solving Methodology**
@@ -572,19 +648,26 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Inline math: $x \neq -\frac{3}{2}$
 • Display math: $$\\displaystyle\\frac{x-1}{2x+3}$$
 • Tables: ONLY array environment (KaTeX compatible)
+• Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
+
+Example:  
+…explanation\n\n$$  
+\displaystyle  
+E = mc^2  
+$$\n\n…continuation 
 
 ### Table Templates (Simplified for Stability)
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-$$\displaystyle
+\n\n$$\displaystyle
 \begin{array}{|c|c|c|c|}
 \hline
 \text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \text{Bit} & P_1 & P_2 & 1 & P_4 \\
 \hline
-\end{array}$$
+\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\begin{array}{|c|c|c|c|}
@@ -594,6 +677,25 @@ $$\begin{array}{|c|c|c|c|}
 \end{array}$$
 
 The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
+
+##Crucial Rule for All LaTeX Begin Environments in Math Mode: When creating any mathematical environment using \begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, 
+ALWAYS start with \displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. 
+This applies to all begin environments including \begin{cases}, \begin{matrix}, \begin{pmatrix}, \begin{bmatrix}, \begin{array}, \begin{align}, and any other mathematical structures.
+
+CORRECT FORMAT:
+\n\n$$\displaystyle 
+\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$\n\n
+
+INCORRECT FORMAT:
+$$\begin{cases}
+x = 1 & \text{if } n > 0 \\
+x = 0 & \text{if } n = 0
+\end{cases}$$
+
+This rule ensures consistent rendering across all mathematical begin/end environments and prevents KaTeX parsing failures.
 ## Formatting & Clarity
 - VISUAL SEPARATION: Use --- between steps
 - ALIGNMENT: Max 3 spaces for indentation
@@ -604,7 +706,6 @@ The \displaystyle directive helps with proper KaTeX parsing of complex table str
   $\\displaystyle\\frac{2-1}{4+3} = \\frac{1}{7} > 1$? Ne ❌"
 
 ## DeepSeek-R1 Optimization
-• TABLE LIMITS: Max 5 rows × 4 columns
 • EQUATION STRUCTURE: 
   $$\\begin{aligned}
   \\frac{x-1}{2x+3} &> 1 \\\\
