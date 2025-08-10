@@ -24,20 +24,12 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   // Preprocess content to fix LaTeX environment syntax issues
   let processedContent = children;
   
-  // Fix missing opening $$ for LaTeX environments
-  // Match patterns like $\begin{array} that should be $$\begin{array}
-  processedContent = processedContent.replace(/(?<!\$)\$\\begin{([^}]+)}/g, '$$\\begin{$1}');
-  
   // Fix the issue with $$\begin{...} syntax for ALL environments (array, cases, aligned, etc.)
   // Ensure there's no line break immediately after $$
   processedContent = processedContent.replace(/\$\$\s*\n\s*\\begin{([^}]+)}/g, '$$\\begin{$1}');
   
   // Also handle cases where there might be spacing issues (without newline)
   processedContent = processedContent.replace(/\$\$\s*\\begin{([^}]+)}/g, '$$\\begin{$1}');
-  
-  // Fix missing closing $$ for LaTeX environments
-  // Look for \end{...}$ that should be \end{...}$$
-  processedContent = processedContent.replace(/\\end{([^}]+)}\$(?!\$)/g, '\\end{$1}$$');
   
   const remarkMathOptions = {
     singleDollarTextMath: true,
