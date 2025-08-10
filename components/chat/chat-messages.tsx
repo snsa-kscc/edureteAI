@@ -4,15 +4,13 @@ import { forwardRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/markdown";
 import { CopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { ToolResult } from "@/components/chat/tool-result";
 import type { UIMessage } from "ai";
-import { ChevronDown, ChevronRight, Loader2, Download, AlertCircle } from "lucide-react";
+import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 
 interface ReasoningPart {
   type: "reasoning";
@@ -171,6 +169,8 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                   <p className="font-semibold opacity-70">edureteAI</p>
                   <CopyToClipboard message={message} className="-mt-1" />
                 </div>
+
+                {/* Reasoning section - always at the top */}
                 {message.parts?.map((part, partIndex) => {
                   if (part.type === "reasoning") {
                     return (
@@ -185,31 +185,10 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                       />
                     );
                   }
-
-                  // Handle AI SDK v5 tool parts - they use specific naming like "tool-toolName"
-                  const partType = part.type as string;
-                  if (partType.startsWith("tool-")) {
-                    const toolName = partType.replace("tool-", "");
-                    const toolPart = part as any;
-
-                    // Only render if we have output/result
-                    if (toolPart.output !== undefined || toolPart.result !== undefined) {
-                      return (
-                        <ToolResult key={partIndex} toolName={toolName} result={toolPart.output || toolPart.result} args={toolPart.input || toolPart.args} />
-                      );
-                    }
-                  }
-
-                  // Handle legacy tool-invocation format
-                  if (part.type === "tool-invocation") {
-                    const toolInvocation = (part as any).toolInvocation;
-                    if (toolInvocation && "result" in toolInvocation && toolInvocation.result !== undefined) {
-                      return <ToolResult key={partIndex} toolName={toolInvocation.toolName} result={toolInvocation.result} args={toolInvocation.args} />;
-                    }
-                  }
-
                   return null;
                 })}
+
+                {/* Text content */}
                 <div className="mt-2 text-sm leading-relaxed">
                   {/* AI SDK v5: Extract text from parts */}
                   {message.parts
@@ -221,6 +200,55 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                   {/* Legacy fallback: use message.content */}
                   {!message.parts && (message as any).content && <Markdown>{(message as any).content}</Markdown>}
                 </div>
+
+                {/* Tool results - always at the end with animation */}
+                <AnimatePresence>
+                  {message.parts?.map((part, partIndex) => {
+                    // Handle AI SDK v5 tool parts - they use specific naming like "tool-toolName"
+                    const partType = part.type as string;
+                    if (partType.startsWith("tool-")) {
+                      const toolName = partType.replace("tool-", "");
+                      const toolPart = part as any;
+
+                      // Only render if we have output/result
+                      if (toolPart.output !== undefined || toolPart.result !== undefined) {
+                        return (
+                          <motion.div
+                            key={partIndex}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="mt-3"
+                          >
+                            <ToolResult toolName={toolName} result={toolPart.output || toolPart.result} args={toolPart.input || toolPart.args} />
+                          </motion.div>
+                        );
+                      }
+                    }
+
+                    // Handle legacy tool-invocation format
+                    if (part.type === "tool-invocation") {
+                      const toolInvocation = (part as any).toolInvocation;
+                      if (toolInvocation && "result" in toolInvocation && toolInvocation.result !== undefined) {
+                        return (
+                          <motion.div
+                            key={partIndex}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="mt-3"
+                          >
+                            <ToolResult toolName={toolInvocation.toolName} result={toolInvocation.result} args={toolInvocation.args} />
+                          </motion.div>
+                        );
+                      }
+                    }
+
+                    return null;
+                  })}
+                </AnimatePresence>
               </div>
             </div>
           )}

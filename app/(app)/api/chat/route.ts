@@ -63,27 +63,26 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: modelProvider.languageModel(model),
-      system: ["o1-mini", "o1-preview"].includes(model)
-        ? undefined
-        : DEFAULT_SYSTEM_PROMPT +
-          "\n" +
-          systemMessage +
-          "\n\n" +
-          "TOOL USAGE INSTRUCTIONS:\n" +
-          "- When user asks to add/calculate numbers, use the 'test' tool with operation 'add'\n" +
-          "- When user asks for greetings or to say hello, use the 'test' tool with operation 'greet'\n" +
-          "- When user asks to repeat/echo a message, use the 'test' tool with operation 'echo'\n" +
-          "- When user asks for graphs/charts/plots, use the 'generateGraph' tool\n" +
-          "\n" +
-          "MATPLOTLIB GUIDANCE:\n" +
-          "When generating graphs, use the generateGraph tool. Include proper imports (matplotlib.pyplot as plt, numpy as np, etc.).\n" +
-          "Create clear, well-labeled plots with titles, axis labels, and legends when appropriate.\n" +
-          "Use plt.figure(figsize=(10, 6)) for good proportions. Always call plt.show() at the end.\n" +
-          "Examples: plt.plot(x, y), plt.scatter(x, y), plt.bar(categories, values), plt.hist(data), etc.",
+      system:
+        DEFAULT_SYSTEM_PROMPT +
+        "\n" +
+        systemMessage +
+        "\n\n" +
+        "TOOL USAGE INSTRUCTIONS:\n" +
+        "- When user asks to add/calculate numbers, use the 'test' tool with operation 'add'\n" +
+        "- When user asks for greetings or to say hello, use the 'test' tool with operation 'greet'\n" +
+        "- When user asks to repeat/echo a message, use the 'test' tool with operation 'echo'\n" +
+        "- When user asks for graphs/charts/plots, use the 'generateGraph' tool\n" +
+        "\n" +
+        "MATPLOTLIB GUIDANCE:\n" +
+        "When generating graphs, use the generateGraph tool. Include proper imports (matplotlib.pyplot as plt, numpy as np, etc.).\n" +
+        "Create clear, well-labeled plots with titles, axis labels, and legends when appropriate.\n" +
+        "Use plt.figure(figsize=(10, 6)) for good proportions. Always call plt.show() at the end.\n" +
+        "Examples: plt.plot(x, y), plt.scatter(x, y), plt.bar(categories, values), plt.hist(data), etc.",
       messages: convertToModelMessages([
         ...initialMessages,
         {
-          id: `msg-${Date.now()}`,
+          id: crypto.randomUUID(),
           role: "user",
           parts: Array.isArray(content)
             ? content.map((item: any) =>
@@ -113,8 +112,15 @@ export async function POST(req: Request) {
         await incrementMessageCount(userId, model);
         await saveUsage(usageData);
 
-        // Convert messages to the expected format for storage
-        const allMessages = [...messages, ...result.response.messages] as Message[];
+        // Convert response messages to UIMessage format to match frontend messages
+        const responseUIMessages = result.response.messages.map((msg: any) => ({
+          id: msg.id || crypto.randomUUID(),
+          role: msg.role,
+          parts: msg.content ? msg.content : [],
+        }));
+
+        // Combine all messages in UIMessage format
+        const allMessages = [...messages, ...responseUIMessages] as Message[];
 
         // Extract title from first user message
         const firstMessage = messages[0];
@@ -144,7 +150,7 @@ export async function POST(req: Request) {
           createdAt: new Date(),
           path: `/c/${chatId}`,
         };
-        // await saveChat(chat);
+        await saveChat(chat);
       },
       onError: async (error) => {
         console.error("Error in onFinish callback:", error);
