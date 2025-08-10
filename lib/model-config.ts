@@ -274,30 +274,26 @@ $\vec{F} = m\vec{a} = 10 \text{ kg} \cdot 9.8 \text{ m/s}^2 = 98 \text{ N}$
 </latex_formatting>
 
 <table_formatting>
-For tables such as truth tables, periodic table excerpts, data tables, function behavior tables, or comparison tables, use the array environment within display math blocks. This approach is essential because properly formatted tables help students see patterns, relationships, and data clearly across all STEM subjects.
+When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
-Use this exact syntax for tables:
-$$\begin{array}{|c|c|c|}
+CORRECT FORMAT:
+$$\displaystyle
+\begin{array}{|c|c|c|c|}
 \hline
-Header 1 & Header 2 & Header 3 \\
+\text{Position} & 1 & 2 & 3 & 4 \\
 \hline
-Row 1 Col 1 & Row 1 Col 2 & Row 1 Col 3 \\
-Row 2 Col 1 & Row 2 Col 2 & Row 2 Col 3 \\
+\text{Bit} & P_1 & P_2 & 1 & P_4 \\
 \hline
 \end{array}$$
-Always use |c|c|c| format for column alignment where c means center, l means left, and r means right. Include vertical lines using | between columns for clear separation. Use \\hline for horizontal lines after headers and at the bottom. Use & to separate columns and \\\\ for new rows.
 
-For truth tables specifically, use this format:
-$$\begin{array}{|c|c|c|}
+INCORRECT FORMAT:
+$$\begin{array}{|c|c|c|c|}
 \hline
-A & B & A \land B \\
-\hline
-0 & 0 & 0 \\
-0 & 1 & 0 \\
-1 & 0 & 0 \\
-1 & 1 & 1 \\
+\text{Position} & 1 & 2 & 3 & 4 \\
 \hline
 \end{array}$$
+
+The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 </table_formatting>
 <examples>
 Here are examples of how to respond to different types of questions:
@@ -403,31 +399,26 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Tables: ONLY array environment (KaTeX compatible)
 
 ### Table Templates (Simplified for Stability)
-**Truth Table:**
-$$
-\\begin{array}{|c|c|c|}
-\\hline
-\\text{A} & \\text{B} & \\text{A } \\land \\text{ B} \\\\ \\hline
-0 & 0 & 0 \\\\ 
-0 & 1 & 0 \\\\ 
-1 & 0 & 0 \\\\ 
-1 & 1 & 1 \\\\ 
-\\hline
-\\end{array}
-$$
+When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
-**Sign Analysis (Compact):**
-$$
-\\begin{array}{c|c|c|c}
-\\hline
-\\text{Interval} & (-\\infty, -4) & (-4, -3/2) & (-3/2, \\infty) \\\\ 
-\\hline
--x-4 & + & - & - \\\\ 
-2x+3 & - & - & + \\\\ 
-\\text{Razlomak} & - & + & - \\\\ 
-\\hline
-\\end{array}
-$$
+CORRECT FORMAT:
+$$\displaystyle
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\text{Bit} & P_1 & P_2 & 1 & P_4 \\
+\hline
+\end{array}$$
+
+INCORRECT FORMAT:
+$$\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\end{array}$$
+
+The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 ## Formatting & Clarity
 - VISUAL SEPARATION: Use --- between steps
 - ALIGNMENT: Max 3 spaces for indentation
@@ -480,43 +471,26 @@ All of your mathematical responses must be written in LaTeX notation that is ful
 *   Always begin display math blocks with \`\\displaystyle\` to ensure fractions and other expressions are rendered in their full, readable size.
 
 **Crucial Rule for All Tables (KaTeX environments):**
-To prevent rendering errors, you must use the \`array\` environment for all tables. To ensure text (like headers) is displayed correctly, **all textual content inside the array must be wrapped in a \`\\text{...}\` command.**
+When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
-Here is exactly how you must format them:
+CORRECT FORMAT:
+$$\displaystyle
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\text{Bit} & P_1 & P_2 & 1 & P_4 \\
+\hline
+\end{array}$$
 
-*   **Example 1: Truth Table**
-    $$
-    \\begin{array}{|c|c|c|}
-    \\hline
-    \\text{\\textbf{Ulaz A}} & \\text{\\textbf{Ulaz B}} & \\text{\\textbf{Izlaz (A \\land B)}} \\\\
-    \\hline
-    0 & 0 & 0 \\\\
-    \\hline
-    0 & 1 & 0 \\\\
-    \\hline
-    1 & 0 & 0 \\\\
-    \\hline
-    1 & 1 & 1 \\\\
-    \\hline
-    \\end{array}
-    $$
+INCORRECT FORMAT:
+$$\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\end{array}$$
 
-*   **Example 2: Sign Analysis Table**
-    $$
-    \\begin{array}{|l|c|c|c|}
-    \\hline
-    \\text{\\textbf{}} & \\text{\\textbf{Interval}} & \\text{\\textbf{Interval}} & \\text{\\textbf{Interval}} \\\\
-    \\hline
-    \\text{Izraz} & (-\\infty, -4) & (-4, -1.5) & (-1.5, +\\infty) \\\\
-    \\hline
-    \\text{Predznak od } -x-4 & + & - & - \\\\
-    \\hline
-    \\text{Predznak od } 2x+3 & - & - & + \\\\
-    \\hline
-    \\text{\\textbf{Predznak razlomka}} & - & + & - \\\\
-    \\hline
-    \\end{array}
-    $$
+The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 **Problem-Solving Methodology**
 
 Your explanations should follow a clear, pedagogical structure.
@@ -600,31 +574,26 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Tables: ONLY array environment (KaTeX compatible)
 
 ### Table Templates (Simplified for Stability)
-**Truth Table:**
-$$
-\\begin{array}{|c|c|c|}
-\\hline
-\\text{A} & \\text{B} & \\text{A } \\land \\text{ B} \\\\ \\hline
-0 & 0 & 0 \\\\ 
-0 & 1 & 0 \\\\ 
-1 & 0 & 0 \\\\ 
-1 & 1 & 1 \\\\ 
-\\hline
-\\end{array}
-$$
+When creating mathematical tables using LaTeX array environment, ALWAYS start with \displaystyle immediately after the opening $$:
 
-**Sign Analysis (Compact):**
-$$
-\\begin{array}{c|c|c|c}
-\\hline
-\\text{Interval} & (-\\infty, -4) & (-4, -3/2) & (-3/2, \\infty) \\\\ 
-\\hline
--x-4 & + & - & - \\\\ 
-2x+3 & - & - & + \\\\ 
-\\text{Razlomak} & - & + & - \\\\ 
-\\hline
-\\end{array}
-$$
+CORRECT FORMAT:
+$$\displaystyle
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\text{Bit} & P_1 & P_2 & 1 & P_4 \\
+\hline
+\end{array}$$
+
+INCORRECT FORMAT:
+$$\begin{array}{|c|c|c|c|}
+\hline
+\text{Position} & 1 & 2 & 3 & 4 \\
+\hline
+\end{array}$$
+
+The \displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 ## Formatting & Clarity
 - VISUAL SEPARATION: Use --- between steps
 - ALIGNMENT: Max 3 spaces for indentation
