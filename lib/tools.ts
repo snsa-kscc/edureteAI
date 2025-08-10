@@ -1,6 +1,6 @@
 import { tool } from "ai";
 import { z } from "zod";
-import { uploadGraphToR2 } from "@/lib/upload-graph";
+import { uploadFileToR2 } from "@/lib/upload-actions";
 
 export const generateGraphTool = tool({
   description: "Generate a mathematical graph using matplotlib. Call this when user asks for plotting functions, graphs, charts, or visualizations.",
@@ -29,27 +29,43 @@ export const generateGraphTool = tool({
         };
       }
 
-      // Upload the generated image to R2 storage
+      // Upload the generated image to R2 storage using existing robust infrastructure
       let r2Url = null;
-      // try {
-      //   const uploadResult = await uploadGraphToR2(result.image, description);
-      //   if (uploadResult.success) {
-      //     r2Url = uploadResult.url;
-      //   } else {
-      //     console.warn("Failed to upload graph to R2:", uploadResult.error);
-      //   }
-      // } catch (uploadError) {
-      //   console.warn("Error uploading to R2:", uploadError);
-      // }
+      try {
+        const uploadResult = await uploadFileToR2({
+          base64Image: result.image,
+          filename: `graph-${Date.now()}.png`,
+          description: description,
+        });
 
-      return {
-        success: true,
-        image: result.image,
-        r2Url,
-        description,
-        stdout: result.stdout,
-        stderr: result.stderr,
-      };
+        if (uploadResult.success) {
+          r2Url = uploadResult.url;
+        } else {
+          console.warn("Failed to upload graph to R2:", uploadResult.error);
+        }
+      } catch (uploadError) {
+        console.warn("Error uploading to R2:", uploadError);
+      }
+
+      // Only return R2 URL if upload was successful, otherwise fallback to base64
+      if (r2Url) {
+        return {
+          success: true,
+          imageUrl: r2Url,
+          description,
+          stdout: result.stdout,
+          stderr: result.stderr,
+        };
+      } else {
+        // Fallback to base64 if R2 upload failed
+        return {
+          success: true,
+          image: result.image,
+          description,
+          stdout: result.stdout,
+          stderr: result.stderr,
+        };
+      }
     } catch (error: any) {
       return {
         success: false,

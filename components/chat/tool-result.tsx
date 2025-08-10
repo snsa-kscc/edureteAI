@@ -32,7 +32,7 @@ export function ToolResult({ toolName, result, args }: ToolResultProps) {
 
             <div className="relative">
               <Image
-                src={result.image}
+                src={result.imageUrl || result.image}
                 alt={result.description || "Generated graph"}
                 width={800}
                 height={480}
@@ -47,7 +47,7 @@ export function ToolResult({ toolName, result, args }: ToolResultProps) {
                 size="sm"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = result.image;
+                  link.href = result.imageUrl || result.image;
                   link.download = `graph-${Date.now()}.png`;
                   document.body.appendChild(link);
                   link.click();
@@ -59,12 +59,12 @@ export function ToolResult({ toolName, result, args }: ToolResultProps) {
                 <Download className="h-3 w-3 mr-1" />
                 Preuzmi
               </Button>
-              {result.r2Url && (
+              {(result.imageUrl || result.r2Url) && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    window.open(result.r2Url, "_blank");
+                    window.open(result.imageUrl || result.r2Url, "_blank");
                   }}
                   className="h-8"
                 >
@@ -74,7 +74,7 @@ export function ToolResult({ toolName, result, args }: ToolResultProps) {
               )}
             </div>
 
-            {result.r2Url && <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">✅ Graf je automatski spremljen u oblak</p>}
+            {(result.imageUrl || result.r2Url) && <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">✅ Graf je automatski spremljen u oblak</p>}
 
             {showDetails && (
               <div className="mt-3 p-3 bg-slate-100 dark:bg-slate-800 rounded text-xs">
