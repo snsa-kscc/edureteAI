@@ -67,7 +67,7 @@ return (
     remarkPlugins={[
       // Staviti remarkMath PRIJE remarkGfm
       [remarkMath, { 
-        singleDollarTextMath: true,
+        singleDollarTextMath: false,
         inlineMathDouble: false // Prevents double processing
       }],
       remarkGfm
