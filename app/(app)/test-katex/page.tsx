@@ -97,9 +97,23 @@ $$\\displaystyle\n
 \\end{array}$$
 `;
 
-  const istinitostGemini = `
-$261,23_8 = \\underbrace{010}_{2} \\underbrace{110}_{6} \\underbrace{001}_{1} , \\underbrace{010}_{2} \\underbrace{011_2}_{3} $
+  const gg = `
+$$\n\\displaystyle\nH(x) =\n
+\\begin{cases}\n0 & \\text{za } x < 0 \\\\\n
+\\frac{1}{2} & \\text{za } x = 0 \\\\\n1 & \\text{za } x > 0\n\\end{cases}\n$$
   `;
+
+  const notGg = `
+Heaviside funkcija (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n
+
+$$\n\\displaystyle\nH(t) = \\begin{cases}\n0 & \\text{za } t < 0 \\\\\n1 & \\text{za } t \\geq 0\n\\end{cases}\n$$
+
+\n\nPostoji i varijanta gdje je $H(0) = \\frac{1}{2}$, ali najčešće koristimo definiciju gdje je $H(0) = 1$.\n\n## Grafički prikaz\n\nFunkcija izgleda kao \"skok\" - kreće se od nule za negativne vrijednosti i skače na 1 za pozitivne vrijednosti. Ima diskontinuitet (prekid) u točki $t = 0$.\n\n## Važna svojstva\n\n**Derivacija:** Derivacija Heaviside funkcije je Diracova delta funkcija:\n$$\\frac{dH(t)}{dt} = \\delta(t)$$\n\n**Integral:** \n$$\\int_{-\\infty}^{t} H(\\tau) d\\tau = tH(t)$$\n\n## Praktične primjene\n\n**U elektrotehnici:** Modelira uključivanje struje u trenutku $t = 0$ 🔌\n\n**U teoriji signala:** Predstavlja jedinični step signal\n\n**U diferencijalnim jednadžbama:** Pomaže pri rješavanju jednadžbi s diskontinuitetnim izvorima\n\n## Pomaknuta Heaviside funkcija\n\nČesto koristimo pomaknutu verziju:\n
+
+$$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\geq a\n\\end{cases}\n$$
+
+\n\nOva funkcija \"uključuje se\" u trenutku $t = a$ umjesto u $t = 0$.\n\nJe li ti jasna osnovna ideja Heaviside funkcije? 🤔 Možda imaš neko specifično pitanje o njezinoj primjeni ili svojstvima?
+`;
 
   return (
     <div className="container mx-auto p-8 max-w-4xl">
@@ -150,7 +164,11 @@ $261,23_8 = \\underbrace{010}_{2} \\underbrace{110}_{6} \\underbrace{001}_{1} , 
       <div className="py-15"></div>
 
       <div className="border p-4 rounded-lg outline-1 outline-red-500">
-        <Markdown>{istinitostGemini}</Markdown>
+        <Markdown>{gg}</Markdown>
+      </div>
+
+      <div className="border p-4 rounded-lg outline-1 outline-red-500">
+        <Markdown>{notGg}</Markdown>
       </div>
 
       <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">

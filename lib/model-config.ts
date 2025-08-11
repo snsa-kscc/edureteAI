@@ -28,28 +28,21 @@ export const SUBSCRIPTION_PLANS = {
     description: "Premium plan koji sadrži 1500 poruka.",
     priceId: process.env.STRIPE_PRICE_ID_PAID || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].TOTAL_MESSAGES,
-    premiumModelMessages:
-      MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID,
   },
   [MESSAGE_TIER.PAID_PLUS]: {
     name: "eduAI Duo",
     price: 39,
-    description:
-      "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
+    description: "Premium plan koji sadrži 1500 poruka i vrijeme sa instruktorom.",
     priceId: process.env.STRIPE_PRICE_ID_PAID_PLUS || "",
     totalMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].TOTAL_MESSAGES,
-    premiumModelMessages:
-      MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
+    premiumModelMessages: MESSAGE_LIMITS[MESSAGE_TIER.PAID_PLUS].PREMIUM_MODEL_MESSAGES,
     tier: MESSAGE_TIER.PAID_PLUS,
   },
 };
 
-export const PREMIUM_MODELS = [
-  "claude-sonnet-4-20250514",
-  "gpt-4.5-preview",
-  "gemini-2.0-flash-thinking-exp-01-21",
-];
+export const PREMIUM_MODELS = ["claude-sonnet-4-20250514", "gpt-4.5-preview", "gemini-2.0-flash-thinking-exp-01-21"];
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   "accounts/fireworks/models/deepseek-r1": {
@@ -238,7 +231,30 @@ For engineering problems: Emphasize practical applications and real-world constr
 </subject_specific_guidelines>
 <latex_formatting>
 Write all mathematical and scientific content using LaTeX notation compatible with the KaTeX parser. Use dollar signs for simple inline math involving single variables, chemical formulas, or basic operations, and double dollar signs for display blocks containing complex expressions, equations, chemical reactions, tables, or multi-line content.
+
+**CRITICAL: For all LaTeX begin environments (cases, matrix, array, align, etc.), you MUST format them as follows:**
+1. Start with double dollar signs followed by a newline: $$\n
+2. Add \\displaystyle on the next line
+3. Then add your \\begin{environment} structure
+4. End with newline before closing $$: \n$$
+
+**CORRECT FORMAT for begin environments:**
+$$
+\n\\displaystyle
+\\begin{cases}
+x = 1 & \\text{if } n > 0 \\\\
+x = 0 & \\text{if } n = 0
+\\end{cases}\n
+$$
+
+**INCORRECT FORMAT (will break KaTeX):**
+$$\\begin{cases}
+x = 1 & \\text{if } n > 0 \\\\
+x = 0 & \\text{if } n = 0
+\\end{cases}$$
+
 Always use \\displaystyle when rendering fractions to ensure they appear in full size. Instead of \\frac{a}{b}, use \\displaystyle\\frac{a}{b} for better readability. For mathematical expressions with multiple terms, nested fractions, or complex structures, use LaTeX equation blocks with double dollar signs rather than inline math mode because this prevents compression and ensures clear formatting.
+
 For chemistry, use proper notation like H_2O, CO_2, or more complex reactions:
 
 $2H_2 + O_2 \\\\rightarrow 2H_2O$
@@ -279,25 +295,6 @@ $$\\begin{array}{|c|c|c|c|}
 
 The \\displaystyle directive helps with proper KaTeX parsing of complex table structures and prevents parsing errors.
 </table_formatting>
-<begin_environment>
-**Crucial Rule for All LaTeX Begin Environments in Math Mode: When creating any mathematical environment using \\begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, 
-ALWAYS start with \\displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. 
-This applies to all begin environments including \\begin{cases}, \\begin{matrix}, \\begin{pmatrix}, \\begin{bmatrix}, \\begin{array}, \\begin{align}, and any other mathematical structures.
-
-CORRECT FORMAT:
-\\n\\n$$\\n\\displaystyle 
-\\begin{cases}
-x = 1 & \\text{if } n > 0 \\\\
-x = 0 & \\text{if } n = 0
-\\end{cases}\\n$$\\n\\n
-
-INCORRECT FORMAT:
-$$\\begin{cases}
-x = 1 & \\text{if } n > 0 \\\\
-x = 0 & \\text{if } n = 0
-\\end{cases}$$
-
-</begin_environment>
 
 <examples>
 Here are examples of how to respond to different types of questions:
