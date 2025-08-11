@@ -25,8 +25,8 @@ export default async function RootLayout({
         <head>
           <link
             rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-            integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+            integrity="sha384-uj6qT5V/e7d1kh0Ue9vSQrD2JBP1c9b+x8kQe2aTL8h9JimkGsSwSv1pyhXpchLz"
             crossOrigin="anonymous"
           />
         </head>

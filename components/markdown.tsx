@@ -67,8 +67,8 @@ return (
     remarkPlugins={[
       // Staviti remarkMath PRIJE remarkGfm
       [remarkMath, { 
-        singleDollarTextMath: false,
-        inlineMathDouble: false // Prevents double processing
+        singleDollarTextMath: true,  // Enable inline math with $...$
+        // inlineMathDouble is not a valid option, removing it
       }],
       remarkGfm
     ]}
@@ -83,7 +83,10 @@ return (
         macros: {}, // Empty macros to prevent conflicts
         fleqn: false,
         leqno: false,
-        minRuleThickness: 0.04
+        minRuleThickness: 0.04,
+        displayMode: false, // Set to true for display math by default
+        maxSize: 100, // Maximum size for user input
+        maxExpand: 1000, // Maximum macro expansions
       }]
     ]}
     skipHtml={false}
