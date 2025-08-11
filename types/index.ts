@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Message as AiMessage } from "ai";
+import { UIMessage as AiMessage } from "ai";
 
 export type MessageContent = {
   type: "text" | "image";
@@ -56,8 +56,8 @@ export type ServerActionResult<Result> = Promise<
 export type Usage = {
   userId: string;
   model: string;
-  promptTokens: number;
-  completionTokens: number;
+  inputTokens: number;
+  outputTokens: number;
   totalTokens: number;
   timestamp: Date;
 };
@@ -83,4 +83,4 @@ export interface ModelPricing {
   inputPrice: number | ((tokens: number) => number);
   outputPrice: number | ((tokens: number) => number);
   family: "openai" | "anthropic" | "togetherai" | "google" | "fireworks";
-};
+}

@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  rewrites: async () => {
+    return [
+      {
+        source: "/api/generate-graph",
+        destination: process.env.NODE_ENV === "development" ? "http://localhost:8000/" : "/api/generate-graph",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

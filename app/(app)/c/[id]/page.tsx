@@ -28,20 +28,20 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
             isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
             userName={user?.firstName}
-            id={params.id}
+            chatId={params.id}
             chatAreaId="left"
             initialModel={chat?.leftModel ?? DEFAULT_LEFT_MODEL}
-            initialSystem={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialSystemMessage={chat?.leftSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
             initialMessages={chat?.leftMessages}
           />
           <Chat
             isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)}
             userId={userId}
             userName={user?.firstName}
-            id={params.id}
+            chatId={params.id}
             chatAreaId="right"
             initialModel={chat?.rightModel ?? DEFAULT_RIGHT_MODEL}
-            initialSystem={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
+            initialSystemMessage={chat?.rightSystemPrompt ?? DEFAULT_USER_SYSTEM_PROMPT}
             initialMessages={chat?.rightMessages}
           />
         </div>

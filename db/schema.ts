@@ -5,8 +5,12 @@ export const usage = pgTable("usage", {
   userId: text("user_id").notNull(),
   model: text("model").notNull(),
   modelFamily: text("model_family").notNull(),
-  promptTokens: integer("prompt_tokens").notNull(),
-  completionTokens: integer("completion_tokens").notNull(),
+  // New AI SDK v5 column names
+  inputTokens: integer("input_tokens"),
+  outputTokens: integer("output_tokens"),
+  // Legacy AI SDK v4 column names (for backward compatibility)
+  promptTokens: integer("prompt_tokens"),
+  completionTokens: integer("completion_tokens"),
   totalTokens: integer("total_tokens").notNull(),
   cost: decimal("cost", { precision: 10, scale: 4 }).notNull(),
   timestamp: timestamp("timestamp").notNull(),

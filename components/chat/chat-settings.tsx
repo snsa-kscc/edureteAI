@@ -7,13 +7,13 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 interface ChatSettingsProps {
   model: string;
-  system: string | undefined;
+  systemMessage: string | undefined;
   onModelChange: (value: string) => void;
-  onSystemChange: (value: string) => void;
+  onSystemMessageChange: (value: string) => void;
   hasImagesInConversation: boolean;
 }
 
-export function ChatSettings({ model, system, onModelChange, onSystemChange, hasImagesInConversation }: ChatSettingsProps) {
+export function ChatSettings({ model, systemMessage, onModelChange, onSystemMessageChange, hasImagesInConversation }: ChatSettingsProps) {
   return (
     <div className="flex justify-between pb-1">
       <Select onValueChange={onModelChange} value={model}>
@@ -58,8 +58,8 @@ export function ChatSettings({ model, system, onModelChange, onSystemChange, has
         <PopoverContent className="w-86 m-4">
           <Textarea
             className="p-2 h-62"
-            value={system || ""}
-            onChange={(e) => onSystemChange(e.target.value)}
+            value={systemMessage || ""}
+            onChange={(e) => onSystemMessageChange(e.target.value)}
             placeholder="Pozdrav, pripremam se za maturu/ispit/usmeni ispit i trebao/la bih pomoć pri rješavanju zadatka. Molim te da mi pružiš detaljno/vrlo detaljno/sažeto objašnjenje teorije potrebne za njegovo rješavanje, zatim da samostalno riješiš zadatak uz sažetak ključnih koraka. Nakon toga, želio/željela bih tvoju asistenciju korak po korak dok ga pokušavam riješiti sam/a. Kada završim, ponudi mi generiranje sličnog/težeg/lakšeg zadatka za dodatnu vježbu."
           />
         </PopoverContent>
