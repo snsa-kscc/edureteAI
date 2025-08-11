@@ -39,6 +39,7 @@
     "ai": "^5.0.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "katex": "^0.16.22",
     "drizzle-orm": "^0.44.4",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.537.0",

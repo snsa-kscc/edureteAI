@@ -3,7 +3,7 @@ import { streamText, type UIMessage, convertToModelMessages, smoothStream } from
 import { auth } from "@clerk/nextjs/server";
 import { saveUsage } from "@/lib/neon-actions";
 import { modelProvider } from "@/lib/utils";
-import { DEFAULT_SYSTEM_PROMPT } from "@/lib/model-config";
+import { getSystemPromptForModel } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import { tools } from "@/lib/tools";

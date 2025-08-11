@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 
 export const metadata: Metadata = {
   title: "edureteAI - matematički asistent",
@@ -22,14 +23,6 @@ export default async function RootLayout({
     <ClerkProvider afterSignOutUrl={"/"} localization={hrHR}>
       {/* <SyncActiveOrganization membership={sessionClaims?.membership} /> */}
       <html lang="en" suppressHydrationWarning>
-        <head>
-          <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-            integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
-            crossOrigin="anonymous"
-          />
-        </head>
         <body>
           <Toaster position="top-center" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
