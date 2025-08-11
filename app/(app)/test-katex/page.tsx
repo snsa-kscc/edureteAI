@@ -155,7 +155,7 @@ $261,23_8 = \\underbrace{010}_{2} \\underbrace{110}_{6} \\underbrace{001}_{1} , 
 
       <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <h2 className="font-bold mb-2">Debug Info:</h2>
-        <p className="text-sm">If you see red error text, it means KaTeX couldn't parse the expression.</p>
+        <p className="text-sm">If you see red error text, it means KaTeX couldn&apos;t parse the expression.</p>
         <p className="text-sm">Common issues:</p>
         <ul className="list-disc ml-6 text-sm">
           <li>Missing double backslashes (\\\\) for line breaks in arrays</li>
