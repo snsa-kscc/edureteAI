@@ -12,14 +12,9 @@ interface MarkdownProps {
 
 const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
   // Safety check for empty or null content
-  if (!children || typeof children !== 'string') {
+  if (!children || typeof children !== "string") {
     return <div className="text-sm text-gray-500">No content to display</div>;
   }
-  
-  // const processedThinkTags = children.replace(
-  //   /<think>(.*?)<\/think>/gs,
-  //   (_, content) => `<pre className="whitespace-pre-wrap"><span className="text-xs text-gray-500">${content}</span></pre>`
-  // );
 
   const components = {
     code: ({ node, inline, className, children, ...props }: any) => {
@@ -61,39 +56,50 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
     ),
   };
 
-return (
-  <ReactMarkdown
-    components={components}
-    remarkPlugins={[
-      // Staviti remarkMath PRIJE remarkGfm
-      [remarkMath, { 
-        singleDollarTextMath: true,  // Enable inline math with $...$
-        // inlineMathDouble is not a valid option, removing it
-      }],
-      remarkGfm
-    ]}
-    rehypePlugins={[
-      rehypeRaw,
-      [rehypeKatex, { 
-        output: "htmlAndMathml",
-        strict: false,    // Dopusti više LaTeX komandi
-        trust: true,      // Vjeruj komandama poput \hline, \begin
-        throwOnError: false, // Prikaži greške umjesto rušenja
-        errorColor: '#cc0000',
-        macros: {}, // Empty macros to prevent conflicts
-        fleqn: false,
-        leqno: false,
-        minRuleThickness: 0.04,
-        displayMode: false, // Set to true for display math by default
-        maxSize: 100, // Maximum size for user input
-        maxExpand: 1000, // Maximum macro expansions
-      }]
-    ]}
-    skipHtml={false}
-  >
-    {children}
-  </ReactMarkdown>
-);
+  return (
+    <ReactMarkdown
+      components={components}
+      remarkPlugins={[
+        // Staviti remarkMath PRIJE remarkGfm
+        [
+          remarkMath,
+          {
+            singleDollarTextMath: true, // Enable inline math with $...$
+            // inlineMathDouble is not a valid option, removing it
+          },
+        ],
+        remarkGfm,
+      ]}
+      rehypePlugins={[
+        rehypeRaw,
+        [
+          rehypeKatex,
+          {
+            output: "htmlAndMathml",
+            strict: false, // Dopusti više LaTeX komandi
+            trust: true, // Vjeruj komandama poput \hline, \begin
+            throwOnError: false, // Prikaži greške umjesto rušenja
+            errorColor: "#cc0000",
+            macros: {}, // Empty macros to prevent conflicts
+            fleqn: false,
+            leqno: false,
+            minRuleThickness: 0.04,
+            displayMode: false, // Set to true for display math by default
+            maxSize: 100, // Maximum size for user input
+            maxExpand: 1000, // Maximum macro expansions
+            // Additional options to handle newlines properly
+            globalGroup: true, // Allow global grouping
+            colorIsTextColor: false,
+            // Trust context for better parsing
+            trustContext: true,
+          },
+        ],
+      ]}
+      skipHtml={false}
+    >
+      {children}
+    </ReactMarkdown>
+  );
 };
 
 export const Markdown = memo(NonMemoizedMarkdown, (prevProps, nextProps) => prevProps.children === nextProps.children);
