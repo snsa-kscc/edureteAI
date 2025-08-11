@@ -97,6 +97,10 @@ $$\\displaystyle\n
 \\end{array}$$
 `;
 
+  const istinitostGemini = `
+$261,23_8 = \\underbrace{010}_{2} \\underbrace{110}_{6} \\underbrace{001}_{1} , \\underbrace{010}_{2} \\underbrace{011_2}_{3} $
+  `;
+
   return (
     <div className="container mx-auto p-8 max-w-4xl">
       <h1 className="text-2xl font-bold mb-6">KaTeX Testing Page</h1>
@@ -141,6 +145,12 @@ $$\\displaystyle\n
 
       <div className="border p-4 rounded-lg outline-1 outline-red-500">
         <Markdown>{anthropicTable2}</Markdown>
+      </div>
+
+      <div className="py-15"></div>
+
+      <div className="border p-4 rounded-lg outline-1 outline-red-500">
+        <Markdown>{istinitostGemini}</Markdown>
       </div>
 
       <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
