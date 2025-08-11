@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     const result = streamText({
       model: modelProvider.languageModel(model),
       system:
-        DEFAULT_SYSTEM_PROMPT +
+        getSystemPromptForModel(model) +
         "\n" +
         systemMessage +
         "\n\n" +

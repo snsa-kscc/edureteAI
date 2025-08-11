@@ -61,7 +61,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 0.3,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -74,7 +74,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 0.3,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -86,7 +86,7 @@ export const modelProvider = customProvider({
     "gpt-4.1": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -98,7 +98,7 @@ export const modelProvider = customProvider({
     "gpt-4.1-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -110,7 +110,7 @@ export const modelProvider = customProvider({
     "gpt-4.1-nano": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -164,7 +164,7 @@ export function handleModelProvider(model: string, logitBias?: LogitBiasConfig) 
       return wrapLanguageModel({
         middleware: defaultSettingsMiddleware({
           settings: {
-            providerMetadata: {
+            providerOptions: {
               openai: {
                 logitBias,
               },
