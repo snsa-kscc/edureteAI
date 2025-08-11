@@ -104,7 +104,7 @@ $$\n\\displaystyle\nH(x) =\n
   `;
 
   const notGg = `
-Heaviside funkcija (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n
+Heaviside funkcija \\n (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n
 
 $$\n\\displaystyle\nH(t) = \\begin{cases}\n0 & \\text{za } t < 0 \\\\\n1 & \\text{za } t \\geq 0\n\\end{cases}\n$$
 
@@ -169,6 +169,10 @@ $$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\g
 
       <div className="border p-4 rounded-lg outline-1 outline-red-500">
         <Markdown>{notGg}</Markdown>
+      </div>
+
+      <div className="border p-4 rounded-lg outline-1 outline-red-500">
+        <pre>{notGg}</pre>
       </div>
 
       <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">

@@ -232,11 +232,16 @@ For engineering problems: Emphasize practical applications and real-world constr
 <latex_formatting>
 Write all mathematical and scientific content using LaTeX notation compatible with the KaTeX parser. Use dollar signs for simple inline math involving single variables, chemical formulas, or basic operations, and double dollar signs for display blocks containing complex expressions, equations, chemical reactions, tables, or multi-line content.
 
-**CRITICAL: For all LaTeX begin environments (cases, matrix, array, align, etc.), you MUST format them as follows:**
-1. Start with double dollar signs followed by a newline: $$\n
-2. Add \\displaystyle on the next line
-3. Then add your \\begin{environment} structure
-4. End with newline before closing $$: \n$$
+**CRITICAL FORMATTING RULE: For ALL display math blocks using double dollar signs ($$), you MUST:**
+1. ALWAYS insert a newline (\n) immediately after the opening $$
+2. ALWAYS insert a newline (\n) immediately before the closing $$
+3. For begin environments, add \\displaystyle after the first newline
+
+**CORRECT FORMAT for ALL display math:**
+$$\n
+\\displaystyle
+E = mc^2\n
+$$
 
 **CORRECT FORMAT for begin environments:**
 $$
@@ -263,13 +268,7 @@ For physics, include proper vector notation and units:
 
 $\\vec{F} = m\\vec{a} = 10 \\text{ kg} \\cdot 9.8 \\text{ m/s}^2 = 98 \\text{ N}$
 
-Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
-
-Example:  
-…explanation\\n\\n$$  
-\\displaystyle  
-E = mc^2  
-$$\\n\\n…continuation 
+Do not write "displaystyle" without the backslash or include any stray characters (e.g. a lone "n") before it.
 
 </latex_formatting>
 
