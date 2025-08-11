@@ -261,14 +261,14 @@ $$\\n\\n…continuation
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle
+\\n\\n$$\\n\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}$$\\n\\n
+\\end{array}\\n$$\\n\\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
@@ -285,11 +285,11 @@ ALWAYS start with \\displaystyle immediately after the opening $$ to ensure prop
 This applies to all begin environments including \\begin{cases}, \\begin{matrix}, \\begin{pmatrix}, \\begin{bmatrix}, \\begin{array}, \\begin{align}, and any other mathematical structures.
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle 
+\\n\\n$$\\n\\displaystyle 
 \\begin{cases}
 x = 1 & \\text{if } n > 0 \\\\
 x = 0 & \\text{if } n = 0
-\\end{cases}$$\\n\\n
+\\end{cases}\\n$$\\n\\n
 
 INCORRECT FORMAT:
 $$\\begin{cases}
@@ -412,14 +412,14 @@ $$\\n\\n…continuation
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle
+\\n\\n$$\\n\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}$$\\n\\n
+\\end{array}\\n$$\\n\\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
