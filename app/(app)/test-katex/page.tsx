@@ -8,6 +8,21 @@ export default function TestKaTeX() {
 Here's the quadratic formula: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
 
 And some inline math: The area of a circle is $A = \\pi r^2$.
+
+In our case, 1 and 2 are the same even if we have $ or $$
+
+And some display math w/o padding because we have \\displaystyle:
+$$\\displaystyle\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+
+This is smaller because we dont have \\displaystyle:
+$$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+
+And some display math with padding because we have \\n or enter:
+$$
+\\displaystyle\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}
+$$
+And some display math with padding because we have \\n or enter:
+$$\n\\displaystyle\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}\n$$
 `;
 
   // Test with properly escaped LaTeX
@@ -103,17 +118,7 @@ $$\n\\displaystyle\nH(x) =\n
 \\frac{1}{2} & \\text{za } x = 0 \\\\\n1 & \\text{za } x > 0\n\\end{cases}\n$$
   `;
 
-  const notGg = `
-Heaviside funkcija \\n (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n
-
-$$\n\\displaystyle\nH(t) = \\begin{cases}\n0 & \\text{za } t < 0 \\\\\n1 & \\text{za } t \\geq 0\n\\end{cases}\n$$
-
-\n\nPostoji i varijanta gdje je $H(0) = \\frac{1}{2}$, ali najčešće koristimo definiciju gdje je $H(0) = 1$.\n\n## Grafički prikaz\n\nFunkcija izgleda kao \"skok\" - kreće se od nule za negativne vrijednosti i skače na 1 za pozitivne vrijednosti. Ima diskontinuitet (prekid) u točki $t = 0$.\n\n## Važna svojstva\n\n**Derivacija:** Derivacija Heaviside funkcije je Diracova delta funkcija:\n$$\\frac{dH(t)}{dt} = \\delta(t)$$\n\n**Integral:** \n$$\\int_{-\\infty}^{t} H(\\tau) d\\tau = tH(t)$$\n\n## Praktične primjene\n\n**U elektrotehnici:** Modelira uključivanje struje u trenutku $t = 0$ 🔌\n\n**U teoriji signala:** Predstavlja jedinični step signal\n\n**U diferencijalnim jednadžbama:** Pomaže pri rješavanju jednadžbi s diskontinuitetnim izvorima\n\n## Pomaknuta Heaviside funkcija\n\nČesto koristimo pomaknutu verziju:\n
-
-$$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\geq a\n\\end{cases}\n$$
-
-\n\nOva funkcija \"uključuje se\" u trenutku $t = a$ umjesto u $t = 0$.\n\nJe li ti jasna osnovna ideja Heaviside funkcije? 🤔 Možda imaš neko specifično pitanje o njezinoj primjeni ili svojstvima?
-`;
+  const notGg = `Heaviside funkcija (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n$$\n\\displaystyle H(t) = \\begin{cases} 0 & \\text{za } t < 0 \\\\\n1 & \\text{za } t \\geq 0 \\end{cases}\n$$\n\nPostoji i varijanta gdje je $H(0) = \\frac{1}{2}$, ali najčešće koristimo definiciju gdje je $H(0) = 1$.\n\n## Grafički prikaz\n\nFunkcija izgleda kao \"skok\" - kreće se od nule za negativne vrijednosti i skače na 1 za pozitivne vrijednosti. Ima diskontinuitet (prekid) u točki $t = 0$.\n\n## Važna svojstva\n\n**Derivacija:** Derivacija Heaviside funkcije je Diracova delta funkcija:\n$$\\frac{dH(t)}{dt} = \\delta(t)$$\n\n**Integral:** \n$$\\int_{-\\infty}^{t} H(\\tau) d\\tau = tH(t)$$\n\n## Praktične primjene\n\n**U elektrotehnici:** Modelira uključivanje struje u trenutku $t = 0$ 🔌\n\n**U teoriji signala:** Predstavlja jedinični step signal\n\n**U diferencijalnim jednadžbama:** Pomaže pri rješavanju jednadžbi s diskontinuitetnim izvorima\n\n## Pomaknuta Heaviside funkcija\n\nČesto koristimo pomaknutu verziju:\n$$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\geq a\n\\end{cases}\n$$\n\nOva funkcija \"uključuje se\" u trenutku $t = a$ umjesto u $t = 0$.\n\nJe li ti jasna osnovna ideja Heaviside funkcije? 🤔 Možda imaš neko specifično pitanje o njezinoj primjeni ili svojstvima?`;
 
   return (
     <div className="container mx-auto p-8 max-w-4xl">
@@ -122,6 +127,18 @@ $$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\g
       <div className="space-y-8">
         <div className="border p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
           <Markdown>{simpleFormula}</Markdown>
+        </div>
+
+        <div className="space-y-8">
+          <div className="border p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <pre>{simpleFormula}</pre>
+          </div>
+        </div>
+
+        <div className="space-y-8">
+          <div className="border p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+            <p>{simpleFormula}</p>
+          </div>
         </div>
 
         <div className="border p-4 rounded-lg">
