@@ -57,7 +57,14 @@ export const modelProvider = customProvider({
       }),
       model: openai("o4-mini"),
     }),
-    "gpt-5": openai("gpt-5"),
+    "gpt-5": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+        },
+      }),
+      model: openai("gpt-5"),
+    }),
     "gpt-5-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
@@ -71,7 +78,14 @@ export const modelProvider = customProvider({
       }),
       model: openai("gpt-5-mini"),
     }),
-    "gpt-5-nano": openai("gpt-5-nano"),
+    "gpt-5-nano": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+        },
+      }),
+      model: openai("gpt-5-nano"),
+    }),
     "gpt-4o": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
