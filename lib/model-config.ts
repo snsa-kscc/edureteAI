@@ -162,19 +162,19 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 0.4,
     family: "openai",
   },
-  "claude-opus-4.1-20250514": {
+  "claude-opus-4-1-20250805": {
     inputPrice: 15.0,
     outputPrice: 75.0,
     family: "anthropic",
   },
   "claude-sonnet-4-20250514": {
-    inputPrice: 3.0,
-    outputPrice: 15.0,
+    inputPrice: (tokens: number) => (tokens <= 200_000 ? 3.0 : 6.0),
+    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.50),
     family: "anthropic",
   },
   "claude-sonnet-4-thinking": {
-    inputPrice: 3.0,
-    outputPrice: 15.0,
+    inputPrice: (tokens: number) => (tokens <= 200_000 ? 3.0 : 6.0),
+    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.50),
     family: "anthropic",
   },
 };

@@ -5,7 +5,7 @@ export const CHAT_MODELS = [
   { value: "gpt-5", label: "OpenAI/GPT-5" },
   { value: "gpt-5-mini", label: "OpenAI/GPT-5 mini" },
   { value: "gpt-5-nano", label: "OpenAI/GPT-5 nano" },
-  { value: "claude-opus-4.1-20250514", label: "Anthropic/Claude Opus 4.1" },
+  { value: "claude-opus-4-1-20250805", label: "Anthropic/Claude Opus 4.1" },
   { value: "claude-sonnet-4-20250514", label: "Anthropic/Claude Sonnet 4" },
   { value: "claude-sonnet-4-thinking", label: "Anthropic/Claude Sonnet 4 (Thinking)" },
 

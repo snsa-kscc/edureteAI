@@ -148,7 +148,7 @@ export const modelProvider = customProvider({
       }),
       model: openai("gpt-4.1-nano"),
     }),
-    "claude-opus-4.1-20250514": anthropic("claude-opus-4.1-20250514"),
+    "claude-opus-4-1-20250805": anthropic("claude-opus-4-1-20250805"),
     "claude-sonnet-4-20250514": anthropic("claude-sonnet-4-20250514"),
     "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
