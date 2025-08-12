@@ -21,11 +21,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export const modelProvider = customProvider({
   languageModels: {
-    "accounts/fireworks/models/deepseek-r1": wrapLanguageModel({
+    "accounts/fireworks/models/deepseek-r1-0528": wrapLanguageModel({
       middleware: extractReasoningMiddleware({
         tagName: "think",
       }),
-      model: fireworks("accounts/fireworks/models/deepseek-r1"),
+      model: fireworks("accounts/fireworks/models/deepseek-r1-0528"),
     }),
     "gemini-2.5-pro": google("gemini-2.5-pro"),
     "gemini-2.5-flash": google("gemini-2.5-flash"),

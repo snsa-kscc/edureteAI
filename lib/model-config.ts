@@ -52,7 +52,7 @@ export const PREMIUM_MODELS = [
 ];
 
 export const MODEL_CONFIGS: Record<string, ModelPricing> = {
-  "accounts/fireworks/models/deepseek-r1": {
+  "accounts/fireworks/models/deepseek-r1-0528": {
     inputPrice: 3,
     outputPrice: 8,
     family: "fireworks",
