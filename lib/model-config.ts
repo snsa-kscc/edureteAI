@@ -122,6 +122,21 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 150.0,
     family: "openai",
   },
+  "gpt-5": {
+    inputPrice: 1.25,
+    outputPrice: 10.0,
+    family: "openai",
+  },
+  "gpt-5-mini": {
+    inputPrice: 0.25,
+    outputPrice: 2.0,
+    family: "openai",
+  },
+  "gpt-5-nano": {
+    inputPrice: 0.05,
+    outputPrice: 0.4,
+    family: "openai",
+  },
   "gpt-4o": {
     inputPrice: 2.5,
     outputPrice: 10.0,
@@ -147,7 +162,17 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 0.4,
     family: "openai",
   },
+  "claude-opus-4.1-20250514": {
+    inputPrice: 15.0,
+    outputPrice: 75.0,
+    family: "anthropic",
+  },
   "claude-sonnet-4-20250514": {
+    inputPrice: 3.0,
+    outputPrice: 15.0,
+    family: "anthropic",
+  },
+  "claude-sonnet-4-thinking": {
     inputPrice: 3.0,
     outputPrice: 15.0,
     family: "anthropic",

@@ -57,6 +57,21 @@ export const modelProvider = customProvider({
       }),
       model: openai("o4-mini"),
     }),
+    "gpt-5": openai("gpt-5"),
+    "gpt-5-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+          providerMetadata: {
+            openai: {
+              reasoningEffort: "high",
+            },
+          },
+        },
+      }),
+      model: openai("gpt-5-mini"),
+    }),
+    "gpt-5-nano": openai("gpt-5-nano"),
     "gpt-4o": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
@@ -119,6 +134,7 @@ export const modelProvider = customProvider({
       }),
       model: openai("gpt-4.1-nano"),
     }),
+    "claude-opus-4.1-20250514": anthropic("claude-opus-4.1-20250514"),
     "claude-sonnet-4-20250514": anthropic("claude-sonnet-4-20250514"),
     "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
