@@ -7,7 +7,7 @@ import { getSystemPromptForModel } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import { tools } from "@/lib/tools";
-import type { Usage, Chat, Message } from "@/types";
+import type { Usage, Chat } from "@/types";
 
 export const runtime = "edge";
 
@@ -96,17 +96,16 @@ export async function POST(req: Request) {
 
         await incrementMessageCount(userId, model);
         await saveUsage(usageData);
+      },
+      onError: async (error) => {
+        console.error("Error in onFinish callback:", error);
+      },
+    });
 
-        // Convert response messages to UIMessage format to match frontend messages
-        const responseUIMessages = result.response.messages.map((msg: any) => ({
-          id: msg.id || crypto.randomUUID(),
-          role: msg.role,
-          parts: msg.content ? msg.content : [],
-        }));
+    result.consumeStream();
 
-        // Combine all messages in UIMessage format
-        const allMessages = [...messages, ...responseUIMessages] as Message[];
-
+    return result.toUIMessageStreamResponse({
+      onFinish: async ({ messages: currentMessage }) => {
         // Extract title from first user message
         const firstMessage = messages[0];
         let title = "Novi razgovor";
@@ -116,6 +115,7 @@ export async function POST(req: Request) {
             title = (textPart as any).text.substring(0, 100);
           }
         }
+        const allMessages = [...messages, ...currentMessage];
 
         const chat: Chat = {
           id: chatId,
@@ -137,12 +137,7 @@ export async function POST(req: Request) {
         };
         await saveChat(chat);
       },
-      onError: async (error) => {
-        console.error("Error in onFinish callback:", error);
-      },
     });
-
-    return result.toUIMessageStreamResponse();
   } catch (error) {
     return new NextResponse("Failed to process request.", { status: 500 });
   }

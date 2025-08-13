@@ -14,7 +14,6 @@ import { deleteFileFromR2, uploadFileToR2 } from "@/lib/upload-actions";
 import { CHAT_MODELS, MODELS_WITHOUT_IMAGE_SUPPORT, DEFAULT_LEFT_MODEL, DEFAULT_RIGHT_MODEL } from "@/lib/chat-config";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
-import type { Message as LocalMessage } from "@/types";
 
 export function Chat({
   isOwner,
@@ -33,7 +32,7 @@ export function Chat({
   chatAreaId: "left" | "right";
   initialModel: string;
   initialSystemMessage?: string;
-  initialMessages?: LocalMessage[];
+  initialMessages?: UIMessage[];
 }) {
   const router = useRouter();
   const [model, setModel] = useState(() => {
