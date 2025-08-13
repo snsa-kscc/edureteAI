@@ -58,6 +58,63 @@ pnpm dev --turbo
 http://localhost:3000
 ```
 
+## Local Testing of Python Graph API
+
+The application includes a Python API for generating matplotlib graphs. To test it locally:
+
+### Prerequisites
+
+- Python 3.9+
+- pip (Python package manager)
+
+### Setup and Testing
+
+1. Navigate to the project root directory
+
+```bash
+cd /path/to/edureteAI
+```
+
+2. Install all required packages
+
+```bash
+pip install matplotlib numpy pandas seaborn fastapi uvicorn pydantic
+```
+
+This installs:
+
+- `matplotlib` - For graph generation
+- `numpy` - For numerical operations
+- `pandas` - For data manipulation
+- `seaborn` - For statistical visualizations
+- `fastapi` - For local API server
+- `uvicorn` - ASGI server for FastAPI
+- `pydantic` - Data validation for API requests
+
+4. Run the Python API locally
+
+```bash
+cd api
+python generate-graph.py
+```
+
+The API will start on `http://localhost:8000` with the following endpoints:
+
+- `GET /` - Health check endpoint
+- `POST /` - Generate graph from Python matplotlib code
+
+### Testing the API
+
+You can test the API using curl:
+
+```bash
+curl -X POST http://localhost:8000 \
+  -H "Content-Type: application/json" \
+  -d '{"code": "plt.plot([1, 2, 3, 4], [1, 4, 2, 3]); plt.title(\"Test Graph\")"}'
+```
+
+The API will return a JSON response with a base64-encoded PNG image.
+
 ---
 
 Made with ❤️ by [dvasadva](https://dvasadva.com).
