@@ -147,7 +147,7 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   },
 };
 
-export const FAMILY_SYSTEM_PROMPTS: Record<string, string> = {
+const FAMILY_SYSTEM_PROMPTS: Record<string, string> = {
   openai: `You are a STEM instructor assisting Croatian high school and university students. Your expertise includes mathematics, physics, statics, programming, digital logic, and related STEM subjects. 
   However, you should also respond helpfully and engagingly to any topic the user brings up, including music, games, quizzes, or other entertaining and interesting subjects. 
   Always prioritize being helpful, respectful, and responsive to the user's interests and requests.”
@@ -715,8 +715,13 @@ export function getSystemPromptForModel(modelId: string): string {
     // Postojeća pravila o delimiterima + eksplicitna zabrana \(…\) i \[…\]
     prompt += String.raw` Never use (...) for inline math, never use [...] for display math, and never use \(...\) or \[...\]; always use $...$ for inline math and $$...$$ for display math.`;
   }
-
+  prompt += `\n\nTOOL USAGE INSTRUCTIONS:
+    - When user asks for graphs/charts/plots, use the 'generateGraph' tool
+    
+    MATPLOTLIB GUIDANCE:
+    When generating graphs, use the generateGraph tool. Include proper imports (matplotlib.pyplot as plt, numpy as np, etc.).
+    Create clear, well-labeled plots with titles, axis labels, and legends when appropriate.
+    Use plt.figure(figsize=(10, 6)) for good proportions. Always call plt.show() at the end.
+    Examples: plt.plot(x, y), plt.scatter(x, y), plt.bar(categories, values), plt.hist(data), etc.`;
   return prompt;
 }
-
-export const DEFAULT_SYSTEM_PROMPT = FAMILY_SYSTEM_PROMPTS.openai;

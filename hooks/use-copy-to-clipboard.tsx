@@ -1,14 +1,14 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { type Message } from "ai";
+import { type UIMessage } from "ai";
 
 import { Button } from "@/components/ui/button";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useClipboard } from "@/hooks/use-clipboard";
 
 interface ChatMessageActionsProps extends React.ComponentProps<"div"> {
-  message: Message;
+  message: UIMessage;
 }
 
 export function CopyToClipboard({ message, className, ...props }: ChatMessageActionsProps) {
@@ -16,7 +16,12 @@ export function CopyToClipboard({ message, className, ...props }: ChatMessageAct
 
   const onCopy = () => {
     if (isCopied) return;
-    copyToClipboard(message.content);
+    // Extract text from message parts (AI SDK v5 format)
+    const textContent = message.parts
+      ?.filter(part => part.type === "text")
+      .map(part => part.text)
+      .join("\n") || "";
+    copyToClipboard(textContent);
   };
 
   return (
