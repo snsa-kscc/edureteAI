@@ -263,7 +263,6 @@ export function Chat({
         onSystemMessageChange={(value) => setSystemMessage(value)}
         hasImagesInConversation={hasImagesInConversation}
       />
-
       <ChatMessages ref={scrollAreaRef} messages={messages} userName={isOwner ? userName : "Korisnik"} status={status} />
       {isOwner && messages.length === 0 && <GraphExamples onExampleClick={handleExampleClick} />}
       {isOwner && (
@@ -274,7 +273,7 @@ export function Chat({
           onImageUpload={handleImageUpload}
           onDeleteImage={handleDeleteImage}
           uploadedImage={uploadedImage}
-          isLoading={status === "streaming" || isPending}
+          isLoading={status === "streaming" || status === "submitted" || isPending}
           isImageUploadDisabled={MODELS_WITHOUT_IMAGE_SUPPORT.includes(model)}
         />
       )}
