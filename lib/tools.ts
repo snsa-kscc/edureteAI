@@ -76,47 +76,6 @@ export const generateGraphTool = tool({
   },
 });
 
-// Minimal test tool to check basic functionality
-export const testTool = tool({
-  description: "Add two numbers together. Use this when user asks to add or calculate numbers.",
-  inputSchema: z.object({
-    input: z.string().describe("User's input message containing numbers to add"),
-  }),
-  execute: async ({ input }) => {
-    try {
-      // Extract numbers from the input string
-      const numbers = input.match(/\d+/g);
-      if (!numbers || numbers.length < 2) {
-        return {
-          success: false,
-          error: "Please provide two numbers to add. Example: 'Add 5 and 3'",
-          input,
-        };
-      }
-
-      const num1 = parseInt(numbers[0]);
-      const num2 = parseInt(numbers[1]);
-      const result = num1 + num2;
-
-      return {
-        success: true,
-        operation: "addition",
-        input: { num1, num2 },
-        result,
-        message: `${num1} + ${num2} = ${result}`,
-        originalInput: input,
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: `Tool execution failed: ${error.message}`,
-        input,
-      };
-    }
-  },
-});
-
 export const tools = {
   generateGraph: generateGraphTool,
-  test: testTool,
 };

@@ -63,22 +63,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: modelProvider.languageModel(model),
-      system:
-        getSystemPromptForModel(model) +
-        "\n" +
-        systemMessage +
-        "\n\n" +
-        "TOOL USAGE INSTRUCTIONS:\n" +
-        "- When user asks to add/calculate numbers, use the 'test' tool with operation 'add'\n" +
-        "- When user asks for greetings or to say hello, use the 'test' tool with operation 'greet'\n" +
-        "- When user asks to repeat/echo a message, use the 'test' tool with operation 'echo'\n" +
-        "- When user asks for graphs/charts/plots, use the 'generateGraph' tool\n" +
-        "\n" +
-        "MATPLOTLIB GUIDANCE:\n" +
-        "When generating graphs, use the generateGraph tool. Include proper imports (matplotlib.pyplot as plt, numpy as np, etc.).\n" +
-        "Create clear, well-labeled plots with titles, axis labels, and legends when appropriate.\n" +
-        "Use plt.figure(figsize=(10, 6)) for good proportions. Always call plt.show() at the end.\n" +
-        "Examples: plt.plot(x, y), plt.scatter(x, y), plt.bar(categories, values), plt.hist(data), etc.",
+      system: getSystemPromptForModel(model) + "\n" + systemMessage,
       messages: convertToModelMessages([
         ...initialMessages,
         {
