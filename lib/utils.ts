@@ -65,6 +65,19 @@ export const modelProvider = customProvider({
       }),
       model: openai("gpt-5"),
     }),
+    "gpt-5-high": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+          providerMetadata: {
+            openai: {
+              reasoningEffort: "high",
+            },
+          },
+        },
+      }),
+      model: openai("gpt-5"),
+    }),
     "gpt-5-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {

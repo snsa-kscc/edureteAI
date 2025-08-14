@@ -120,6 +120,11 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
     outputPrice: 10.0,
     family: "openai",
   },
+  "gpt-5-high": {
+    inputPrice: 1.25,
+    outputPrice: 10.0,
+    family: "openai",
+  },
   "gpt-5-mini": {
     inputPrice: 0.25,
     outputPrice: 2.0,
