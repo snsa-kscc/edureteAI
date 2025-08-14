@@ -84,7 +84,7 @@ const NonMemoizedMarkdown = ({ children }: MarkdownProps) => {
             fleqn: false,
             leqno: false,
             minRuleThickness: 0.04,
-            displayMode: false, // Set to true for display math by default
+            displayMode: true, // Set to true for display math by default
             maxSize: 100, // Maximum size for user input
             maxExpand: 1000, // Maximum macro expansions
             // Additional options to handle newlines properly

@@ -120,6 +120,10 @@ $$\n\\displaystyle\nH(x) =\n
 
   const notGg = `Heaviside funkcija (ili jedinična step funkcija) je jedna od najvažnijih funkcija u matematici i inženjerstvu! 📝 Naziva se po britanskom fizičaru Oliveru Heavisideu koji ju je koristio za analizu električnih krugova.\n\n## Definicija\n\nHeaviside funkcija $H(t)$ (ponekad označena kao $u(t)$ ili $\\theta(t)$) definira se ovako:\n\n$$\n\\displaystyle H(t) = \\begin{cases} 0 & \\text{za } t < 0 \\\\\n1 & \\text{za } t \\geq 0 \\end{cases}\n$$\n\nPostoji i varijanta gdje je $H(0) = \\frac{1}{2}$, ali najčešće koristimo definiciju gdje je $H(0) = 1$.\n\n## Grafički prikaz\n\nFunkcija izgleda kao \"skok\" - kreće se od nule za negativne vrijednosti i skače na 1 za pozitivne vrijednosti. Ima diskontinuitet (prekid) u točki $t = 0$.\n\n## Važna svojstva\n\n**Derivacija:** Derivacija Heaviside funkcije je Diracova delta funkcija:\n$$\\frac{dH(t)}{dt} = \\delta(t)$$\n\n**Integral:** \n$$\\int_{-\\infty}^{t} H(\\tau) d\\tau = tH(t)$$\n\n## Praktične primjene\n\n**U elektrotehnici:** Modelira uključivanje struje u trenutku $t = 0$ 🔌\n\n**U teoriji signala:** Predstavlja jedinični step signal\n\n**U diferencijalnim jednadžbama:** Pomaže pri rješavanju jednadžbi s diskontinuitetnim izvorima\n\n## Pomaknuta Heaviside funkcija\n\nČesto koristimo pomaknutu verziju:\n$$\nH(t - a) = \\begin{cases}\n0 & \\text{za } t < a \\\\\n1 & \\text{za } t \\geq a\n\\end{cases}\n$$\n\nOva funkcija \"uključuje se\" u trenutku $t = a$ umjesto u $t = 0$.\n\nJe li ti jasna osnovna ideja Heaviside funkcije? 🤔 Možda imaš neko specifično pitanje o njezinoj primjeni ili svojstvima?`;
 
+  const tableExample = `
+  Evo ti zanimljive tablice s osnovnim trigonometrijskim vrijednostima! 📝\n\n$$\n\n\\displaystyle\n\\begin{array}{|c|c|c|c|c|c|}\n\\hline\n\\text{Kut} & 0° & 30° & 45° & 60° & 90° \\\\\n\\hline\n\\text{Radijani} & 0 & \\frac{\\pi}{6} & \\frac{\\pi}{4} & \\frac{\\pi}{3} & \\frac{\\pi}{2} \\\\\n\\hline\n\\sin & 0 & \\frac{1}{2} & \\frac{\\sqrt{2}}{2} & \\frac{\\sqrt{3}}{2} & 1 \\\\\n\\hline\n\\cos & 1 & \\frac{\\sqrt{3}}{2} & \\frac{\\sqrt{2}}{2} & \\frac{1}{2} & 0 \\\\\n\\hline\n\\tan & 0 & \\frac{1}{\\sqrt{3}} & 1 & \\sqrt{3} & \\text{nedefiniran} \\\\\n\\hline\n\\end{array}\n\n$$\n\nOva tablica je super korisna jer sadrži najčešće korištene kutove u trigonometriji! 🌟 Primijetio/la si možda neki uzorak? Na primjer, vrijednosti sinusa se povećavaju od 0° do 90°, dok se vrijednosti kosinusa smanjuju.\n\nMožeš li mi reći što primjećuješ kod vrijednosti za 30° i 60°? Postoji li neka veza između njih? 🤔\n\nAko želiš, mogu ti pokazati i kako se ove vrijednosti izvode ili baciti neku drugu vrstu tablice - možda periodnu tablicu elemenata ili tablicu derivacija? Što te zanima? 😊
+`;
+
   return (
     <div className="container mx-auto p-8 max-w-4xl">
       <h1 className="text-2xl font-bold mb-6">KaTeX Testing Page</h1>
@@ -190,6 +194,10 @@ $$\n\\displaystyle\nH(x) =\n
 
       <div className="border p-4 rounded-lg outline-1 outline-red-500">
         <pre>{notGg}</pre>
+      </div>
+
+      <div className="border p-4 rounded-lg outline-1 outline-red-500">
+        <Markdown>{tableExample}</Markdown>
       </div>
 
       <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">

@@ -193,16 +193,34 @@
   background-color: #868686;
 }
 
-@media (min-width: 640px) {
-  .katex.katex {
-    font-size: 1.4rem;
+.chat-area-left {
+  container-name: chat-area-left;
+  container-type: inline-size;
+}
+
+.chat-area-right {
+  container-name: chat-area-right;
+  container-type: inline-size;
+}
+
+@container chat-area-left (max-width: 420px) {
+  .katex.katex:has(.mtable) {
+    font-size: 0.8rem;
+  }
+}
+
+@container chat-area-right (max-width: 420px) {
+  .katex.katex:has(.mtable) {
+    font-size: 0.8rem;
   }
 }
 
 .katex-display {
   border-radius: 0.5rem;
-  padding: 1rem;
+  margin: 1rem !important;
+  padding: 1rem 0;
   background: oklch(0.92 0.004 286.32);
+  overflow-x: scroll;
 }
 
 .dark .katex-display {
@@ -224,4 +242,8 @@
 
 .katex.katex .fbox {
   display: none;
+}
+
+.mtable {
+  white-space: nowrap;
 }
