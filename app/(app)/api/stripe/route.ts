@@ -1,9 +1,10 @@
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { updateSubscriptionInDatabase, getUserIdFromCustomer } from "@/lib/subscription-actions";
+import { updateSubscriptionInDatabase, getUserFromCustomer } from "@/lib/subscription-actions";
 import { updateUserSubscriptionTier, resetUserMessageCounts } from "@/lib/message-limits";
 import { MESSAGE_TIER } from "@/lib/model-config";
+import { sendSubscriptionWelcomeEmail, sendUpgradeEmail } from "@/lib/mail-config";
 import type Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated": {
         const subscription = session as Stripe.Subscription;
-        const userId = await getUserIdFromCustomer(subscription.customer as string);
+        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
@@ -82,6 +83,16 @@ export async function POST(req: Request) {
           pendingTier = MESSAGE_TIER.FREE;
         }
 
+        // Access the full event data to get previous_attributes
+        const previousAttributes = (event.data as any).previous_attributes;
+        if (previousAttributes && previousAttributes.items && previousAttributes.items.data) {
+          const previousPriceId = previousAttributes.items.data[0].price.id;
+          // Detect upgrade from PAID to PAID_PLUS
+          if (previousPriceId === process.env.STRIPE_PRICE_ID_PAID && priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
+            await sendUpgradeEmail(userId, email, fullName);
+          }
+        }
+
         await updateSubscriptionInDatabase(
           userId,
           subscription.customer as string,
@@ -96,9 +107,28 @@ export async function POST(req: Request) {
         break;
       }
 
+      case "customer.subscription.created": {
+        const subscription = session as Stripe.Subscription;
+        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
+
+        if (!userId) {
+          console.error("No userId found for customer", subscription.customer);
+          return new NextResponse("No userId found for customer", { status: 400 });
+        }
+
+        const priceId = subscription.items.data[0].price.id;
+        let tier = MESSAGE_TIER.PAID;
+
+        if (priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
+          tier = MESSAGE_TIER.PAID_PLUS;
+        }
+        await sendSubscriptionWelcomeEmail(userId, email, fullName, tier);
+        break;
+      }
+
       case "customer.subscription.deleted": {
         const subscription = session as Stripe.Subscription;
-        const userId = await getUserIdFromCustomer(subscription.customer as string);
+        const { userId } = await getUserFromCustomer(subscription.customer as string);
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);

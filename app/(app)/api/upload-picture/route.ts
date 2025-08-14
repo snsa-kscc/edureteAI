@@ -23,18 +23,43 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const contentType = request.headers.get("content-type");
+    let buffer: Buffer;
+    let filename: string;
+    let fileType: string;
 
-    if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    // Handle both FormData (user uploads) and JSON (generated images)
+    if (contentType?.includes("multipart/form-data")) {
+      // Traditional file upload via FormData
+      const formData = await request.formData();
+      const file = formData.get("file") as File;
+
+      if (!file) {
+        return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      }
+
+      if (!file.type.startsWith("image/") || !["image/jpeg", "image/png"].includes(file.type)) {
+        return NextResponse.json({ error: "Only JPG and PNG files are allowed" }, { status: 400 });
+      }
+
+      buffer = Buffer.from(await file.arrayBuffer());
+      filename = file.name;
+      fileType = file.type;
+    } else {
+      // Generated image upload via JSON with base64
+      const body = await request.json();
+      const { base64Image, filename: providedFilename, description } = body;
+
+      if (!base64Image) {
+        return NextResponse.json({ error: "No base64 image provided" }, { status: 400 });
+      }
+
+      // Convert base64 to buffer
+      const base64Data = base64Image.replace(/^data:image\/png;base64,/, '');
+      buffer = Buffer.from(base64Data, 'base64');
+      filename = providedFilename || `graph-${Date.now()}.png`;
+      fileType = "image/png";
     }
-
-    if (!file.type.startsWith("image/") || !["image/jpeg", "image/png"].includes(file.type)) {
-      return NextResponse.json({ error: "Only JPG and PNG files are allowed" }, { status: 400 });
-    }
-
-    const buffer = Buffer.from(await file.arrayBuffer());
     const image = sharp(buffer);
     const metadata = await image.metadata();
 
@@ -48,14 +73,14 @@ export async function POST(request: NextRequest) {
         .toBuffer();
     }
 
-    const uniqueFilename = `${uuidv4()}-${file.name}`;
+    const uniqueFilename = `${uuidv4()}-${filename}`;
     const upload = new Upload({
       client: s3,
       params: {
         Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
         Key: uniqueFilename,
         Body: resizedBuffer || buffer,
-        ContentType: file.type,
+        ContentType: fileType,
       },
     });
 

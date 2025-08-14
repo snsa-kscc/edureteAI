@@ -35,7 +35,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 1,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               reasoningEffort: "high",
             },
@@ -47,8 +47,8 @@ export const modelProvider = customProvider({
     "o4-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          temperature: 0.8,
-          providerMetadata: {
+          temperature: 1,
+          providerOptions: {
             openai: {
               reasoningEffort: "high",
             },
@@ -90,7 +90,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 0.3,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -103,7 +103,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 0.3,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -115,7 +115,7 @@ export const modelProvider = customProvider({
     "gpt-4.1": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -127,7 +127,7 @@ export const modelProvider = customProvider({
     "gpt-4.1-mini": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -139,7 +139,7 @@ export const modelProvider = customProvider({
     "gpt-4.1-nano": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             openai: {
               logitBias: { "29992": -100, "29993": -100 },
             },
@@ -153,7 +153,7 @@ export const modelProvider = customProvider({
     "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             anthropic: {
               thinking: { type: "disabled", budgetTokens: 12000 },
             },
@@ -165,7 +165,7 @@ export const modelProvider = customProvider({
     "claude-sonnet-4-thinking": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
         settings: {
-          providerMetadata: {
+          providerOptions: {
             anthropic: {
               thinking: { type: "enabled", budgetTokens: 5000 },
             },
@@ -194,7 +194,7 @@ export function handleModelProvider(model: string, logitBias?: LogitBiasConfig) 
       return wrapLanguageModel({
         middleware: defaultSettingsMiddleware({
           settings: {
-            providerMetadata: {
+            providerOptions: {
               openai: {
                 logitBias,
               },
@@ -242,14 +242,4 @@ export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily:
 
 export function getUniqueFamilies(): string[] {
   return [...new Set(Object.values(MODEL_CONFIGS).map((model) => model.family))].sort();
-}
-
-// deprecated
-
-export function tokensToDollars(tokens: number): number {
-  return Number((tokens / 66_666).toFixed(4));
-}
-
-export function dollarsToTokens(dollars: number): number {
-  return Math.round(dollars * 66_666);
 }

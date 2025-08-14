@@ -1,123 +1,141 @@
 import { NextResponse } from "next/server";
-import { streamText, type Message, appendResponseMessages, createDataStreamResponse, smoothStream } from "ai";
+import { streamText, type UIMessage, convertToModelMessages, smoothStream } from "ai";
 import { auth } from "@clerk/nextjs/server";
 import { saveUsage } from "@/lib/neon-actions";
 import { modelProvider } from "@/lib/utils";
 import { getSystemPromptForModel } from "@/lib/model-config";
 import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
+import { tools } from "@/lib/tools";
 import type { Usage, Chat } from "@/types";
 
 export const runtime = "edge";
 
 interface ChatRequest {
-  messages: Message[];
-  id: string;
+  messages: UIMessage[];
+  chatId: string;
   userId: string;
   model: string;
-  system: string;
+  systemMessage: string;
   chatAreaId: string;
 }
 
 export async function POST(req: Request) {
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId;
-
   if (!userId) {
     return new NextResponse("Niste autorizirani!", { status: 401 });
   }
 
   try {
-    const { messages, id, userId, model, system, chatAreaId }: ChatRequest = await req.json();
+    const { messages, chatId, userId, model, systemMessage, chatAreaId }: ChatRequest = await req.json();
 
     const messageAvailability = await checkMessageAvailability(userId, model);
     if (!messageAvailability.hasAvailability) {
       return new NextResponse("Došli ste do limita!", { status: 429 });
     }
 
-    // const hasQuotaAvailable = await checkQuota(userId, model);
-    // if (!hasQuotaAvailable) {
-    //   return new NextResponse("Došli ste do limita!", { status: 429 });
-    // }
-
     const initialMessages = messages.slice(0, -1);
     const currentMessage = messages[messages.length - 1];
 
-    const content = currentMessage.experimental_attachments?.some((attachment) => attachment.contentType?.startsWith("image/"))
+    // Check if message has file parts with images
+    const hasImageParts = currentMessage.parts?.some((part) => part.type === "file" && part.mediaType?.startsWith("image/"));
+
+    const content = hasImageParts
       ? [
-          { type: "text", text: currentMessage.content.trim() || "Analiziraj sliku." },
-          ...currentMessage.experimental_attachments
-            .filter((attachment) => attachment.contentType?.startsWith("image/"))
-            .map((attachment) => {
-              return {
-                type: "image",
-                image: new URL(attachment.url),
-              };
-            }),
+          {
+            type: "text",
+            text:
+              typeof currentMessage.parts?.find((p) => p.type === "text")?.text === "string"
+                ? currentMessage.parts.find((p) => p.type === "text")?.text?.trim() || "Analiziraj sliku."
+                : "Analiziraj sliku.",
+          },
+          ...(currentMessage.parts
+            ?.filter((part) => part.type === "file" && part.mediaType?.startsWith("image/"))
+            .map((part) => ({
+              type: "image" as const,
+              image: new URL((part as any).url || ""),
+            })) || []),
         ]
-      : currentMessage.content.trim();
+      : typeof currentMessage.parts?.find((p) => p.type === "text")?.text === "string"
+      ? currentMessage.parts.find((p) => p.type === "text")?.text?.trim() || ""
+      : "";
 
-    return createDataStreamResponse({
-      execute: (dataStream) => {
-        const result = streamText({
-          model: modelProvider.languageModel(model),
-          system: getSystemPromptForModel(model) + "\n" + system,
-          messages: [
-            ...initialMessages,
-            {
-              role: "user",
-              content,
-            } as Message,
-          ],
-          experimental_transform: [
-            smoothStream({
-              chunking: "word",
-            }),
-          ],
-          onFinish: async (result) => {
-            const usageData: Usage = {
-              userId,
-              model,
-              promptTokens: result.usage.promptTokens,
-              completionTokens: result.usage.completionTokens,
-              totalTokens: result.usage.totalTokens,
-              timestamp: new Date(),
-            };
+    const result = streamText({
+      model: modelProvider.languageModel(model),
+      system: getSystemPromptForModel(model) + "\n" + systemMessage,
+      messages: convertToModelMessages([
+        ...initialMessages,
+        {
+          id: crypto.randomUUID(),
+          role: "user",
+          parts: Array.isArray(content)
+            ? content.map((item: any) =>
+                item.type === "text"
+                  ? { type: "text" as const, text: item.text }
+                  : { type: "file" as const, url: (item as any).image?.toString() || "", mediaType: "image/jpeg" }
+              )
+            : [{ type: "text" as const, text: content }],
+        } as UIMessage,
+      ]),
+      tools,
+      experimental_transform: [
+        smoothStream({
+          chunking: "word",
+        }),
+      ],
+      onFinish: async (result) => {
+        const usageData: Usage = {
+          userId,
+          model,
+          inputTokens: result.usage.inputTokens ?? 0,
+          outputTokens: result.usage.outputTokens ?? 0,
+          totalTokens: result.usage.totalTokens ?? 0,
+          timestamp: new Date(),
+        };
 
-            await incrementMessageCount(userId, model);
-            await saveUsage(usageData);
-
-            const combinedMessages = appendResponseMessages({ messages, responseMessages: result.response.messages });
-            const chat: Chat = {
-              id,
-              userId,
-              ...(chatAreaId === "left"
-                ? {
-                    leftMessages: combinedMessages,
-                    leftModel: model,
-                    leftSystemPrompt: system,
-                  }
-                : {
-                    rightMessages: combinedMessages,
-                    rightModel: model,
-                    rightSystemPrompt: system,
-                  }),
-              title: messages[0]?.content?.substring?.(0, 100) || "Novi razgovor",
-              path: `/c/${id}`,
-              createdAt: new Date(),
-            };
-            await saveChat(chat);
-          },
-          onError: async (error) => {
-            console.error("Error in onFinish callback:", error);
-          },
-        });
-
-        result.consumeStream();
-        result.mergeIntoDataStream(dataStream, { sendReasoning: true });
+        await incrementMessageCount(userId, model);
+        await saveUsage(usageData);
       },
-      onError: () => {
-        return "Greška prilikom obrade zahtjeva!";
+      onError: async (error) => {
+        console.error("Error in onFinish callback:", error);
+      },
+    });
+
+    result.consumeStream();
+
+    return result.toUIMessageStreamResponse({
+      onFinish: async ({ messages: currentMessage }) => {
+        // Extract title from first user message
+        const firstMessage = messages[0];
+        let title = "Novi razgovor";
+        if (firstMessage?.parts) {
+          const textPart = firstMessage.parts.find((p: any) => p.type === "text" && "text" in p);
+          if (textPart && "text" in textPart) {
+            title = (textPart as any).text.substring(0, 100);
+          }
+        }
+        const allMessages = [...messages, ...currentMessage];
+
+        const chat: Chat = {
+          id: chatId,
+          userId,
+          ...(chatAreaId === "left"
+            ? {
+                leftMessages: allMessages,
+                leftModel: model,
+                leftSystemPrompt: systemMessage,
+              }
+            : {
+                rightMessages: allMessages,
+                rightModel: model,
+                rightSystemPrompt: systemMessage,
+              }),
+          title,
+          createdAt: new Date(),
+          path: `/c/${chatId}`,
+        };
+        await saveChat(chat);
       },
     });
   } catch (error) {

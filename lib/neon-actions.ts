@@ -13,16 +13,12 @@ export async function saveUsage(usageData: Usage) {
     throw new Error(`Unknown model: ${usageData.model}`);
   }
 
-const inputPrice = typeof modelConfig.inputPrice === "function"
-  ? modelConfig.inputPrice(usageData.promptTokens)
-  : modelConfig.inputPrice;
+  const inputPrice = typeof modelConfig.inputPrice === "function" ? modelConfig.inputPrice(usageData.inputTokens) : modelConfig.inputPrice;
 
-const outputPrice = typeof modelConfig.outputPrice === "function"
-  ? modelConfig.outputPrice(usageData.completionTokens)
-  : modelConfig.outputPrice;
+  const outputPrice = typeof modelConfig.outputPrice === "function" ? modelConfig.outputPrice(usageData.outputTokens) : modelConfig.outputPrice;
 
-const inputCost = (usageData.promptTokens / 1_000_000) * inputPrice;
-const outputCost = (usageData.completionTokens / 1_000_000) * outputPrice;
+  const inputCost = (usageData.inputTokens / 1_000_000) * inputPrice;
+  const outputCost = (usageData.outputTokens / 1_000_000) * outputPrice;
   const totalCost = inputCost + outputCost;
 
   const currentDate = new Date(usageData.timestamp).toISOString().split("T")[0];
@@ -35,8 +31,12 @@ const outputCost = (usageData.completionTokens / 1_000_000) * outputPrice;
     await db
       .update(usage)
       .set({
-        promptTokens: existingUsage.promptTokens + usageData.promptTokens,
-        completionTokens: existingUsage.completionTokens + usageData.completionTokens,
+        // Use new columns if available, otherwise fall back to legacy columns
+        inputTokens: (existingUsage.inputTokens ?? existingUsage.promptTokens ?? 0) + usageData.inputTokens,
+        outputTokens: (existingUsage.outputTokens ?? existingUsage.completionTokens ?? 0) + usageData.outputTokens,
+        // Also update legacy columns for backward compatibility
+        promptTokens: (existingUsage.promptTokens ?? existingUsage.inputTokens ?? 0) + usageData.inputTokens,
+        completionTokens: (existingUsage.completionTokens ?? existingUsage.outputTokens ?? 0) + usageData.outputTokens,
         totalTokens: existingUsage.totalTokens + usageData.totalTokens,
         cost: (+existingUsage.cost + totalCost).toFixed(4),
       })
@@ -46,8 +46,12 @@ const outputCost = (usageData.completionTokens / 1_000_000) * outputPrice;
       userId: usageData.userId,
       model: usageData.model,
       modelFamily,
-      promptTokens: usageData.promptTokens,
-      completionTokens: usageData.completionTokens,
+      // New AI SDK v5 columns
+      inputTokens: usageData.inputTokens,
+      outputTokens: usageData.outputTokens,
+      // Legacy AI SDK v4 columns (for backward compatibility)
+      promptTokens: usageData.inputTokens,
+      completionTokens: usageData.outputTokens,
       totalTokens: usageData.totalTokens,
       cost: totalCost.toFixed(4),
       timestamp: usageData.timestamp,

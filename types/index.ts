@@ -1,14 +1,10 @@
 import { ReactNode } from "react";
-import { Message as AiMessage } from "ai";
+import { UIMessage } from "ai";
 
 export type MessageContent = {
   type: "text" | "image";
   text?: string;
   image?: string;
-};
-
-export type Message = Omit<AiMessage, "content"> & {
-  content: string | MessageContent[];
 };
 
 export interface ClientMessage {
@@ -23,28 +19,13 @@ export interface Chat extends Record<string, any> {
   createdAt: Date;
   userId: string;
   path: string;
-  leftMessages?: Message[];
-  rightMessages?: Message[];
+  leftMessages?: UIMessage[];
+  rightMessages?: UIMessage[];
   leftModel?: string;
   rightModel?: string;
   leftSystemPrompt?: string | undefined;
   rightSystemPrompt?: string | undefined;
 }
-
-export type AIState = {
-  userId: string | null | undefined;
-  chatId: string;
-  model: string;
-  system: string | undefined;
-  chatAreaId: string;
-  messages: Message[];
-};
-
-export type UIState = {
-  id: string;
-  role: "user" | "assistant";
-  content: ReactNode;
-}[];
 
 export type ServerActionResult<Result> = Promise<
   | Result
@@ -56,8 +37,8 @@ export type ServerActionResult<Result> = Promise<
 export type Usage = {
   userId: string;
   model: string;
-  promptTokens: number;
-  completionTokens: number;
+  inputTokens: number;
+  outputTokens: number;
   totalTokens: number;
   timestamp: Date;
 };
@@ -83,4 +64,4 @@ export interface ModelPricing {
   inputPrice: number | ((tokens: number) => number);
   outputPrice: number | ((tokens: number) => number);
   family: "openai" | "anthropic" | "togetherai" | "google" | "fireworks";
-};
+}
