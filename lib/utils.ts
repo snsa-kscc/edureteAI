@@ -21,11 +21,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export const modelProvider = customProvider({
   languageModels: {
-    "accounts/fireworks/models/deepseek-r1": wrapLanguageModel({
+    "accounts/fireworks/models/deepseek-r1-0528": wrapLanguageModel({
       middleware: extractReasoningMiddleware({
         tagName: "think",
       }),
-      model: fireworks("accounts/fireworks/models/deepseek-r1"),
+      model: fireworks("accounts/fireworks/models/deepseek-r1-0528"),
     }),
     "gemini-2.5-pro": google("gemini-2.5-pro"),
     "gemini-2.5-flash": google("gemini-2.5-flash"),
@@ -56,6 +56,35 @@ export const modelProvider = customProvider({
         },
       }),
       model: openai("o4-mini"),
+    }),
+    "gpt-5": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+        },
+      }),
+      model: openai("gpt-5"),
+    }),
+    "gpt-5-mini": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+          providerOptions: {
+            openai: {
+              reasoningEffort: "high",
+            },
+          },
+        },
+      }),
+      model: openai("gpt-5-mini"),
+    }),
+    "gpt-5-nano": wrapLanguageModel({
+      middleware: defaultSettingsMiddleware({
+        settings: {
+          temperature: 1,
+        },
+      }),
+      model: openai("gpt-5-nano"),
     }),
     "gpt-4o": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
@@ -119,6 +148,7 @@ export const modelProvider = customProvider({
       }),
       model: openai("gpt-4.1-nano"),
     }),
+    "claude-opus-4-1-20250805": anthropic("claude-opus-4-1-20250805"),
     "claude-sonnet-4-20250514": anthropic("claude-sonnet-4-20250514"),
     "claude sonnet 4": wrapLanguageModel({
       middleware: defaultSettingsMiddleware({
