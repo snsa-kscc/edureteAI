@@ -220,7 +220,7 @@
   margin: 1rem !important;
   padding: 1rem 0;
   background: oklch(0.92 0.004 286.32);
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .dark .katex-display {
