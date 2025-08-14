@@ -69,7 +69,7 @@ export const modelProvider = customProvider({
       middleware: defaultSettingsMiddleware({
         settings: {
           temperature: 1,
-          providerMetadata: {
+          providerOptions: {
             openai: {
               reasoningEffort: "high",
             },
