@@ -125,36 +125,35 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                     }
                     return null;
                   })}
-
                   {/* Legacy content format fallback */}
-                  {!message.parts && (
-                    <>
-                      {Array.isArray((message as any).content)
-                        ? (message as any).content.map((item: any, index: number) => (
-                            <div key={index}>
-                              {item.type === "text" && item.text}
-                              {item.type === "image" && (
-                                <Image src={item.image || "/placeholder.svg"} alt="Uploaded image" className="mt-2 max-w-xs rounded" width={250} height={250} />
-                              )}
-                            </div>
-                          ))
-                        : (message as any).content}
-                      {(message as any).experimental_attachments?.map(
-                        (attachment: any, index: number) =>
-                          attachment.contentType?.startsWith("image/") && (
-                            <div key={index} className="mb-2">
-                              <Image
-                                src={attachment.url || "/placeholder.svg"}
-                                alt={attachment.name || "Attached image"}
-                                width={250}
-                                height={250}
-                                className="rounded-lg object-cover"
-                              />
-                            </div>
-                          )
-                      )}
-                    </>
-                  )}
+                  <>
+                    {Array.isArray((message as any).content)
+                      ? (message as any).content.map((item: any, index: number) => (
+                          <div key={index}>
+                            {item.type === "text" && item.text}
+                            {item.type === "image" && (
+                              <Image src={item.image || "/placeholder.svg"} alt="Uploaded image" className="mt-2 max-w-xs rounded" width={250} height={250} />
+                            )}
+                          </div>
+                        ))
+                      : message.parts
+                      ? null
+                      : (message as any).content}
+                    {(message as any).experimental_attachments?.map(
+                      (attachment: any, index: number) =>
+                        attachment.contentType?.startsWith("image/") && (
+                          <div key={index} className="mb-2">
+                            <Image
+                              src={attachment.url || "/placeholder.svg"}
+                              alt={attachment.name || "Attached image"}
+                              width={250}
+                              height={250}
+                              className="rounded-lg object-cover"
+                            />
+                          </div>
+                        )
+                    )}
+                  </>
                 </div>
               </div>
             </div>
