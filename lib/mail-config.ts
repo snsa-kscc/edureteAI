@@ -330,7 +330,7 @@ export async function sendWelcomeEmail(user: any) {
   try {
     const transporter = createTransporter();
     const firstName = user.first_name || "korisnik";
-    const email = user.email_addresses?.[0]?.email_address || "sinisa@dvasadva.hr";
+    const email = user.email_addresses?.[0]?.email_address || "podrska@edurete.com";
 
     if (!email) {
       console.error("No email address found for user:", user.id);
