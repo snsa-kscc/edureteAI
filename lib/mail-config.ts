@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import path from "path";
 import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
 // Email configuration
@@ -317,42 +318,42 @@ function createEmailAttachments() {
   return [
     {
       filename: "edurete-hero-image.jpg",
-      path: "public/email-assets/edurete-hero-image.jpg",
+      path: path.join(process.cwd(), "public/email-assets/edurete-hero-image.jpg"),
       cid: "hero-image",
     },
     {
       filename: "background-top.png",
-      path: "public/email-assets/background-top.png",
+      path: path.join(process.cwd(), "public/email-assets/background-top.png"),
       cid: "background-top",
     },
     {
       filename: "image-1.png",
-      path: "public/email-assets/image-1.png",
+      path: path.join(process.cwd(), "public/email-assets/image-1.png"),
       cid: "image-1",
     },
     {
       filename: "image-2.png",
-      path: "public/email-assets/image-2.png",
+      path: path.join(process.cwd(), "public/email-assets/image-2.png"),
       cid: "image-2",
     },
     {
       filename: "image-3.png",
-      path: "public/email-assets/image-3.png",
+      path: path.join(process.cwd(), "public/email-assets/image-3.png"),
       cid: "image-3",
     },
     {
       filename: "facebook-icon.png",
-      path: "public/email-assets/facebook-icon.png",
+      path: path.join(process.cwd(), "public/email-assets/facebook-icon.png"),
       cid: "facebook-icon",
     },
     {
       filename: "insta-icon.png",
-      path: "public/email-assets/insta-icon.png",
+      path: path.join(process.cwd(), "public/email-assets/insta-icon.png"),
       cid: "insta-icon",
     },
     {
       filename: "yt-icon.png",
-      path: "public/email-assets/yt-icon.png",
+      path: path.join(process.cwd(), "public/email-assets/yt-icon.png"),
       cid: "yt-icon",
     },
   ];
