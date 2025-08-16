@@ -9,8 +9,7 @@ const isRootRoute = createRouteMatcher(["/"]);
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
 
 export default clerkMiddleware(async (auth, request) => {
-  const { sessionClaims } = await auth();
-  const userId = sessionClaims?.userId;
+  const { sessionClaims, userId } = await auth();
 
   // Handle authenticated users
   if (userId) {

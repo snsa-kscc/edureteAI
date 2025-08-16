@@ -1,8 +1,6 @@
 "use server";
 
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import { getUserMessageCounts } from "./message-limits";
-import { MESSAGE_TIER } from "./model-config";
 
 /**
  * Checks if user should see onboarding page
@@ -13,24 +11,13 @@ export async function shouldShowOnboarding(userId: string): Promise<boolean> {
     return false;
   }
 
-  // Check if user has completed onboarding first (faster Clerk API call)
   const client = await clerkClient();
   const user = await client.users.getUser(userId);
   const hasCompletedOnboarding = user.publicMetadata?.onboardingCompleted === true;
 
   if (hasCompletedOnboarding) {
-    return false; // User already completed onboarding
+    return false;
   }
-
-  // Only check subscription status if onboarding not completed (database call)
-  // const messageCounts = await getUserMessageCounts(userId);
-  // const isSubscriber = messageCounts.subscriptionTier !== MESSAGE_TIER.FREE;
-
-  // if (isSubscriber) {
-  //   return false;
-  // }
-
-  // User is free tier and hasn't completed onboarding
   return true;
 }
 
@@ -38,8 +25,7 @@ export async function shouldShowOnboarding(userId: string): Promise<boolean> {
  * Marks onboarding as completed for the current user
  */
 export async function completeOnboarding(): Promise<void> {
-  const { sessionClaims } = await auth();
-  const userId = sessionClaims?.userId;
+  const { userId } = await auth();
 
   if (!userId) {
     throw new Error("User not authenticated");
@@ -58,8 +44,7 @@ export async function completeOnboarding(): Promise<void> {
  * This can be used to redirect new users to onboarding
  */
 export async function isNewUser(): Promise<boolean> {
-  const { sessionClaims } = await auth();
-  const userId = sessionClaims?.userId;
+  const { userId } = await auth();
 
   if (!userId) {
     return false;
