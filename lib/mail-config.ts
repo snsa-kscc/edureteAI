@@ -32,7 +32,7 @@ export const EMAIL_TEMPLATES = {
 
     <body style="max-width: 710px; margin: 0 auto;">
         <div style="position: relative;">
-            <img style="width: 100%; display: block;" src="${APP_URL}/email-assets/edurete-hero-image.jpg">
+            <img style="width: 100%; display: block;" src="cid:hero-image">
             <div style="position: absolute; top: 30%; left: 10%;">
                 <h1 style="color: #FFF; font-family: 'Inter', sans-serif;font-size: 23px; font-style: normal; font-weight: 600; line-height: 30px;">
                     Dobrodošli u <span style="background: linear-gradient(90deg, #155DFC 0%, #AD46FF 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">edureteAI</span>
@@ -67,24 +67,24 @@ export const EMAIL_TEMPLATES = {
         </div>
 
         <div style="display: flex; gap: 8px; margin-right: 15px; margin-left: 15px;">
-            <div style="flex: 1; background-image: url(${APP_URL}/email-assets/background-top.png); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="${APP_URL}/email-assets/image-1.png" alt="">
+            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
+                <img src="cid:image-1" alt="">
                 <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
                     <span style="font-weight: 700;">Korištenje dva prozora </span>
                     je korisno jer se može provjeriti rješenje, ali i produbiti razumijevanje gradiva.
                 </p>
             </div>
 
-            <div style="flex: 1; background-image: url(${APP_URL}/email-assets/background-top.png); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="${APP_URL}/email-assets/image-2.png" alt="">
+            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
+                <img src="cid:image-2" alt="">
                 <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
                     <span style="font-weight: 700;">Isprobavanje različitih modela </span>
                     se isplati jer je svatko od nas jedinstven i ne odgovara svima isti način komunikacije.
                 </p>
             </div>
 
-            <div style="flex: 1; background-image: url(${APP_URL}/email-assets/background-top.png); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="${APP_URL}/email-assets/image-3.png" alt="">
+            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
+                <img src="cid:image-3" alt="">
                 <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
                     <span style="font-weight: 700;">Prilagodi sebi prozor</span>
                     omogućuje da se modelu da općenita uputa koju će slijediti kroz cijeli razgovor.
@@ -113,9 +113,9 @@ export const EMAIL_TEMPLATES = {
                 <p style="margin-bottom:10px; margin-top: 0; color: #FFF; text-align: center; font-family: 'Inter', sans-serif; font-size: 16px;font-style: normal;font-weight: 700;line-height: 18px;">
                     Edurete - mreža znanja</p>
                 <div style="display: flex;justify-content: center;gap: 10px;">
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="${APP_URL}/email-assets/facebook-icon.png" alt=""></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="${APP_URL}/email-assets/insta-icon.png" alt=""></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="${APP_URL}/email-assets/yt-icon.png" alt=""></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:facebook-icon" alt=""></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:insta-icon" alt=""></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:yt-icon" alt=""></a>
                 </div>
             </div>
         </div>
@@ -312,6 +312,52 @@ export const EMAIL_TEMPLATES = {
   },
 };
 
+// Helper function to create email attachments for images
+function createEmailAttachments() {
+  return [
+    {
+      filename: "edurete-hero-image.jpg",
+      path: "public/email-assets/edurete-hero-image.jpg",
+      cid: "hero-image",
+    },
+    {
+      filename: "background-top.png",
+      path: "public/email-assets/background-top.png",
+      cid: "background-top",
+    },
+    {
+      filename: "image-1.png",
+      path: "public/email-assets/image-1.png",
+      cid: "image-1",
+    },
+    {
+      filename: "image-2.png",
+      path: "public/email-assets/image-2.png",
+      cid: "image-2",
+    },
+    {
+      filename: "image-3.png",
+      path: "public/email-assets/image-3.png",
+      cid: "image-3",
+    },
+    {
+      filename: "facebook-icon.png",
+      path: "public/email-assets/facebook-icon.png",
+      cid: "facebook-icon",
+    },
+    {
+      filename: "insta-icon.png",
+      path: "public/email-assets/insta-icon.png",
+      cid: "insta-icon",
+    },
+    {
+      filename: "yt-icon.png",
+      path: "public/email-assets/yt-icon.png",
+      cid: "yt-icon",
+    },
+  ];
+}
+
 // Helper function to extract first name from full name
 function getFirstName(fullName: string | null | undefined): string {
   if (!fullName) return "korisnik";
@@ -344,6 +390,7 @@ export async function sendWelcomeEmail(user: any) {
       subject: template.subject,
       html: template.getHtml(firstName),
       text: template.getText(firstName),
+      attachments: createEmailAttachments(),
     };
 
     await transporter.sendMail(mailOptions);
