@@ -437,10 +437,6 @@ export default function Home() {
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" /> 1500 poruka
                         </li>
-                        <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" /> Uključeni besplatni videozapisi za učenje
-                        </li>
-
                       </ul>
                       <Link href="/sign-up" className="price_btn">
                         Isprobaj
@@ -456,9 +452,6 @@ export default function Home() {
                       <ul className="list-unstyled flex-grow-1">
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 1500 poruka
-                        </li>
-                        <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> Uključeni besplatni videozapisi za učenje
                         </li>
                         <li>
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x45 minuta svaki mjesec sa instruktorom
