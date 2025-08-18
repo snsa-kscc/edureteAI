@@ -21,7 +21,7 @@ const loadChats = cache(async (userId: string) => {
   return await getChats(userId);
 });
 
-export async function AppSidebar({ userId, user }: { userId: string | null | undefined; user: User | null | undefined }) {
+export async function AppSidebar({ userId, user, isOwner }: { userId: string | null | undefined; user: User | null | undefined; isOwner: boolean }) {
   const chats = await loadChats(userId!);
   const userData = await loadUsersData();
   const role = user?.privateMetadata.role as string | null | undefined;
@@ -61,7 +61,9 @@ export async function AppSidebar({ userId, user }: { userId: string | null | und
               <p className="text-sm">
                 {user?.firstName} {user?.lastName}
               </p>
-              <p className="text-xs opacity-40">{SUBSCRIPTION_PLANS[subscriptionTier as keyof typeof SUBSCRIPTION_PLANS]?.name ?? "Besplatni plan"}</p>
+              {isOwner && (
+                <p className="text-xs opacity-40">{SUBSCRIPTION_PLANS[subscriptionTier as keyof typeof SUBSCRIPTION_PLANS]?.name ?? "Besplatni plan"}</p>
+              )}
             </div>
           </div>
           <div>

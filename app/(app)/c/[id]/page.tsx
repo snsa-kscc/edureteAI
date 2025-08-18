@@ -17,7 +17,7 @@ export default async function ChatPage(props: { params: Promise<Params> }) {
 
   return (
     <SidebarProvider>
-      <AppSidebar userId={chat?.userId ?? userId} user={user} />
+      <AppSidebar userId={chat?.userId ?? userId} user={user} isOwner={!chat || ((chat.userId && chat.userId === userId) as boolean)} />
       <main className="w-full h-screen max-h-screen overflow-hidden grid grid-rows-[auto_1fr_auto]">
         <div className="m-4 flex items-center gap-2 justify-between">
           <SidebarTrigger className="w-10 h-10 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer hover:bg-transparent" />
