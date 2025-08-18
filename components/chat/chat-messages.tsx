@@ -108,13 +108,13 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                 <AvatarImage src="" />
                 <AvatarFallback className="text-sm">{userName?.charAt(0)}</AvatarFallback>
               </Avatar>
-              <div className="mt-1.5">
+              <div className="mt-1.5 flex-1 min-w-0">
                 <p className="font-semibold opacity-70">{userName}</p>
                 <div className="mt-1.5 text-sm leading-relaxed">
                   {/* AI SDK v5 parts format */}
                   {message.parts?.map((part, index) => {
                     if (part.type === "text") {
-                      return <div key={index}>{part.text}</div>;
+                      return <p key={index}>{part.text}</p>;
                     }
                     if (part.type === "file" && part.mediaType?.startsWith("image/")) {
                       return (
@@ -130,7 +130,7 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                     {Array.isArray((message as any).content)
                       ? (message as any).content.map((item: any, index: number) => (
                           <div key={index}>
-                            {item.type === "text" && item.text}
+                            {item.type === "text" && <p>{item.text}</p>}
                             {item.type === "image" && (
                               <Image src={item.image || "/placeholder.svg"} alt="Uploaded image" className="mt-2 max-w-xs rounded" width={250} height={250} />
                             )}
@@ -163,7 +163,7 @@ export const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(({ mes
                 <AvatarImage src="" />
                 <AvatarFallback className="bg-emerald-500 text-white">eAI</AvatarFallback>
               </Avatar>
-              <div className="mt-1.5 w-full">
+              <div className="mt-1.5 flex-1 min-w-0">
                 <div className="flex justify-between">
                   <p className="font-semibold opacity-70">edureteAI</p>
                   <CopyToClipboard message={message} className="-mt-1" />
