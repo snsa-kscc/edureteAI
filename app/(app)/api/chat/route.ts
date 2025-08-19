@@ -8,8 +8,12 @@ import { saveChat } from "@/lib/redis-actions";
 import { checkMessageAvailability, incrementMessageCount } from "@/lib/message-limits";
 import { tools } from "@/lib/tools";
 import type { Usage, Chat } from "@/types";
+import { initializeOTEL } from "langsmith/experimental/otel/setup";
 
-export const runtime = "edge";
+initializeOTEL({
+  skipGlobalContextManagerSetup: true,
+});
+// export const runtime = "edge";
 
 interface ChatRequest {
   messages: UIMessage[];
@@ -84,6 +88,15 @@ export async function POST(req: Request) {
           chunking: "word",
         }),
       ],
+      experimental_telemetry: {
+        isEnabled: true,
+        metadata: {
+          title: `chat:${chatId}`,
+          userId,
+          model,
+          chatAreaId,
+        },
+      },
       onFinish: async (result) => {
         const usageData: Usage = {
           userId,
@@ -139,6 +152,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (error) {
+    console.error("Chat API error:", error);
     return new NextResponse("Failed to process request.", { status: 500 });
   }
 }
