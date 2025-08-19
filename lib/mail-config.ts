@@ -23,103 +23,128 @@ export const EMAIL_TEMPLATES = {
     getHtml: (firstName: string) => `
     <!DOCTYPE html>
     <html>
-    <head>
-        <title>Dobrodošli u EdureteAI! 🎉</title>
 
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-        </style>
-    </head>
+    <body style="margin:0; padding:0; background-color:#ffffff; font-family: Arial, sans-serif; max-width:710px;">
 
-    <body style="max-width: 710px; margin: 0 auto;">
-        <div style="position: relative;">
-            <img style="width: 100%; display: block;" src="cid:hero-image">
-            <div style="position: absolute; top: 30%; left: 10%;">
-                <h1 style="color: #FFF; font-family: 'Inter', sans-serif;font-size: 23px; font-style: normal; font-weight: 600; line-height: 30px;">
-                    Dobrodošli u <span style="background: linear-gradient(90deg, #155DFC 0%, #AD46FF 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">edureteAI</span>
-                </h1>
-            </div>
+        <!-- HERO -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td align="center" style="position:relative;">
+                    <img src="cid:news-1" alt="EdureteAI dobrodošlica" style="width:100%; max-width:710px; display:block;">
+                </td>
+            </tr>
+        </table>
 
-        </div>
-        <div style="background: #EFF3FF; padding: 35px;">
-            <p style="color: #0D1A28; font-family: 'Inter', sans-serif;font-size: 14px; font-style: normal; font-weight: 400; line-height: 18px; margin-top: 0;">Pozdrav ${firstName},</p>
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif;font-size: 14px; font-style: normal; font-weight: 400; line-height: 18px; margin-top: 0;">
-                Izuzetno nam je drago što ste nam se pridružili i postali dio naše rastuće zajednice. 
-                Naša <strong>Edurete platforma</strong> osmišljena je kako bi <strong>pomogla da učenje postane lakše,
-                    zabavnije i učinkovitije.</strong> Bilo da se pripremate za ispite, želite bolje razumjeti gradivo ili
-                jednostavno proširiti svoje znanje, mi smo tu za Vas! 
-                 </p>
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif;font-size: 14px; font-style: normal; font-weight: 400; line-height: 18px;">
-                Povezali smo <strong>najnaprednije AI alate s podrškom instruktora</strong> kako bismo stvorili okruženje
-                prilagođeno Vašem tempu i potrebama - modernije, brže i pouzdanije.
-                 </p>
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif;font-size: 14px; font-style: normal; font-weight: 400; line-height: 18px;">
-                Kako biste <strong>maksimalno iskoristili sve prednosti aplikacije,</strong> pogledajte naš
-                <a style="color: #155DFC;" href="#" target="_blank" rel="noopener noreferrer">kratki video</a> sa savjetima
-                za rad.
+        <!-- TEXT BLOCK -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:710px; background:#EFF3FF; padding:35px;">
+            <tr>
+                <td align="left" style="font-size:14px; color:#0D1A28;">
+                    Pozdrav ${firstName},
+                </td>
+            </tr>
+            <tr><td height="15"></td></tr>
+            <tr>
+                <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
+                    Izuzetno nam je drago što ste nam se pridružili i postali dio naše rastuće zajednice. 
+                    Naša <strong>Edurete platforma</strong> osmišljena je kako bi <strong>pomogla da učenje postane lakše,
+                    zabavnije i učinkovitije.</strong>
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
+                    Povezali smo <strong>najnaprednije AI alate s podrškom instruktora</strong> kako bismo stvorili okruženje
+                    prilagođeno Vašem tempu i potrebama.
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
+                    Kako biste <strong>maksimalno iskoristili sve prednosti aplikacije,</strong> pogledajte naš 
+                    <a href="#" target="_blank" style="color:#155DFC;">kratki video</a>.
+                </td>
+            </tr>
+        </table>
 
-            </p>
-        </div>
+        <!-- TIPS TITLE -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:710px;">
+            <tr>
+                <td align="center" style="font-size:27px; font-weight:700; padding:20px 0;">
+                    <span style="color:#155DFC;">Tips & tricks</span>
+                </td>
+            </tr>
+        </table>
 
-        <div>
-            <h2 style="text-align: center; font-family: 'Inter', sans-serif; font-size: 27px;font-style: normal;font-weight: 700;line-height: normal;">
-                <span style="background: linear-gradient(90deg, #155DFC 0%, #AD46FF 100%);background-clip: text;-webkit-background-clip: text; -webkit-text-fill-color: transparent;">Tips&tricks</span>
-            </h2>
-        </div>
+      <!-- TIPS GRID (3 kolone s razmakom) -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:710px;">
+      <tr>
+        <!-- Tip 1 -->
+        <td width="33%" valign="top" style="background-color:#050E39; padding:20px; color:#FFF; background-image: url(cid:background-top); background-repeat:no-repeat; background-position:top right;">
+          <img src="cid:image-1" alt="Ikona za korištenje dva prozora" style="display:block; margin-bottom:10px;">
+          <p style="font-size:13px; line-height:18px; margin:0;">
+            <strong>Korištenje dva prozora</strong> je korisno jer se može provjeriti rješenje, ali i produbiti razumijevanje gradiva.
+          </p>
+        </td>
 
-        <div style="display: flex; gap: 8px; margin-right: 15px; margin-left: 15px;">
-            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="cid:image-1" alt="">
-                <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
-                    <span style="font-weight: 700;">Korištenje dva prozora </span>
-                    je korisno jer se može provjeriti rješenje, ali i produbiti razumijevanje gradiva.
-                </p>
-            </div>
+        <!-- Spacer -->
+        <td width="8" style="font-size:0; line-height:0;">&nbsp;</td>
 
-            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="cid:image-2" alt="">
-                <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
-                    <span style="font-weight: 700;">Isprobavanje različitih modela </span>
-                    se isplati jer je svatko od nas jedinstven i ne odgovara svima isti način komunikacije.
-                </p>
-            </div>
+        <!-- Tip 2 -->
+        <td width="33%" valign="top" style="background-color:#050E39; padding:20px; color:#FFF; background-image: url(cid:background-top); background-repeat:no-repeat; background-position:top right;"" >
+          <img src="cid:image-2" alt="Ikona za isprobavanje različitih modela" style="display:block; margin-bottom:10px;">
+          <p style="font-size:13px; line-height:18px; margin:0;">
+            <strong>Isprobavanje različitih modela</strong> se isplati jer je svatko od nas jedinstven.
+          </p>
+        </td>
 
-            <div style="flex: 1; background-image: url(cid:background-top); background-color: #050E39; background-repeat: no-repeat; background-position: top right; padding: 25px 45px 15px 15px;">
-                <img src="cid:image-3" alt="">
-                <p style="color: #FFF; font-family: 'Inter', sans-serif; font-size: 13px; font-style: normal; font-weight: 400; line-height: 18px;">
-                    <span style="font-weight: 700;">Prilagodi sebi prozor</span>
-                    omogućuje da se modelu da općenita uputa koju će slijediti kroz cijeli razgovor.
+        <!-- Spacer -->
+        <td width="8" style="font-size:0; line-height:0;">&nbsp;</td>
 
-                </p>
-            </div>
+        <!-- Tip 3 -->
+        <td width="33%" valign="top" style="background-color:#050E39; padding:20px; color:#FFF; background-image: url(cid:background-top); background-repeat:no-repeat; background-position:top right;"">
+          <img src="cid:image-3" alt="Ikona za prilagođavanje prozora" style="display:block; margin-bottom:10px;">
+          <p style="font-size:13px; line-height:18px; margin:0;">
+            <strong>Prilagodi sebi prozor</strong> omogućuje da se modelu da uputa koju će slijediti kroz cijeli razgovor.
+          </p>
+        </td>
+      </tr>
+    </table>
 
-        </div>
+        <!-- FOOTER -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:710px; background:#EFF3FF; padding:20px;">
+            <tr>
+                <td align="center" style="font-size:14px; color:#0D1A28; line-height:18px;">
+                    Ukoliko imate bilo <strong>kakvih pitanja ili trebate pomoć</strong>, javite se na 
+                    <a href="mailto:podrska@edurete.com" style="color:#155DFC; font-weight:600; text-decoration:none;">podrska@edurete.com</a>.
+                </td>
+            </tr>
+            <tr><td height="10"></td></tr>
+            <tr>
+                <td align="center" style="font-size:14px; color:#0D1A28;">
+                    Želimo Vam puno uspjeha i uživanja u učenju!<br><br>
+                    Srdačan pozdrav,<br>
+                    <strong>Tim Edurete</strong>
+                </td>
+            </tr>
+        </table>
 
-        <div style="background: #EFF3FF; padding: 20px 51px; margin-top: 22px;">
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif; font-size: 14px; font-style: normal;font-weight: 400;line-height: 18px;">
-                Ukoliko imate bilo <strong> kakvih pitanja ili trebate pomoć,</strong> naš tim Vam uvijek stoji na
-                raspolaganju. Slobodno nam se obratite na mail <a href="mailto:podrska@edurete.com" style="color: #155DFC; font-weight: 600; text-decoration: none;"> podrska@edurete.com.</a></p>
+        <!-- SOCIAL FOOTER -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width:710px; background:#021240;">
+            <tr>
+                <td align="center" style="padding:20px; color:#FFF; font-size:16px; font-weight:700;">
+                    Edurete - mreža znanja
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding-bottom:20px;">
+                    <a href="https://www.facebook.com/edurete/?locale=hr_HR"><img src="cid:facebook-icon" alt="Facebook" style="margin:0 5px;"></a>
+                    <a href="https://www.instagram.com/edurete_mreza/"><img src="cid:insta-icon" alt="Instagram" style="margin:0 5px;"></a>
+                    <a href="https://www.youtube.com/@eduretemrezaznanja8067"><img src="cid:yt-icon" alt="YouTube" style="margin:0 5px;"></a>
+                </td>
+            </tr>
 
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif; font-size: 14px; font-style: normal;font-weight: 400;line-height: 18px;">
-                Želimo Vam puno uspjeha i uživanja u učenju!</p>
+        </table>
 
-            <p style="color: #0D1A28; text-align: center; font-family: 'Inter', sans-serif; font-size: 14px; font-style: normal;font-weight: 400;line-height: 18px;">
-                Srdačan pozdrav,<br>
-                <strong>Tim Edurete</strong>
-            </p>
-        </div>
-
-        <div style="background: radial-gradient(200.98% 137.88% at 2.6% 36.82%, #021240 0%, #070A30 100%);">
-            <div style="max-width: 260px;margin: 0 auto; padding-bottom: 25px; padding-top: 25px;">
-                <p style="margin-bottom:10px; margin-top: 0; color: #FFF; text-align: center; font-family: 'Inter', sans-serif; font-size: 16px;font-style: normal;font-weight: 700;line-height: 18px;">
-                    Edurete - mreža znanja</p>
-                <div style="display: flex;justify-content: center;gap: 10px;">
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:facebook-icon" alt=""></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:insta-icon" alt=""></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer"><img src="cid:yt-icon" alt=""></a>
-                </div>
-            </div>
-        </div>
     </body>
     </html>
     `,
@@ -317,14 +342,14 @@ export const EMAIL_TEMPLATES = {
 function createEmailAttachments() {
   return [
     {
-      filename: "edurete-hero-image.jpg",
-      path: path.join(process.cwd(), "public/email-assets/edurete-hero-image.jpg"),
-      cid: "hero-image",
-    },
-    {
       filename: "background-top.png",
       path: path.join(process.cwd(), "public/email-assets/background-top.png"),
       cid: "background-top",
+    },
+    {
+      filename: "news-1.jpg",
+      path: path.join(process.cwd(), "public/email-assets/news-1.jpg"),
+      cid: "news-1",
     },
     {
       filename: "image-1.png",
@@ -377,7 +402,7 @@ export async function sendWelcomeEmail(user: any) {
   try {
     const transporter = createTransporter();
     const firstName = user.first_name || "korisnik";
-    const email = user.email_addresses?.[0]?.email_address || "podrska@edurete.com";
+    const email = user.email_addresses?.[0]?.email_address || "eklektik909@gmail.com";
 
     if (!email) {
       console.error("No email address found for user:", user.id);
@@ -388,6 +413,7 @@ export async function sendWelcomeEmail(user: any) {
     const mailOptions = {
       from: FROM_EMAIL,
       to: email,
+      replyTo: "podrska@edurete.com",
       subject: template.subject,
       html: template.getHtml(firstName),
       text: template.getText(firstName),
@@ -414,6 +440,7 @@ export async function sendSubscriptionWelcomeEmail(userId: string, email: string
     const mailOptions = {
       from: FROM_EMAIL,
       to: email,
+      replyTo: "podrska@edurete.com",
       subject: template.subject(tier),
       html: template.getHtml(getFirstName(fullName), tier),
       text: template.getText(getFirstName(fullName), tier),
@@ -439,6 +466,7 @@ export async function sendUpgradeEmail(userId: string, email: string | null, ful
     const mailOptions = {
       from: FROM_EMAIL,
       to: email,
+      replyTo: "podrska@edurete.com",
       subject: template.subject(),
       html: template.getHtml(getFirstName(fullName)),
       text: template.getText(getFirstName(fullName)),
