@@ -167,12 +167,12 @@ export const MODEL_CONFIGS: Record<string, ModelPricing> = {
   },
   "claude-sonnet-4-20250514": {
     inputPrice: (tokens: number) => (tokens <= 200_000 ? 3.0 : 6.0),
-    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.50),
+    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.5),
     family: "anthropic",
   },
   "claude-sonnet-4-thinking": {
     inputPrice: (tokens: number) => (tokens <= 200_000 ? 3.0 : 6.0),
-    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.50),
+    outputPrice: (tokens: number) => (tokens <= 200_000 ? 15.0 : 22.5),
     family: "anthropic",
   },
 };
@@ -194,17 +194,17 @@ Always emit mathematics in pure LaTeX that KaTeX supports. Do not use Unicode sy
 – Always begin every display block with \\displaystyle (written exactly like this in the output)
 
 2. NEWLINE RULE FOR DISPLAY MATH  
-– Insert exactly two newline characters (\\n\\n) before the opening $$ and two newline characters after the closing $$  
+– Insert exactly two newline characters (\n\n) before the opening $$ and two newline characters after the closing $$  
 – Do not add extra blank lines or spaces  
 – Immediately after the opening $$ (following the two required newlines), the very first line inside the math block must be  
   \\displaystyle  
 – Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
 
 Example:  
-…explanation\\n\\n$$  
+…explanation\n\n$$  
 \\displaystyle  
 E = mc^2  
-$$\\n\\n…continuation  
+$$\n\n…continuation  
 
 3. COMMANDS, SCRIPTS & SPACING  
 – Prefix LaTeX commands with a single backslash (for example: \\alpha, \\pi, \\Longrightarrow)  
@@ -306,14 +306,14 @@ Do not write "displaystyle" without the backslash or include any stray character
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\n\\displaystyle
+\n\n$$\n\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}\\n$$\\n\\n
+\\end{array}\n$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
@@ -429,23 +429,23 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Tables: ONLY array environment (KaTeX compatible)
 
 Example:  
-…explanation\\n\\n$$  
+…explanation\n\n$$  
 \\displaystyle  
 E = mc^2  
-$$\\n\\n…continuation  
+$$\n\n…continuation  
 
 ### Table Templates (Simplified for Stability)
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\n\\displaystyle
+\n\n$$\n\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}\\n$$\\n\\n
+\\end{array}\n$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
@@ -460,11 +460,11 @@ The \\displaystyle directive helps with proper KaTeX parsing of complex table st
 When creating any mathematical environment using \\begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, ALWAYS start with \\displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. This applies to all begin environments including \\begin{cases}, \\begin{matrix}, \\begin{pmatrix}, \\begin{bmatrix}, \\begin{array}, \\begin{align}, and any other mathematical structures.
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle 
+\n\n$$\\displaystyle 
 \\begin{cases}
 x = 1 & \\text{if } n > 0 \\\\
 x = 0 & \\text{if } n = 0
-\\end{cases}$$\\n\\n
+\\end{cases}$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{cases}
@@ -527,23 +527,23 @@ All of your mathematical responses must be written in LaTeX notation that is ful
 *   Do not write “displaystyle” without the backslash or include any stray characters (e.g. a lone “n”) before it.
 
 Example:  
-…explanation\\n\\n$$  
+…explanation\n\n$$  
 \\displaystyle  
 E = mc^2  
-$$\\n\\n…continuation 
+$$\n\n…continuation 
 
 **Crucial Rule for All Tables (KaTeX environments):**
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle
+\n\n$$\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}$$\\n\\n
+\\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
@@ -555,11 +555,11 @@ $$\\begin{array}{|c|c|c|c|}
 **Crucial Rule for All LaTeX Begin Environments in Math Mode:** When creating any mathematical environment using \\begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, ALWAYS start with \\displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. This applies to all begin environments including \\begin{cases}, \\begin{matrix}, \\begin{pmatrix}, \\begin{bmatrix}, \\begin{array}, \\begin{align}, and any other mathematical structures.
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle 
+\n\n$$\\displaystyle 
 \\begin{cases}
 x = 1 & \\text{if } n > 0 \\\\
 x = 0 & \\text{if } n = 0
-\\end{cases}$$\\n\\n
+\\end{cases}$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{cases}
@@ -653,23 +653,23 @@ While STEM is your expertise, you must enthusiastically engage with ANY user-req
 • Tables: ONLY array environment (KaTeX compatible)
 
 Example:  
-…explanation\\n\\n$$  
+…explanation\n\n$$  
 \\displaystyle  
 E = mc^2  
-$$\\n\\n…continuation  
+$$\n\n…continuation  
 
 ### Table Templates (Simplified for Stability)
 When creating mathematical tables using LaTeX array environment, ALWAYS start with \\displaystyle immediately after the opening $$:
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle
+\n\n$$\\displaystyle
 \\begin{array}{|c|c|c|c|}
 \\hline
 \\text{Position} & 1 & 2 & 3 & 4 \\\\
 \\hline
 \\text{Bit} & P_1 & P_2 & 1 & P_4 \\\\
 \\hline
-\\end{array}$$\\n\\n
+\\end{array}$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{array}{|c|c|c|c|}
@@ -684,11 +684,11 @@ The \\displaystyle directive helps with proper KaTeX parsing of complex table st
 When creating any mathematical environment using \\begin{...} structures (such as cases, matrix, array, align, etc.) within $$ delimiters, ALWAYS start with \\displaystyle immediately after the opening $$ to ensure proper KaTeX parsing and prevent rendering errors. This applies to all begin environments including \\begin{cases}, \\begin{matrix}, \\begin{pmatrix}, \\begin{bmatrix}, \\begin{array}, \\begin{align}, and any other mathematical structures.
 
 CORRECT FORMAT:
-\\n\\n$$\\displaystyle 
+\n\n$$\\displaystyle 
 \\begin{cases}
 x = 1 & \\text{if } n > 0 \\\\
 x = 0 & \\text{if } n = 0
-\\end{cases}$$\\n\\n
+\\end{cases}$$\n\n
 
 INCORRECT FORMAT:
 $$\\begin{cases}
