@@ -29,6 +29,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
+      Joined: user.createdAt,
       "Total ($)": currentUsageByFamily.reduce((sum, familyData) => {
         const userData = familyData.find((u) => u.userId === user.userId);
         return sum + (userData?.amount || 0);
@@ -52,6 +53,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
       "Last name": user.lastName,
       "First name": user.firstName,
       Email: user.emailAddress,
+      Joined: user.createdAt,
       "Total ($)": yesterdayUsageByFamily.reduce((sum, familyData) => {
         const userData = familyData.find((u) => u.userId === user.userId);
         return sum + (userData?.amount || 0);
@@ -86,7 +88,7 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
     }),
   ];
 
-  const baseColumnWidths = [{ wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 25 }, { wch: 12 }];
+  const baseColumnWidths = [{ wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 12 }];
   const modelColumnWidths = MODEL_FAMILY.flatMap(() => Array(4).fill({ wch: 12 }));
 
   const workbook = XLSX.utils.book_new();
