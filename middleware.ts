@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { shouldShowOnboarding } from "@/lib/onboarding";
 
-const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
+const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)", "/test-katex"]);
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isRootRoute = createRouteMatcher(["/"]);
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
