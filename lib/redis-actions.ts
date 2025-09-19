@@ -20,7 +20,7 @@ export async function getUsersData() {
     const userIds: string[] = await client.smembers("userIds");
     const clerk = await clerkClient();
     const allUsers = await clerk.users.getUserList({ limit: 499 });
-    const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string }[] = [];
+    const usersData: { userId: string; firstName: string; lastName: string; emailAddress: string; role: string; createdAt: Date }[] = [];
     for (const storedId of userIds) {
       const user = allUsers.data.find((u: User) => u.externalId === storedId || u.id === storedId);
       if (!user) {
@@ -35,9 +35,12 @@ export async function getUsersData() {
       const emailAddress = user.emailAddresses[0].emailAddress;
       const firstName = user.firstName ?? "No";
       const lastName = user.lastName ?? "Name";
-      usersData.push({ userId, firstName, lastName, emailAddress, role });
-      usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
+      const createdAt = new Date(user.createdAt);
+      usersData.push({ userId, firstName, lastName, emailAddress, role, createdAt });
     }
+    
+    // Sort once after all users are processed
+    usersData.sort((a, b) => a.lastName.localeCompare(b.lastName));
     return usersData;
   } catch (error) {
     console.error(error);
