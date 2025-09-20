@@ -1,0 +1,60 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for required secrets
+        id: check-secrets
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "❌ Missing required secrets for Vercel deployment"
+            echo "Required secrets: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID"
+            echo "Please add these secrets to your GitHub repository settings"
+            echo "secrets-available=false" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "✅ All required secrets are available"
+            echo "secrets-available=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set commit email if needed
+        if: steps.check-secrets.outputs.secrets-available == 'true'
+        run: |
+          COMMIT_EMAIL=$(git log -1 --pretty=format:'%ae')
+          if [ "$COMMIT_EMAIL" != "sven1397@hotmail.com" ]; then
+            echo "Changing commit email from $COMMIT_EMAIL to sven1397@hotmail.com"
+            git config user.name "SvenMandic"
+            git config user.email "sven1397@hotmail.com"
+            git commit --amend --author="SvenMandic <sven1397@hotmail.com>" --no-edit
+          else
+            echo "Commit email is already ok"
+          fi
+
+      - name: Install Vercel CLI
+        if: steps.check-secrets.outputs.secrets-available == 'true'
+        run: npm install -g vercel@latest
+
+      - name: Deploy to Production
+        if: steps.check-secrets.outputs.secrets-available == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Preview
+        if: steps.check-secrets.outputs.secrets-available == 'true' && github.ref != 'refs/heads/main' && github.event_name == 'push'
+        run: vercel --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
