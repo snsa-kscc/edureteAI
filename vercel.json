@@ -9,5 +9,8 @@
     "api/generate-graph.py": {
       "maxDuration": 30
     }
+  },
+  "github": {
+    "enabled": false
   }
 }
