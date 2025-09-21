@@ -11,7 +11,17 @@ import { PricingCardsSection } from "@/components/pricing-cards-section";
 export default async function AccountPage() {
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
-  const user = await currentUser();
+
+  // Try catch needed because it errors hard when deleting user.
+
+  let user;
+
+  try {
+    user = await currentUser();
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+
   const subscriptionDetails = await getUserSubscriptionDetails();
 
   if (!userId) {
