@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,6 +16,7 @@ interface DeleteAccountSectionProps {
 
 export function DeleteAccountSection({ userId }: DeleteAccountSectionProps) {
   const router = useRouter();
+  const { signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -32,7 +34,10 @@ export function DeleteAccountSection({ userId }: DeleteAccountSectionProps) {
 
       await deleteUserAccount(userId);
 
-      // Redirect to home page after successful deletion
+      // Sign out the user to clear the session
+      await signOut();
+
+      // Redirect to home page after successful deletion and sign out
       router.push("/");
     } catch (error) {
       console.error("Error deleting account:", error);
