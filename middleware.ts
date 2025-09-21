@@ -7,14 +7,15 @@ const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"]);
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isRootRoute = createRouteMatcher(["/"]);
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
+const isConversationRoute = createRouteMatcher(["/c/(.*)"]); // Match /c/[uuid] routes
 
 export default clerkMiddleware(async (auth, request) => {
   const { sessionClaims, userId } = await auth();
 
   // Handle authenticated users
   if (userId) {
-    // Check if user should see onboarding (but not if they're already on onboarding page)
-    if (!isOnboardingRoute(request)) {
+    // Check if user should see onboarding (only for conversation routes)
+    if (isConversationRoute(request) && !isOnboardingRoute(request)) {
       try {
         const showOnboarding = await shouldShowOnboarding(userId);
         if (showOnboarding) {
