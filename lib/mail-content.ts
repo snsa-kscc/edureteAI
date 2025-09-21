@@ -146,8 +146,6 @@ export const EMAIL_TEMPLATES = {
       return createBaseEmailTemplate("hero-welcome.jpg", textBlockContent);
     },
     getText: (firstName: string) => `
-Dobrodošli u edureteAI! 🎉
-
 Pozdrav ${firstName},
 
 Izuzetno nam je drago što si nam se pridružio/la i postao/la dio naše rastuće zajednice. Naša edurete platforma osmišljena je kako bi pomogla da učenje postane lakše, zabavnije i učinkovitije. Bilo da se pripremaš za ispite, želiš bolje razumjeti gradivo ili jednostavno proširiti svoje znanje, mi smo tu za tebe!
