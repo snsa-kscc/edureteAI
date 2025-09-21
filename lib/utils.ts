@@ -221,35 +221,63 @@ export function handleModelProvider(model: string, logitBias?: LogitBiasConfig) 
   }
 }
 
-export async function getUsersUsage(usersData: UserData[], modelFamily: string) {
-  const res = await Promise.all(
-    usersData.map(async ({ userId, firstName, lastName, emailAddress }) => {
-      const { totalTokensUsed, totalCost, quotaLimit } = await getUserQuota(userId, modelFamily);
-      return {
-        userId,
-        firstName,
-        lastName,
-        emailAddress,
-        tokens: totalTokensUsed,
-        amount: +totalCost,
-        limit: +quotaLimit,
-      };
-    })
-  );
+export async function getUsersUsage(usersData: UserData[], modelFamily: string): Promise<Array<{
+  userId: string;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  tokens: number;
+  amount: number;
+  limit: number;
+}>> {
+  const res: Array<{
+    userId: string;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    tokens: number;
+    amount: number;
+    limit: number;
+  }> = [];
+  
+  // Process users sequentially to avoid overwhelming database connection pool
+  for (const { userId, firstName, lastName, emailAddress } of usersData) {
+    const { totalTokensUsed, totalCost, quotaLimit } = await getUserQuota(userId, modelFamily);
+    res.push({
+      userId,
+      firstName,
+      lastName,
+      emailAddress,
+      tokens: totalTokensUsed,
+      amount: +totalCost,
+      limit: +quotaLimit,
+    });
+  }
+  
   return res;
 }
 
-export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily: string) {
-  const res = await Promise.all(
-    usersData.map(async ({ userId }) => {
-      const { totalTokens, totalCost } = await getYesterdayUsage(userId, modelFamily);
-      return {
-        userId,
-        tokens: +totalTokens,
-        amount: +totalCost,
-      };
-    })
-  );
+export async function getUsersYesterdayUsage(usersData: UserData[], modelFamily: string): Promise<Array<{
+  userId: string;
+  tokens: number;
+  amount: number;
+}>> {
+  const res: Array<{
+    userId: string;
+    tokens: number;
+    amount: number;
+  }> = [];
+  
+  // Process users sequentially to avoid overwhelming database connection pool
+  for (const { userId } of usersData) {
+    const { totalTokens, totalCost } = await getYesterdayUsage(userId, modelFamily);
+    res.push({
+      userId,
+      tokens: +totalTokens,
+      amount: +totalCost,
+    });
+  }
+  
   return res;
 }
 

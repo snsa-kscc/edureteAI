@@ -9,8 +9,28 @@ export async function getUsersDataXlsx(returnBuffer: boolean = false) {
   const MODEL_FAMILY = getUniqueFamilies();
   const usersData = await getUsersData();
 
-  const currentUsageByFamily = await Promise.all(MODEL_FAMILY.map((family) => getUsersUsage(usersData, family)));
-  const yesterdayUsageByFamily = await Promise.all(MODEL_FAMILY.map((family) => getUsersYesterdayUsage(usersData, family)));
+  // Process families sequentially to avoid overwhelming database connection pool
+  const currentUsageByFamily: Array<{
+    userId: string;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    tokens: number;
+    amount: number;
+    limit: number;
+  }[]> = [];
+  const yesterdayUsageByFamily: Array<{
+    userId: string;
+    tokens: number;
+    amount: number;
+  }[]> = [];
+
+  for (const family of MODEL_FAMILY) {
+    const currentUsage = await getUsersUsage(usersData, family);
+    const yesterdayUsage = await getUsersYesterdayUsage(usersData, family);
+    currentUsageByFamily.push(currentUsage);
+    yesterdayUsageByFamily.push(yesterdayUsage);
+  }
 
   const currentData = usersData.map((user) => {
     const modelData = MODEL_FAMILY.reduce((acc, family, index) => {
