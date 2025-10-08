@@ -454,7 +454,7 @@ export default function Home() {
                           <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 1500 poruka
                         </li>
                         <li>
-                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x45 minuta svaki mjesec sa instruktorom
+                          <img className="d-inline" src="/assets/img/home-one/check_3.png" alt="" /> 4x40 minuta svaki mjesec sa instruktorom
                         </li>
                       </ul>
                       <Link href="/sign-up" className="price_btn">

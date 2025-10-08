@@ -140,6 +140,9 @@ export const EMAIL_TEMPLATES = {
             <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
                 Kako bi <strong>maksimalno iskoristio/la sve prednosti aplikacije,</strong> pogledaj naš
                 <a href="${SHORT_VIDEO_URL}" target="_blank" style="color:#155DFC;">kratki video</a> sa savjetima za rad.
+                Kao dobrodošlicu pripremili smo tablicu s linkovima na <a href="https://docs.google.com/spreadsheets/d/1oRSbet1JXSh9yG7_FL6XgQXf6QK5gu2H/edit?usp=sharing&ouid=107754712315620356659&rtpof=true&sd=true" target="_blank" style="color:#155DFC;">dvije u potpunosti riješene državne mature (A i B razina)</a>. 
+                Ne brini ako se još ne pripremaš za maturu – mislili smo i na tebe pa smo zadatke kategorizirali i prema temama srednjoškolskih udžbenika.
+
             </td>
         </tr>
       `;
@@ -153,6 +156,8 @@ Izuzetno nam je drago što si nam se pridružio/la i postao/la dio naše rastuć
 Povezali smo najnaprednije AI alate s podrškom instruktora kako bismo stvorili okruženje prilagođeno tvom tempu i potrebama - modernije, brže i pouzdanije.
 
 Kako bi maksimalno iskoristio/la sve prednosti aplikacije, pogledaj naš kratki video sa savjetima za rad: ${SHORT_VIDEO_URL}
+
+Kao dobrodošlicu pripremili smo tablicu s linkovima na dvije u potpunosti riješene državne mature (A i B razina): https://docs.google.com/spreadsheets/d/1oRSbet1JXSh9yG7_FL6XgQXf6QK5gu2H/edit?usp=sharing&ouid=107754712315620356659&rtpof=true&sd=true. Ne brini ako se još ne pripremaš za maturu – mislili smo i na tebe pa smo zadatke kategorizirali i prema temama srednjoškolskih udžbenika.
 
 Tips & tricks
 
