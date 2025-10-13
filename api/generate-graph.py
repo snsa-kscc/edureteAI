@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 plt.rcParams['savefig.directory'] = '/tmp'
 import numpy as np
 import pandas as pd
+import scipy
 import seaborn as sns
 import math
 
@@ -56,6 +57,7 @@ def generate_graph(code: str) -> Dict[str, Any]:
             'numpy': np,
             'pd': pd,
             'pandas': pd,
+            'scipy': scipy,
             'sns': sns,
             'seaborn': sns,
             'math': math,
