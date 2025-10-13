@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 plt.rcParams['savefig.directory'] = '/tmp'
 import numpy as np
 import scipy
-import seaborn as sns
 import math
 
 # For Vercel compatibility, we still need the handler class
@@ -55,8 +54,6 @@ def generate_graph(code: str) -> Dict[str, Any]:
             'np': np,
             'numpy': np,
             'scipy': scipy,
-            'sns': sns,
-            'seaborn': sns,
             'math': math,
             'matplotlib': matplotlib,
             'io': io,
