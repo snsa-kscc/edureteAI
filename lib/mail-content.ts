@@ -232,6 +232,14 @@ edurete - mreža znanja
         </tr>
         <tr>
             <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
+                Kao mali znak dobrodošlice, poklanjamo ti <a href="https://docs.google.com/spreadsheets/d/1_g8ZCY2Y9kuS0bRik8qiK7F58N_skTyj/edit?usp=sharing&ouid=107754712315620356659&rtpof=true&sd=true" target="_blank" style="color:#155DFC;">rješenja državne mature</a>. Iskoristi ih za vježbu, samoprovjeru i bolje razumijevanje zadataka.
+            </td>
+        </tr>
+        <tr>
+            <td height="10"></td>
+        </tr>
+        <tr>
+            <td align="left" style="font-size:14px; color:#0D1A28; line-height:18px;">
                 Osim brzih objašnjenja zadataka, edureteAI sada može crtati i čitati grafove, predlagati metode rješavanja te ti nuditi stalnu podršku dok samostalno učiš. Možeš i prilagoditi način na koji ti AI pomaže – samo unesi svoje želje u <strong>"prilagodi sebi" box</strong> i model će se ponašati u skladu s tvojim stilom učenja.
             </td>
         </tr>
@@ -263,6 +271,8 @@ Kako bi maksimalno iskoristio/la sve prednosti Duo paketa, pogledaj naš kratki 
         content = `Izuzetno nam je drago što si odlučio/la prijeći s eduAI Start paketa na eduAI Solo i podići svoje učenje na višu razinu.
 
 Umjesto dosadašnjih 50 poruka mjesečno, sada ti je na raspolaganju čak 1500 interakcija s našim naprednim AI asistentima, koji koriste kombinaciju najjačih sustava – posebno prilagođenih za školski i fakultetski rad.
+
+Kao mali znak dobrodošlice, poklanjamo ti rješenja državne mature (https://docs.google.com/spreadsheets/d/1_g8ZCY2Y9kuS0bRik8qiK7F58N_skTyj/edit?usp=sharing&ouid=107754712315620356659&rtpof=true&sd=true). Iskoristi ih za vježbu, samoprovjeru i bolje razumijevanje zadataka.
 
 Osim brzih objašnjenja zadataka, edureteAI sada može crtati i čitati grafove, predlagati metode rješavanja te ti nuditi stalnu podršku dok samostalno učiš. Možeš i prilagoditi način na koji ti AI pomaže – samo unesi svoje želje u "prilagodi sebi" box i model će se ponašati u skladu s tvojim stilom učenja.
 
