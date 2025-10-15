@@ -20,8 +20,7 @@ matplotlib.use('Agg')  # Use non-GUI backend
 import matplotlib.pyplot as plt
 plt.rcParams['savefig.directory'] = '/tmp'
 import numpy as np
-import pandas as pd
-import seaborn as sns
+import scipy
 import math
 
 # For Vercel compatibility, we still need the handler class
@@ -54,10 +53,7 @@ def generate_graph(code: str) -> Dict[str, Any]:
             'plt': plt,
             'np': np,
             'numpy': np,
-            'pd': pd,
-            'pandas': pd,
-            'sns': sns,
-            'seaborn': sns,
+            'scipy': scipy,
             'math': math,
             'matplotlib': matplotlib,
             'io': io,
