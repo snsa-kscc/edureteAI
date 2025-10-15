@@ -1,6 +1,6 @@
 import { MESSAGE_TIER, SUBSCRIPTION_PLANS } from "@/lib/model-config";
 
-const APP_URL = "https://ai.edurete.com";
+const APP_URL = "https://edurete.com";
 const SHORT_VIDEO_URL = "https://www.youtube.com/watch?v=I-B-fK-JdFU";
 
 // Base email template function
@@ -177,7 +177,11 @@ edurete - mreža znanja
   },
 
   SUBSCRIPTION_WELCOME: {
-    subject: (tier: string) => `Dobrodošli u ${SUBSCRIPTION_PLANS[tier as keyof typeof SUBSCRIPTION_PLANS]?.name || "Premium"} plan! 🚀`,
+    subject: (tier: string) =>
+      `Dobrodošli u ${
+        SUBSCRIPTION_PLANS[tier as keyof typeof SUBSCRIPTION_PLANS]?.name ||
+        "Premium"
+      } plan! 🚀`,
     getHtml: (firstName: string, tier: string) => {
       let textBlockContent = "";
 
@@ -303,7 +307,10 @@ edurete - mreža znanja
   },
 
   UPGRADE: {
-    subject: () => `Uspješno nadograđeno na ${SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS]?.name || "Premium"} plan! 🎉`,
+    subject: () =>
+      `Uspješno nadograđeno na ${
+        SUBSCRIPTION_PLANS[MESSAGE_TIER.PAID_PLUS]?.name || "Premium"
+      } plan! 🎉`,
     getHtml: (firstName: string) => {
       // Content for eduAI Solo -> eduAI Duo upgrade
       const textBlockContent = `
