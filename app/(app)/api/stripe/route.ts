@@ -1,10 +1,19 @@
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { updateSubscriptionInDatabase, getUserFromCustomer } from "@/lib/subscription-actions";
-import { updateUserSubscriptionTier, resetUserMessageCounts } from "@/lib/message-limits";
+import {
+  updateSubscriptionInDatabase,
+  getUserFromCustomer,
+} from "@/lib/subscription-actions";
+import {
+  updateUserSubscriptionTier,
+  resetUserMessageCounts,
+} from "@/lib/message-limits";
 import { MESSAGE_TIER } from "@/lib/model-config";
-import { sendSubscriptionWelcomeEmail, sendUpgradeEmail } from "@/lib/mail-config";
+import {
+  sendSubscriptionWelcomeEmail,
+  sendUpgradeEmail,
+} from "@/lib/mail-config";
 import type Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -18,31 +27,58 @@ export async function POST(req: Request) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
   } catch (error) {
-    console.error(error instanceof Error ? `Webhook Error: ${error.message}` : `Webhook Error`);
-    return new NextResponse(error instanceof Error ? `Webhook Error: ${error.message}` : "Webhook Error", { status: 400 });
+    console.error(
+      error instanceof Error
+        ? `Webhook Error: ${error.message}`
+        : `Webhook Error`
+    );
+    return new NextResponse(
+      error instanceof Error
+        ? `Webhook Error: ${error.message}`
+        : "Webhook Error",
+      { status: 400 }
+    );
   }
 
-  const session = event.data.object as Stripe.Checkout.Session | Stripe.Subscription;
+  const session = event.data.object as
+    | Stripe.Checkout.Session
+    | Stripe.Subscription;
 
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const checkoutSession = session as Stripe.Checkout.Session;
 
-        if (checkoutSession.mode === "subscription" && checkoutSession.customer && checkoutSession.subscription) {
+        if (
+          checkoutSession.mode === "subscription" &&
+          checkoutSession.customer &&
+          checkoutSession.subscription
+        ) {
           const userId = checkoutSession.metadata?.userId;
           const planType = checkoutSession.metadata?.plan;
 
           if (!userId) {
             console.error("No userId found in checkout session metadata");
-            return new NextResponse("No userId found in checkout session metadata", { status: 400 });
+            return new NextResponse(
+              "No userId found in checkout session metadata",
+              { status: 400 }
+            );
           }
 
-          const subscription = await stripe.subscriptions.retrieve(checkoutSession.subscription as string);
+          const subscription = await stripe.subscriptions.retrieve(
+            checkoutSession.subscription as string
+          );
           const priceId = subscription.items.data[0].price.id;
-          const tier = planType === MESSAGE_TIER.PAID_PLUS ? MESSAGE_TIER.PAID_PLUS : MESSAGE_TIER.PAID;
+          const tier =
+            planType === MESSAGE_TIER.PAID_PLUS
+              ? MESSAGE_TIER.PAID_PLUS
+              : MESSAGE_TIER.PAID;
 
           await updateSubscriptionInDatabase(
             userId,
@@ -61,11 +97,15 @@ export async function POST(req: Request) {
 
       case "customer.subscription.updated": {
         const subscription = session as Stripe.Subscription;
-        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
+        const { userId, email, fullName } = await getUserFromCustomer(
+          subscription.customer as string
+        );
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
-          return new NextResponse("No userId found for customer", { status: 400 });
+          return new NextResponse("No userId found for customer", {
+            status: 400,
+          });
         }
 
         const priceId = subscription.items.data[0].price.id;
@@ -85,20 +125,31 @@ export async function POST(req: Request) {
 
         // Access the full event data to get previous_attributes
         const previousAttributes = (event.data as any).previous_attributes;
-        if (previousAttributes && previousAttributes.items && previousAttributes.items.data) {
+        if (
+          previousAttributes &&
+          previousAttributes.items &&
+          previousAttributes.items.data
+        ) {
           const previousPriceId = previousAttributes.items.data[0].price.id;
           // Detect upgrade from PAID to PAID_PLUS
-          if (previousPriceId === process.env.STRIPE_PRICE_ID_PAID && priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS) {
+          if (
+            previousPriceId === process.env.STRIPE_PRICE_ID_PAID &&
+            priceId === process.env.STRIPE_PRICE_ID_PAID_PLUS
+          ) {
             await sendUpgradeEmail(userId, email, fullName);
           }
         }
+
+        // Downgrade to free tier if past_due, otherwise use paid tier
+        const effectiveTier =
+          subscription.status === "past_due" ? MESSAGE_TIER.FREE : tier;
 
         await updateSubscriptionInDatabase(
           userId,
           subscription.customer as string,
           subscription.id,
           priceId,
-          tier,
+          effectiveTier,
           subscription.status,
           new Date(subscription.items.data[0].current_period_end * 1000),
           cancelAtPeriodEnd,
@@ -109,11 +160,15 @@ export async function POST(req: Request) {
 
       case "customer.subscription.created": {
         const subscription = session as Stripe.Subscription;
-        const { userId, email, fullName } = await getUserFromCustomer(subscription.customer as string);
+        const { userId, email, fullName } = await getUserFromCustomer(
+          subscription.customer as string
+        );
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
-          return new NextResponse("No userId found for customer", { status: 400 });
+          return new NextResponse("No userId found for customer", {
+            status: 400,
+          });
         }
 
         const priceId = subscription.items.data[0].price.id;
@@ -128,11 +183,15 @@ export async function POST(req: Request) {
 
       case "customer.subscription.deleted": {
         const subscription = session as Stripe.Subscription;
-        const { userId } = await getUserFromCustomer(subscription.customer as string);
+        const { userId } = await getUserFromCustomer(
+          subscription.customer as string
+        );
 
         if (!userId) {
           console.error("No userId found for customer", subscription.customer);
-          return new NextResponse("No userId found for customer", { status: 400 });
+          return new NextResponse("No userId found for customer", {
+            status: 400,
+          });
         }
 
         const priceId = subscription.items.data[0].price.id;
